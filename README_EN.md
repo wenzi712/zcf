@@ -1,0 +1,208 @@
+# Claude Code Configuration
+
+[中文](README.md) | **English**
+
+> Professional AI programming assistant configuration framework with structured workflows and intelligent agent system
+
+## 🚀 Quick Start
+
+1. **Copy configuration files**
+
+   ```bash
+   # Create configuration directory
+   mkdir -p ~/.claude
+
+   # Copy English configuration files
+   cp -r en/* ~/.claude/
+   ```
+
+2. **Configure API key**
+
+   Edit ~/.claude/settings.json
+
+   ```json
+   {
+     "env": {
+       "ANTHROPIC_API_KEY": "your-api-key-here"
+     }
+   }
+   ```
+
+3. **Configure MCP Services (Optional but Recommended)**
+
+   Edit `~/.claude.json` to add MCP services:
+
+   ```json
+   {
+     "mcpServers": {
+       "figma": {
+         "type": "sse",
+         "url": "http://127.0.0.1:3845/sse"
+       },
+       "context7": {
+         "type": "stdio",
+         "command": "npx",
+         "args": ["-y", "@upstash/context7-mcp"],
+         "env": {}
+       },
+       "filesystem": {
+         "type": "stdio",
+         "command": "npx",
+         "args": [
+           "-y",
+           "@modelcontextprotocol/server-filesystem",
+           "/Users/username/Desktop",
+           "/path/to/other/allowed/dir"
+         ],
+         "env": {}
+       },
+       "mcp-deepwiki": {
+         "type": "stdio",
+         "command": "npx",
+         "args": ["-y", "mcp-deepwiki@latest"],
+         "env": {}
+       },
+       "fetch": {
+         "type": "stdio",
+         "command": "uvx",
+         "args": ["mcp-server-fetch"],
+         "env": {
+           "PYTHONIOENCODING": "utf-8"
+         }
+       },
+       "Playwright": {
+         "type": "stdio",
+         "command": "npx",
+         "args": ["-y", "@playwright/mcp@latest"],
+         "env": {}
+       },
+       "exa": {
+         "type": "stdio",
+         "command": "npx",
+         "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=your-api-key-here"],
+         "env": {}
+       }
+     }
+   }
+   ```
+
+   **MCP Configuration Notes:**
+
+   - **Figma**: Requires local Figma app with MCP Server enabled, [Official Guide](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Dev-Mode-MCP-Server)
+   - **Filesystem**: Configure allowed local paths, replace example paths with your actual paths
+   - **Exa**: Requires your API Key, [Get API Key](https://dashboard.exa.ai/api-keys)
+
+4. **Start using**
+
+   - `<task description>` - Execute directly without any workflow, adhering to SOLID, KISS, DRY, and YAGNI principles; suitable for small tasks like bug fixes
+   - `/feat <task description>` - Start developing new features, divided into two phases: plan and UI
+   - `/workflow <task description>` - Run complete development workflow
+
+## 📁 Project Structure
+
+```
+claude-code-config/
+├── README.md              # Documentation
+├── settings.json          # Main configuration
+├── en/                    # English version
+│   ├── CLAUDE.md          # Core principles
+│   ├── agents/            # AI agents
+│   │   ├── planner.md     # Task planning agent
+│   │   └── ui-ux-designer.md  # UI/UX design agent
+│   └── commands/          # Commands
+│       ├── feat.md        # Feature development
+│       └── workflow.md    # Workflow command
+└── zh-CN/                 # Chinese version
+    └── ... (same structure)
+```
+
+## ✨ Core Features
+
+### 🤖 Professional Agents
+
+- **Task Planner**: Breaks down complex tasks into executable steps
+- **UI/UX Designer**: Provides professional interface design guidance
+
+### ⚡ Command System
+
+- **Feature Development** (`/feat`): Structured new feature development
+- **Workflow** (`/workflow`): Complete 6-phase development workflow
+
+### 🔧 Smart Configuration
+
+- API key management
+- Fine-grained permission control
+- Multiple Claude model support
+
+## 🎯 Development Workflow
+
+### Six-Phase Workflow
+
+1. **[Mode: Research]** - Understand requirements
+2. **[Mode: Ideate]** - Design solutions
+3. **[Mode: Plan]** - Create detailed plan
+4. **[Mode: Execute]** - Implement code
+5. **[Mode: Optimize]** - Improve quality
+6. **[Mode: Review]** - Final assessment
+
+## ⚙️ Configuration
+
+### Basic Settings
+
+```json
+{
+  "env": {
+    "ANTHROPIC_API_KEY": "sk-xxx",
+    "ANTHROPIC_BASE_URL": "https://api.anthropic.com"
+  },
+  "model": "opus",  // opus or sonnet
+  "permissions": {
+    "allow": ["Bash(*)", "Read(*)", "Write(*)", ...]
+  }
+}
+```
+
+### Model Selection
+
+- **opus**: Most powerful, for complex tasks
+- **sonnet**: Balanced performance and cost
+- **haiku**: Fast lightweight model
+
+## 💡 Best Practices
+
+1. **Task Breakdown**: Keep tasks independent and testable
+2. **Code Quality**: Follow SOLID, KISS, DRY, and YAGNI principles
+3. **Documentation**: Store plans in `.claude/` directory
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**API Connection Error**
+
+```bash
+# Check API key
+echo $ANTHROPIC_API_KEY
+
+# Verify configuration
+cat ~/.claude/settings.json | jq '.env'
+```
+
+**Permission Denied**
+
+```json
+// Add required permissions in settings.json
+{
+  "permissions": {
+    "allow": ["Bash(*)", "Write(*)"]
+  }
+}
+```
+
+## 📄 License
+
+MIT License
+
+---
+
+If this project helps you, please give me a ⭐️ Star!
