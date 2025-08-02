@@ -94,9 +94,14 @@
 
 4. **Start using**
 
+   - **For first-time project use, it's highly recommended to run `/init` to generate a CLAUDE.md summary for better AI understanding of project architecture**
    - `<task description>` - Execute directly without any workflow, adhering to SOLID, KISS, DRY, and YAGNI principles; suitable for small tasks like bug fixes
    - `/feat <task description>` - Start developing new features, divided into two phases: plan and UI
-   - `/workflow <task description>` - Run complete development workflow
+   - `/workflow <task description>` - Run complete development workflow, not fully automated; starts with multiple solution options, asks for user feedback at each step, allows modifying plans, and provides maximum control
+
+   > **PS**: 
+   > - Both feat and workflow have their advantages, try both to compare
+   > - Generated documents are located by default at `.claude/xxx.md` in the project root, you can add `.claude/` to your project's `.gitignore`
 
 ## 📁 Project Structure
 
