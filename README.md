@@ -204,6 +204,16 @@ cat ~/.claude/settings.json | jq '.env'
 }
 ```
 
+## 🙏 鸣谢
+
+本项目的部分 Prompt 参考了以下优秀作品：
+
+- [Linux.do - 分享一个让 AI 只生成必要的代码的通用 Prompt，欢迎一起调优~](https://linux.do/t/topic/830802)
+- [Linux.do - claude code 降智不怕，使用 agent 与 command 结合将任务做详细的拆分大概可以帮助到你](https://linux.do/t/topic/815230)
+- [Linux.do - cursor 快速开发规则](https://linux.do/t/topic/697566)
+
+感谢这些社区贡献者的分享！
+
 ## 📄 许可证
 
 MIT 许可证
