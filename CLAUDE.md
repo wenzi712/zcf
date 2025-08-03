@@ -20,7 +20,7 @@ pnpm test
 
 ## 项目架构
 
-这是一个 Claude Code 零配置工具 (ZCC - Zero-config Claude Code)，用于自动化配置 Claude Code 的工作环境。
+这是一个 Claude Code 零配置工具 (ZCF - Zero-Config Claude-Code Flow)，用于自动化配置 Claude Code 的工作环境。
 
 ### 核心组件
 
@@ -58,8 +58,8 @@ pnpm test
 
 ### 发布流程
 
-作为 npm 包 `zcc`，支持 npx 直接执行：
-- bin 入口：`bin/zcc.mjs`
+作为 npm 包 `zcf`，支持 npx 直接执行：
+- bin 入口：`bin/zcf.mjs`
 - 发布文件：dist、bin、templates
 
 ## 代码规范

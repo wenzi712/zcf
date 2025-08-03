@@ -3,7 +3,7 @@ import cac from 'cac'
 import { version } from '../package.json'
 import { init } from './commands/init'
 
-const cli = cac('zcc')
+const cli = cac('zcf')
 
 cli
   .command('[lang]', 'Initialize Claude Code configuration')

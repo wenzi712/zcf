@@ -1,9 +1,9 @@
 {
-  "name": "zcc",
+  "name": "zcf",
   "type": "module",
   "version": "1.0.0",
   "packageManager": "pnpm@9.0.0",
-  "description": "Zero-config Claude Code - One-click configuration tool for Claude Code",
+  "description": "Zero-Config Claude-Code Flow - One-click configuration tool for Claude Code",
   "license": "MIT",
   "homepage": "https://github.com/UfoMiao/claude-code-config#readme",
   "repository": {
@@ -14,7 +14,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.mts",
   "bin": {
-    "zcc": "bin/zcc.mjs"
+    "zcf": "bin/zcf.mjs"
   },
   "files": [
     "dist",
@@ -26,7 +26,7 @@
     "build": "unbuild",
     "typecheck": "tsc",
     "prepublishOnly": "npm run build",
-    "test": "npm run build && node bin/zcc.mjs"
+    "test": "npm run build && node bin/zcf.mjs"
   },
   "dependencies": {
     "@posva/prompts": "^2.4.4",
@@ -50,7 +50,7 @@
     "cli",
     "setup",
     "zero-config",
-    "zcc",
+    "zcf",
     "anthropic",
     "ai",
     "automation",

@@ -1,4 +1,4 @@
-# ZCC - Zero-config Claude Code
+# ZCF - Zero-Config Claude-Code Flow
 
 **中文** | [English](README_EN.md)
 
@@ -7,7 +7,7 @@
 ## 🚀 快速开始
 
 ```bash
-npx zcc
+npx zcf
 ```
 
 运行后会自动：
@@ -30,7 +30,7 @@ npx zcc
    > - feat 和 workflow 这两套各有优势，可以都试试比较一下
    > - 生成的文档位置默认都是项目根目录下的 `.claude/xxx.md`，可以把 `.claude/` 加入项目的 `.gitignore` 里
 
-## ✨ ZCC 工具特性
+## ✨ ZCF 工具特性
 
 ### 🌏 双语支持
 - 脚本交互语言：控制安装过程的提示语言
@@ -64,7 +64,7 @@ npx zcc
 ### 交互式配置流程
 
 ```bash
-$ npx zcc
+$ npx zcf
 
 ? Select script language / 选择脚本语言:
   ❯ 简体中文
@@ -115,16 +115,16 @@ $ npx zcc
 
 ```bash
 # 指定配置语言
-npx zcc --config-lang zh-CN
+npx zcf --config-lang zh-CN
 
 # 强制覆盖现有配置
-npx zcc --force
+npx zcf --force
 
 # 跳过 Claude Code 安装检测
-npx zcc --skip-install
+npx zcf --skip-install
 
 # 帮助信息
-npx zcc --help
+npx zcf --help
 ```
 
 ## 📁 项目结构
@@ -134,7 +134,7 @@ claude-code-config/
 ├── README.md              # 说明文档
 ├── package.json           # npm 包配置
 ├── bin/
-│   └── zcc.mjs           # CLI 入口
+│   └── zcf.mjs           # CLI 入口
 ├── src/                  # 源代码
 │   ├── cli.ts           # CLI 主逻辑
 │   ├── commands/        # 命令实现
@@ -200,7 +200,7 @@ pnpm install
 pnpm build
 
 # 本地测试
-node bin/zcc.mjs
+node bin/zcf.mjs
 ```
 
 ## 💡 最佳实践
@@ -213,7 +213,7 @@ node bin/zcc.mjs
 
 如果遇到问题，可以：
 
-1. 重新运行 `npx zcc` 重新配置
+1. 重新运行 `npx zcf` 重新配置
 2. 检查 `~/.claude/` 目录下的配置文件
 3. 确保 Claude Code 已正确安装
 

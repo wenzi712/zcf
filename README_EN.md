@@ -1,4 +1,4 @@
-# ZCC - Zero-config Claude Code
+# ZCF - Zero-Config Claude-Code Flow
 
 [中文](README.md) | **English**
 
@@ -7,7 +7,7 @@
 ## 🚀 Quick Start
 
 ```bash
-npx zcc
+npx zcf
 ```
 
 The tool will automatically:
@@ -30,7 +30,7 @@ After configuration:
    > - Both feat and workflow have their advantages, try both to compare
    > - Generated documents are located by default at `.claude/xxx.md` in project root, you can add `.claude/` to your project's `.gitignore`
 
-## ✨ ZCC Tool Features
+## ✨ ZCF Tool Features
 
 ### 🌏 Bilingual Support
 - Script interaction language: Controls installation prompts language
@@ -64,7 +64,7 @@ After configuration:
 ### Interactive Configuration Flow
 
 ```bash
-$ npx zcc
+$ npx zcf
 
 ? Select script language / 选择脚本语言:
   ❯ 简体中文
@@ -115,16 +115,16 @@ $ npx zcc
 
 ```bash
 # Specify configuration language
-npx zcc --config-lang zh-CN
+npx zcf --config-lang zh-CN
 
 # Force overwrite existing configuration
-npx zcc --force
+npx zcf --force
 
 # Skip Claude Code installation check
-npx zcc --skip-install
+npx zcf --skip-install
 
 # Help information
-npx zcc --help
+npx zcf --help
 ```
 
 ## 📁 Project Structure
@@ -134,7 +134,7 @@ claude-code-config/
 ├── README.md              # Documentation
 ├── package.json           # npm package configuration
 ├── bin/
-│   └── zcc.mjs           # CLI entry point
+│   └── zcf.mjs           # CLI entry point
 ├── src/                  # Source code
 │   ├── cli.ts           # CLI main logic
 │   ├── commands/        # Command implementations
@@ -200,7 +200,7 @@ pnpm install
 pnpm build
 
 # Local testing
-node bin/zcc.mjs
+node bin/zcf.mjs
 ```
 
 ## 💡 Best Practices
@@ -213,7 +213,7 @@ node bin/zcc.mjs
 
 If you encounter issues:
 
-1. Re-run `npx zcc` to reconfigure
+1. Re-run `npx zcf` to reconfigure
 2. Check configuration files in `~/.claude/` directory
 3. Ensure Claude Code is properly installed
 
