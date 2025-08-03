@@ -45,30 +45,11 @@
          "args": ["-y", "@upstash/context7-mcp"],
          "env": {}
        },
-       "filesystem": {
-         "type": "stdio",
-         "command": "npx",
-         "args": [
-           "-y",
-           "@modelcontextprotocol/server-filesystem",
-           "/Users/username/Desktop",
-           "/path/to/other/allowed/dir"
-         ],
-         "env": {}
-       },
        "mcp-deepwiki": {
          "type": "stdio",
          "command": "npx",
          "args": ["-y", "mcp-deepwiki@latest"],
          "env": {}
-       },
-       "fetch": {
-         "type": "stdio",
-         "command": "uvx",
-         "args": ["mcp-server-fetch"],
-         "env": {
-           "PYTHONIOENCODING": "utf-8"
-         }
        },
        "Playwright": {
          "type": "stdio",
@@ -89,7 +70,6 @@
    **MCP Configuration Notes:**
 
    - **Figma**: Requires local Figma app with MCP Server enabled, [Official Guide](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Dev-Mode-MCP-Server)
-   - **Filesystem**: Configure allowed local paths, replace example paths with your actual paths
    - **Exa**: Requires your API Key, [Get API Key](https://dashboard.exa.ai/api-keys)
 
 4. **Start using**
@@ -99,7 +79,8 @@
    - `/feat <task description>` - Start developing new features, divided into two phases: plan and UI
    - `/workflow <task description>` - Run complete development workflow, not fully automated; starts with multiple solution options, asks for user feedback at each step, allows modifying plans, and provides maximum control
 
-   > **PS**: 
+   > **PS**:
+   >
    > - Both feat and workflow have their advantages, try both to compare
    > - Generated documents are located by default at `.claude/xxx.md` in the project root, you can add `.claude/` to your project's `.gitignore`
 
