@@ -202,3 +202,5 @@ MIT License
 ---
 
 If this project helps you, please give me a ⭐️ Star!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=UfoMiao/claude-code-config&type=Date)](https://star-history.com/#UfoMiao/claude-code-config&Date)

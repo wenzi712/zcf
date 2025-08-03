@@ -208,3 +208,5 @@ MIT 许可证
 ---
 
 如果这个项目对你有帮助，请给我一个 ⭐️ Star！
+
+[![Star History Chart](https://api.star-history.com/svg?repos=UfoMiao/claude-code-config&type=Date)](https://star-history.com/#UfoMiao/claude-code-config&Date)
