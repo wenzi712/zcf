@@ -48,6 +48,12 @@
     "claude-code",
     "config",
     "cli",
-    "setup"
+    "setup",
+    "zero-config",
+    "zcc",
+    "anthropic",
+    "ai",
+    "automation",
+    "mcp"
   ]
 }
