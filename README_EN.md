@@ -6,84 +6,19 @@
 
 ## 🚀 Quick Start
 
-### One-Click Setup with npx (Recommended)
-
 ```bash
 npx zcc
 ```
 
-Now supports automatic MCP service configuration! The tool will prompt you to select and configure MCP services during setup.
+The tool will automatically:
+- Detect and install Claude Code
+- Configure API keys
+- Select and configure MCP services
+- Set up all necessary configuration files
 
-### Manual Configuration
+### Usage
 
-1. **Copy Configuration Files**
-
-   Choose to copy either Chinese or English configuration (English version uses fewer tokens, Chinese version is easier for Chinese users to customize):
-
-   ```bash
-   # Create configuration directory
-   mkdir -p ~/.claude
-
-   # Choose one language configuration to copy:
-   # English version (recommended, lower token consumption)
-   cp -r templates/en/* ~/.claude/
-
-   # Or Chinese version (easier for Chinese users to customize)
-   cp -r templates/zh-CN/* ~/.claude/
-   ```
-
-2. **Configure API Key**
-
-   Edit ~/.claude/settings.json
-
-   ```json
-   {
-     "env": {
-       "ANTHROPIC_API_KEY": "your-api-key-here"
-     }
-   }
-   ```
-
-3. **Configure MCP Services (Optional but Recommended)**
-
-   Use `npx zcc` for automatic MCP service configuration, or manually edit `~/.claude.json`:
-
-   ```json
-   {
-     "mcpServers": {
-       "context7": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "@upstash/context7-mcp"],
-         "env": {}
-       },
-       "mcp-deepwiki": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "mcp-deepwiki@latest"],
-         "env": {}
-       },
-       "Playwright": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "@playwright/mcp@latest"],
-         "env": {}
-       },
-       "exa": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=your-api-key-here"],
-         "env": {}
-       }
-     }
-   }
-   ```
-
-   **MCP Configuration Notes:**
-
-   - **Exa**: Requires your API Key, [Get it here](https://dashboard.exa.ai/api-keys)
-
-4. **Start Using**
+After configuration:
 
    - **For first-time project use, strongly recommend running `/init` to generate CLAUDE.md for better AI understanding of project architecture**
    - `<task description>` - Execute directly without workflow, following SOLID, KISS, DRY, and YAGNI principles, suitable for small tasks like bug fixes
@@ -245,24 +180,7 @@ claude-code-config/
 5. **[Mode: Optimize]** - Improve quality
 6. **[Mode: Review]** - Final assessment
 
-## ⚙️ Configuration
-
-### Basic Configuration
-
-```json
-{
-  "env": {
-    "ANTHROPIC_API_KEY": "sk-xxx",
-    "ANTHROPIC_BASE_URL": "https://api.anthropic.com"
-  },
-  "model": "opus",  // opus or sonnet
-  "permissions": {
-    "allow": ["Bash(*)", "Read(*)", "Write(*)", ...]
-  }
-}
-```
-
-### Model Selection
+## ⚙️ Supported Models
 
 - **opus**: Most powerful, for complex tasks
 - **sonnet**: Balanced performance and cost
@@ -293,28 +211,11 @@ node bin/zcc.mjs
 
 ## 🔧 Troubleshooting
 
-### Common Issues
+If you encounter issues:
 
-**API Connection Error**
-
-```bash
-# Check API key
-echo $ANTHROPIC_API_KEY
-
-# Verify configuration
-cat ~/.claude/settings.json | jq '.env'
-```
-
-**Permission Denied**
-
-```json
-// Add required permissions in settings.json
-{
-  "permissions": {
-    "allow": ["Bash(*)", "Write(*)"]
-  }
-}
-```
+1. Re-run `npx zcc` to reconfigure
+2. Check configuration files in `~/.claude/` directory
+3. Ensure Claude Code is properly installed
 
 ## 🙏 Acknowledgments
 

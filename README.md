@@ -6,86 +6,21 @@
 
 ## 🚀 快速开始
 
-### 使用 npx 一键配置（推荐）
-
 ```bash
 npx zcc
 ```
 
-现在支持自动配置 MCP 服务！运行时会让您选择需要的 MCP 服务并自动配置。
+运行后会自动：
+- 检测并安装 Claude Code
+- 配置 API 密钥
+- 选择并配置 MCP 服务
+- 设置所有必要的配置文件
 
-### 手动配置
+### 使用方式
 
-1. **复制配置文件**
+配置完成后：
 
-   选择复制中文或英文配置（英文版 token 消耗更低，中文版便于中文用户自定义）：
-
-   ```bash
-   # 创建配置目录
-   mkdir -p ~/.claude
-
-   # 选择一种语言配置复制：
-   # 英文版（推荐，token 消耗更低）
-   cp -r templates/en/* ~/.claude/
-
-   # 或者中文版（便于中文用户自定义）
-   cp -r templates/zh-CN/* ~/.claude/
-   ```
-
-2. **配置 API 密钥**
-
-   编辑 ~/.claude/settings.json
-
-   ```json
-   {
-     "env": {
-       "ANTHROPIC_API_KEY": "your-api-key-here"
-     }
-   }
-   ```
-
-3. **配置 MCP 服务（可选但推荐）**
-
-   使用 `npx zcc` 会自动配置 MCP 服务，或手动编辑 `~/.claude.json`：
-
-   ```json
-   {
-     "mcpServers": {
-       "context7": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "@upstash/context7-mcp"],
-         "env": {}
-       },
-       "mcp-deepwiki": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "mcp-deepwiki@latest"],
-         "env": {}
-       },
-       "Playwright": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "@playwright/mcp@latest"],
-         "env": {}
-       },
-       "exa": {
-         "type": "stdio",
-         "command": "npx",
-         "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=your-api-key-here"],
-         "env": {}
-       }
-     }
-   }
-   ```
-
-   **MCP 配置说明：**
-
-   - **Exa**：需要填写你的 API Key，[获取地址](https://dashboard.exa.ai/api-keys)
-
-4. **开始使用**
-
-   - **项目第一次使用强烈建议先运行 `/init` 进行初始化总结出 CLAUDE.md，便于 AI 理解项目架构**
+   - **项目第一次使用强烈建议先运行 `/init` 进行初始化，生成 CLAUDE.md 便于 AI 理解项目架构**
    - `<任务描述>` - 不使用任何工作流直接执行，会遵循 SOLID、KISS、DRY 和 YAGNI 原则，适合修复 Bug 等小任务
    - `/feat <任务描述>` - 开始新功能开发，分为 plan 和 ui 两个阶段
    - `/workflow <任务描述>` - 执行完整开发工作流，不是自动化，开始会给出多套方案，每一步会询问用户意见，可随时修改方案，掌控力 MAX
@@ -245,24 +180,7 @@ claude-code-config/
 5. **[模式：优化]** - 提升质量
 6. **[模式：评审]** - 最终评估
 
-## ⚙️ 配置说明
-
-### 基础配置
-
-```json
-{
-  "env": {
-    "ANTHROPIC_API_KEY": "sk-xxx",
-    "ANTHROPIC_BASE_URL": "https://api.anthropic.com"
-  },
-  "model": "opus",  // opus 或 sonnet
-  "permissions": {
-    "allow": ["Bash(*)", "Read(*)", "Write(*)", ...]
-  }
-}
-```
-
-### 模型选择
+## ⚙️ 支持的模型
 
 - **opus**：最强大，适合复杂任务
 - **sonnet**：平衡性能和成本
@@ -293,28 +211,11 @@ node bin/zcc.mjs
 
 ## 🔧 故障排除
 
-### 常见问题
+如果遇到问题，可以：
 
-**API 连接错误**
-
-```bash
-# 检查 API 密钥
-echo $ANTHROPIC_API_KEY
-
-# 验证配置
-cat ~/.claude/settings.json | jq '.env'
-```
-
-**权限被拒绝**
-
-```json
-// 在 settings.json 中添加所需权限
-{
-  "permissions": {
-    "allow": ["Bash(*)", "Write(*)"]
-  }
-}
-```
+1. 重新运行 `npx zcc` 重新配置
+2. 检查 `~/.claude/` 目录下的配置文件
+3. 确保 Claude Code 已正确安装
 
 ## 🙏 鸣谢
 
