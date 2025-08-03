@@ -1,20 +1,20 @@
-import { homedir } from 'node:os'
-import { join } from 'pathe'
-import type { McpService } from './types'
+import { homedir } from 'node:os';
+import { join } from 'pathe';
+import type { McpService } from './types';
 
-export const CLAUDE_DIR = join(homedir(), '.claude')
-export const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json')
-export const CLAUDE_MD_FILE = join(CLAUDE_DIR, 'CLAUDE.md')
-export const MCP_CONFIG_FILE = join(homedir(), '.claude.json')
+export const CLAUDE_DIR = join(homedir(), '.claude');
+export const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json');
+export const CLAUDE_MD_FILE = join(CLAUDE_DIR, 'CLAUDE.md');
+export const MCP_CONFIG_FILE = join(homedir(), '.claude.json');
+export const ZCF_CONFIG_FILE = join(homedir(), '.zcf.json');
 
-
-export const SUPPORTED_LANGS = ['zh-CN', 'en'] as const
-export type SupportedLang = typeof SUPPORTED_LANGS[number]
+export const SUPPORTED_LANGS = ['zh-CN', 'en'] as const;
+export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
 
 export const LANG_LABELS = {
   'zh-CN': '简体中文',
-  'en': 'English'
-} as const
+  en: 'English',
+} as const;
 
 export const I18N = {
   'zh-CN': {
@@ -22,7 +22,7 @@ export const I18N = {
     selectConfigLang: '选择 Claude Code 配置语言',
     configLangHint: {
       'zh-CN': '中文版（便于中文用户自定义）',
-      'en': '英文版（推荐，token 消耗更低）'
+      en: '英文版（推荐，token 消耗更低）',
     },
     installPrompt: '检测到 Claude Code 未安装，是否自动安装？',
     installing: '正在安装 Claude Code...',
@@ -51,17 +51,25 @@ export const I18N = {
     skipMcp: '跳过 MCP 配置',
     configureMcp: '是否配置 MCP 服务？',
     mcpBackupSuccess: '已备份原有 MCP 配置',
-    complete: '🎉 配置完成！使用 \'claude\' 命令开始体验。',
+    complete: "🎉 配置完成！使用 'claude' 命令开始体验。",
     error: '错误',
     yes: '是',
-    no: '否'
+    no: '否',
+    cancelled: '操作已取消',
+    noExistingConfig: '未找到现有配置。请先运行 `zcf`。',
+    updatingPrompts: '正在更新 Claude Code Prompt 文档...',
+    updateConfigLangPrompt: '选择配置语言',
+    updateConfigLangChoice: {
+      'zh-CN': '中文版配置',
+      'en': '英文版配置'
+    }
   },
-  'en': {
+  en: {
     selectScriptLang: 'Select script language',
     selectConfigLang: 'Select Claude Code configuration language',
     configLangHint: {
       'zh-CN': 'Chinese (easier for Chinese users to customize)',
-      'en': 'English (recommended, lower token consumption)'
+      en: 'English (recommended, lower token consumption)',
     },
     installPrompt: 'Claude Code not found. Install automatically?',
     installing: 'Installing Claude Code...',
@@ -90,12 +98,20 @@ export const I18N = {
     skipMcp: 'Skip MCP configuration',
     configureMcp: 'Configure MCP services?',
     mcpBackupSuccess: 'Original MCP config backed up',
-    complete: '🎉 Setup complete! Use \'claude\' command to start.',
+    complete: "🎉 Setup complete! Use 'claude' command to start.",
     error: 'Error',
     yes: 'Yes',
-    no: 'No'
-  }
-}
+    no: 'No',
+    cancelled: 'Operation cancelled',
+    noExistingConfig: 'No existing configuration found. Please run `zcf` first.',
+    updatingPrompts: 'Updating Claude Code prompt documents...',
+    updateConfigLangPrompt: 'Select configuration language',
+    updateConfigLangChoice: {
+      'zh-CN': 'Chinese configuration',
+      'en': 'English configuration'
+    }
+  },
+};
 
 export const MCP_SERVICES: McpService[] = [
   {
@@ -103,64 +119,64 @@ export const MCP_SERVICES: McpService[] = [
     name: { 'zh-CN': 'Context7 文档查询', en: 'Context7 Docs' },
     description: {
       'zh-CN': '查询最新的库文档和代码示例',
-      en: 'Query latest library documentation and code examples'
+      en: 'Query latest library documentation and code examples',
     },
     requiresApiKey: false,
     config: {
       type: 'stdio',
       command: 'npx',
       args: ['-y', '@upstash/context7-mcp'],
-      env: {}
-    }
+      env: {},
+    },
   },
   {
     id: 'mcp-deepwiki',
     name: { 'zh-CN': 'DeepWiki', en: 'DeepWiki' },
     description: {
       'zh-CN': '查询 GitHub 仓库文档和示例',
-      en: 'Query GitHub repository documentation and examples'
+      en: 'Query GitHub repository documentation and examples',
     },
     requiresApiKey: false,
     config: {
       type: 'stdio',
       command: 'npx',
       args: ['-y', 'mcp-deepwiki@latest'],
-      env: {}
-    }
+      env: {},
+    },
   },
   {
     id: 'Playwright',
     name: { 'zh-CN': 'Playwright 浏览器控制', en: 'Playwright Browser Control' },
     description: {
       'zh-CN': '直接控制浏览器进行自动化操作',
-      en: 'Direct browser control for automation'
+      en: 'Direct browser control for automation',
     },
     requiresApiKey: false,
     config: {
       type: 'stdio',
       command: 'npx',
       args: ['-y', '@playwright/mcp@latest'],
-      env: {}
-    }
+      env: {},
+    },
   },
   {
     id: 'exa',
     name: { 'zh-CN': 'Exa AI 搜索', en: 'Exa AI Search' },
     description: {
       'zh-CN': '使用 Exa AI 进行网页搜索',
-      en: 'Web search using Exa AI'
+      en: 'Web search using Exa AI',
     },
     requiresApiKey: true,
     apiKeyPrompt: {
       'zh-CN': '请输入 Exa API Key',
-      en: 'Enter Exa API Key'
+      en: 'Enter Exa API Key',
     },
     apiKeyPlaceholder: 'YOUR_EXA_API_KEY',
     config: {
       type: 'stdio',
       command: 'npx',
       args: ['-y', 'mcp-remote', 'https://mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY'],
-      env: {}
-    }
-  }
-]
+      env: {},
+    },
+  },
+];

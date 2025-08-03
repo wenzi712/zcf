@@ -1,22 +1,46 @@
 import prompts from '@posva/prompts';
 import ansis from 'ansis';
 import { existsSync } from 'node:fs';
+import { version } from '../../package.json';
 import type { SupportedLang } from '../constants';
 import { CLAUDE_DIR, I18N, LANG_LABELS, MCP_SERVICES, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants';
 import type { McpServerConfig } from '../types';
+import { displayBanner } from '../utils/banner';
 import { backupExistingConfig, configureApi, copyConfigFiles, ensureClaudeDir } from '../utils/config';
 import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer';
 import { backupMcpConfig, buildMcpServerConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
+import { updateZcfConfig } from '../utils/zcf-config';
 
 export interface InitOptions {
   lang?: SupportedLang;
   configLang?: SupportedLang;
   force?: boolean;
-  skipInstall?: boolean;
 }
+
+
+export async function updatePromptOnly(configLang: SupportedLang, scriptLang: SupportedLang) {
+  const i18n = I18N[scriptLang];
+  
+  // Backup existing config
+  const backupDir = backupExistingConfig();
+  if (backupDir) {
+    console.log(ansis.gray(`✔ ${i18n.backupSuccess}: ${backupDir}`));
+  }
+  
+  // Copy only documentation files
+  copyConfigFiles(configLang, true);
+  
+  console.log(ansis.green(`✔ ${i18n.configSuccess} ${CLAUDE_DIR}`));
+  console.log('\n' + ansis.cyan(i18n.complete));
+}
+
 
 export async function init(options: InitOptions = {}) {
   try {
+    // Display banner
+    displayBanner();
+  console.log(ansis.gray(`  Version: ${ansis.cyan(version)}  |  ${ansis.cyan('https://github.com/UfoMiao/zcf')}\n`));
+
     // Step 1: Select script language
     let scriptLang = options.lang;
     if (!scriptLang) {
@@ -29,6 +53,12 @@ export async function init(options: InitOptions = {}) {
           value: l,
         })),
       });
+      
+      if (!response.lang) {
+        console.log(ansis.yellow('操作已取消 / Operation cancelled'));
+        process.exit(0);
+      }
+      
       scriptLang = response.lang as SupportedLang;
     }
 
@@ -51,28 +81,37 @@ export async function init(options: InitOptions = {}) {
           value: l,
         })),
       });
+      
+      if (!response.lang) {
+        console.log(ansis.yellow(i18n.cancelled));
+        process.exit(0);
+      }
+      
       configLang = response.lang as SupportedLang;
     }
 
     // Step 3: Check and install Claude Code
-    if (!options.skipInstall) {
-      const installed = await isClaudeCodeInstalled();
-      if (!installed) {
-        const response = await prompts({
-          type: 'confirm',
-          name: 'shouldInstall',
-          message: i18n.installPrompt,
-          initial: true,
-        });
+    const installed = await isClaudeCodeInstalled();
+    if (!installed) {
+      const response = await prompts({
+        type: 'confirm',
+        name: 'shouldInstall',
+        message: i18n.installPrompt,
+        initial: true,
+      });
 
-        if (response.shouldInstall) {
-          await installClaudeCode(scriptLang);
-        } else {
-          console.log(ansis.yellow(i18n.skip));
-        }
-      } else {
-        console.log(ansis.green(`✔ ${i18n.installSuccess}`));
+      if (response.shouldInstall === undefined) {
+        console.log(ansis.yellow(i18n.cancelled));
+        process.exit(0);
       }
+
+      if (response.shouldInstall) {
+        await installClaudeCode(scriptLang);
+      } else {
+        console.log(ansis.yellow(i18n.skip));
+      }
+    } else {
+      console.log(ansis.green(`✔ ${i18n.installSuccess}`));
     }
 
     // Step 4: Handle existing config
@@ -92,6 +131,12 @@ export async function init(options: InitOptions = {}) {
           { title: i18n.skip, value: 'skip' },
         ],
       });
+      
+      if (!actionResponse.action) {
+        console.log(ansis.yellow(i18n.cancelled));
+        process.exit(0);
+      }
+      
       action = actionResponse.action;
 
       if (action === 'skip') {
@@ -117,6 +162,12 @@ export async function init(options: InitOptions = {}) {
           { title: i18n.skipApi, value: 'skip' },
         ],
       });
+      
+      if (!apiResponse.apiChoice) {
+        console.log(ansis.yellow(i18n.cancelled));
+        process.exit(0);
+      }
+      
       const apiChoice = apiResponse.apiChoice;
 
       if (apiChoice === 'custom') {
@@ -134,6 +185,12 @@ export async function init(options: InitOptions = {}) {
             }
           },
         });
+        
+        if (urlResponse.url === undefined) {
+          console.log(ansis.yellow(i18n.cancelled));
+          process.exit(0);
+        }
+        
         const url = urlResponse.url;
 
         const keyResponse = await prompts({
@@ -142,6 +199,12 @@ export async function init(options: InitOptions = {}) {
           message: i18n.enterApiKey,
           validate: (value) => !!value || 'API Key is required',
         });
+        
+        if (keyResponse.key === undefined) {
+          console.log(ansis.yellow(i18n.cancelled));
+          process.exit(0);
+        }
+        
         const key = keyResponse.key;
 
         apiConfig = { url, key };
@@ -187,6 +250,11 @@ export async function init(options: InitOptions = {}) {
         initial: true,
       });
 
+      if (mcpResponse.shouldConfigureMcp === undefined) {
+        console.log(ansis.yellow(i18n.cancelled));
+        process.exit(0);
+      }
+
       if (mcpResponse.shouldConfigureMcp) {
         // Create choices array with "All" option first
         const choices = [
@@ -210,6 +278,11 @@ export async function init(options: InitOptions = {}) {
           instructions: false,
           hint: '- Space to select. Return to submit',
         });
+
+        if (selectedResponse.services === undefined) {
+          console.log(ansis.yellow(i18n.cancelled));
+          process.exit(0);
+        }
 
         let selectedServices = selectedResponse.services || [];
 
@@ -243,6 +316,11 @@ export async function init(options: InitOptions = {}) {
                 validate: (value) => !!value || 'API Key is required',
               });
 
+              if (apiKeyResponse.apiKey === undefined) {
+                console.log(ansis.yellow(`${i18n.skip}: ${service.name[scriptLang]}`));
+                continue;
+              }
+
               if (apiKeyResponse.apiKey) {
                 config = buildMcpServerConfig(service.config, apiKeyResponse.apiKey, service.apiKeyPlaceholder);
               } else {
@@ -269,7 +347,13 @@ export async function init(options: InitOptions = {}) {
       }
     }
 
-    // Step 9: Success message
+    // Step 9: Save zcf config
+    updateZcfConfig({
+      version,
+      preferredLang: scriptLang,
+    });
+
+    // Step 10: Success message
     console.log(ansis.green(`✔ ${i18n.configSuccess} ${CLAUDE_DIR}`));
     console.log('\n' + ansis.cyan(i18n.complete));
   } catch (error) {

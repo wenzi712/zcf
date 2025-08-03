@@ -7,10 +7,12 @@
 ## 🚀 Quick Start
 
 ```bash
-npx zcf
+npx zcf          # Initialize configuration (default)
+npx zcf u        # Update prompts with backup (short for update)
 ```
 
-The tool will automatically:
+Initialization will automatically:
+
 - Detect and install Claude Code
 - Configure API keys
 - Select and configure MCP services
@@ -20,40 +22,45 @@ The tool will automatically:
 
 After configuration:
 
-   - **For first-time project use, strongly recommend running `/init` to generate CLAUDE.md for better AI understanding of project architecture**
-   - `<task description>` - Execute directly without workflow, following SOLID, KISS, DRY, and YAGNI principles, suitable for small tasks like bug fixes
-   - `/feat <task description>` - Start new feature development, divided into plan and UI phases
-   - `/workflow <task description>` - Execute complete development workflow, not automated, starts with multiple solution options, asks for user feedback at each step, allows plan modifications, maximum control
+- **For first-time project use, strongly recommend running `/init` to generate CLAUDE.md for better AI understanding of project architecture**
+- `<task description>` - Execute directly without workflow, following SOLID, KISS, DRY, and YAGNI principles, suitable for small tasks like bug fixes
+- `/feat <task description>` - Start new feature development, divided into plan and UI phases
+- `/workflow <task description>` - Execute complete development workflow, not automated, starts with multiple solution options, asks for user feedback at each step, allows plan modifications, maximum control
 
-   > **PS**:
-   >
-   > - Both feat and workflow have their advantages, try both to compare
-   > - Generated documents are located by default at `.claude/xxx.md` in project root, you can add `.claude/` to your project's `.gitignore`
+> **PS**:
+>
+> - Both feat and workflow have their advantages, try both to compare
+> - Generated documents are located by default at `.claude/xxx.md` in project root, you can add `.claude/` to your project's `.gitignore`
 
 ## ✨ ZCF Tool Features
 
 ### 🌏 Bilingual Support
+
 - Script interaction language: Controls installation prompts language
 - Configuration file language: Determines which configuration set to install (zh-CN/en)
 
 ### 🔧 Smart Installation
+
 - Auto-detects Claude Code installation status
-- Supports npm/yarn/pnpm package managers
+- Uses npm for automatic installation (ensures compatibility)
 - Cross-platform support (Windows/macOS/Linux)
 - Automatic MCP service configuration (new feature)
 
 ### 📦 Complete Configuration
+
 - CLAUDE.md system instructions
 - settings.json configuration file
 - commands custom commands
 - agents AI agent configurations
 
 ### 🔐 API Configuration
+
 - Custom API support
 - Automatic API Key configuration
 - Support for later configuration in claude command (e.g., OAuth)
 
 ### 💾 Configuration Management
+
 - Smart backup of existing configurations (all backups saved in ~/.claude/backup/)
 - Configuration merge option
 - Safe overwrite mechanism
@@ -113,18 +120,53 @@ $ npx zcf
 
 ### Command Line Options
 
+#### Commands Quick Reference
+
+| Command      | Alias   | Description                        |
+| ------------ | ------- | ---------------------------------- |
+| `zcf`        | -       | Initialize configuration (default) |
+| `zcf update` | `zcf u` | Update prompts with backup         |
+
+#### Common Options
+
 ```bash
 # Specify configuration language
 npx zcf --config-lang zh-CN
+npx zcf -c zh-CN            # Using short option
 
 # Force overwrite existing configuration
 npx zcf --force
+npx zcf -f                 # Using short option
 
-# Skip Claude Code installation check
-npx zcf --skip-install
+# Update prompts with backup (preserve API and MCP configs)
+npx zcf u                  # Using update command
+npx zcf update             # Full command
 
-# Help information
+# Show help information
 npx zcf --help
+npx zcf -h
+
+# Show version
+npx zcf --version
+npx zcf -v
+```
+
+#### Usage Examples
+
+```bash
+# First-time installation, interactive setup
+npx zcf
+
+# Update prompts with backup, keep API and MCP configs
+npx zcf u
+
+# Force reinitialize with Chinese config
+npx zcf --config-lang zh-CN --force
+npx zcf -c zh-CN -f      # Using short options
+
+# Update to English prompts (lower token consumption)
+npx zcf u --config-lang en
+npx zcf u -c en            # Using short option
 ```
 
 ## 📁 Project Structure
@@ -190,8 +232,8 @@ claude-code-config/
 
 ```bash
 # Clone the project
-git clone https://github.com/UfoMiao/claude-code-config.git
-cd claude-code-config
+git clone https://github.com/UfoMiao/zcf.git
+cd zcf
 
 # Install dependencies (using pnpm)
 pnpm install

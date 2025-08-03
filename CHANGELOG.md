@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- feat: 添加 update 命令支持增量更新配置
+  feat: 优化命令执行逻辑和错误处理
+  feat: 改进用户体验和交互提示
+  refactor: 重构配置管理模块
+  docs: 更新 README 文档
+
 ## 1.0.3
 
 ### Patch Changes

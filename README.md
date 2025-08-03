@@ -7,10 +7,12 @@
 ## 🚀 快速开始
 
 ```bash
-npx zcf
+npx zcf          # 初始化配置（默认）
+npx zcf u        # 更新 Prompt 文档并备份旧配置（update 缩写）
 ```
 
-运行后会自动：
+初始化后会自动：
+
 - 检测并安装 Claude Code
 - 配置 API 密钥
 - 选择并配置 MCP 服务
@@ -20,40 +22,45 @@ npx zcf
 
 配置完成后：
 
-   - **项目第一次使用强烈建议先运行 `/init` 进行初始化，生成 CLAUDE.md 便于 AI 理解项目架构**
-   - `<任务描述>` - 不使用任何工作流直接执行，会遵循 SOLID、KISS、DRY 和 YAGNI 原则，适合修复 Bug 等小任务
-   - `/feat <任务描述>` - 开始新功能开发，分为 plan 和 ui 两个阶段
-   - `/workflow <任务描述>` - 执行完整开发工作流，不是自动化，开始会给出多套方案，每一步会询问用户意见，可随时修改方案，掌控力 MAX
+- **项目第一次使用强烈建议先运行 `/init` 进行初始化，生成 CLAUDE.md 便于 AI 理解项目架构**
+- `<任务描述>` - 不使用任何工作流直接执行，会遵循 SOLID、KISS、DRY 和 YAGNI 原则，适合修复 Bug 等小任务
+- `/feat <任务描述>` - 开始新功能开发，分为 plan 和 ui 两个阶段
+- `/workflow <任务描述>` - 执行完整开发工作流，不是自动化，开始会给出多套方案，每一步会询问用户意见，可随时修改方案，掌控力 MAX
 
-   > **PS**:
-   >
-   > - feat 和 workflow 这两套各有优势，可以都试试比较一下
-   > - 生成的文档位置默认都是项目根目录下的 `.claude/xxx.md`，可以把 `.claude/` 加入项目的 `.gitignore` 里
+> **PS**:
+>
+> - feat 和 workflow 这两套各有优势，可以都试试比较一下
+> - 生成的文档位置默认都是项目根目录下的 `.claude/xxx.md`，可以把 `.claude/` 加入项目的 `.gitignore` 里
 
 ## ✨ ZCF 工具特性
 
 ### 🌏 双语支持
+
 - 脚本交互语言：控制安装过程的提示语言
 - 配置文件语言：决定安装哪套配置文件（zh-CN/en）
 
 ### 🔧 智能安装
+
 - 自动检测 Claude Code 安装状态
-- 支持 npm/yarn/pnpm 包管理器
+- 使用 npm 进行自动安装（确保兼容性）
 - 跨平台支持（Windows/macOS/Linux）
 - 自动配置 MCP 服务（新增）
 
 ### 📦 完整配置
+
 - CLAUDE.md 系统指令
 - settings.json 设置文件
 - commands 自定义命令
 - agents AI 代理配置
 
 ### 🔐 API 配置
+
 - 自定义 API 支持
 - API Key 自动配置
 - 支持稍后在 claude 命令中配置（如 OAuth）
 
 ### 💾 配置管理
+
 - 智能备份现有配置（所有备份保存在 ~/.claude/backup/）
 - 配置合并选项
 - 安全的覆盖机制
@@ -113,18 +120,53 @@ $ npx zcf
 
 ### 命令行参数
 
+#### 命令速查表
+
+| 命令         | 缩写    | 说明                   |
+| ------------ | ------- | ---------------------- |
+| `zcf`        | -       | 初始化配置（默认命令） |
+| `zcf update` | `zcf u` | 更新 Prompt 文档并备份旧配置 |
+
+#### 常用选项
+
 ```bash
 # 指定配置语言
 npx zcf --config-lang zh-CN
+npx zcf -c zh-CN            # 使用缩写
 
 # 强制覆盖现有配置
 npx zcf --force
+npx zcf -f                 # 使用缩写
 
-# 跳过 Claude Code 安装检测
-npx zcf --skip-install
+# 更新 Prompt 文档并备份旧配置（保留 API 和 MCP 配置）
+npx zcf u                  # 使用 update 命令
+npx zcf update             # 完整命令
 
-# 帮助信息
+# 查看帮助信息
 npx zcf --help
+npx zcf -h
+
+# 查看版本
+npx zcf --version
+npx zcf -v
+```
+
+#### 使用示例
+
+```bash
+# 首次安装，交互式配置
+npx zcf
+
+# 更新 Prompt 文档并备份旧配置，保留 API 和 MCP 配置
+npx zcf u
+
+# 强制使用中文配置重新初始化
+npx zcf --config-lang zh-CN --force
+npx zcf -c zh-CN -f      # 使用缩写
+
+# 更新到英文版 Prompt（降低 token 消耗）
+npx zcf u --config-lang en
+npx zcf u -c en            # 使用缩写
 ```
 
 ## 📁 项目结构
@@ -190,8 +232,8 @@ claude-code-config/
 
 ```bash
 # 克隆项目
-git clone https://github.com/UfoMiao/claude-code-config.git
-cd claude-code-config
+git clone https://github.com/UfoMiao/zcf.git
+cd zcf
 
 # 安装依赖（使用 pnpm）
 pnpm install
