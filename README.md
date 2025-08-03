@@ -1,10 +1,20 @@
-# Claude Code 配置
+# ZCC - Zero-config Claude Code
 
 **中文** | [English](README_EN.md)
 
-> 专业的 AI 编程助手配置框架，提供结构化工作流和智能代理系统
+> 零配置，一键搞定 Claude Code 环境设置 - 支持中英文双语配置和智能代理系统
 
 ## 🚀 快速开始
+
+### 使用 npx 一键配置（推荐）
+
+```bash
+npx zcc
+```
+
+现在支持自动配置 MCP 服务！运行时会让您选择需要的 MCP 服务并自动配置。
+
+### 手动配置
 
 1. **复制配置文件**
 
@@ -16,10 +26,10 @@
 
    # 选择一种语言配置复制：
    # 英文版（推荐，token 消耗更低）
-   cp -r en/* ~/.claude/
+   cp -r templates/en/* ~/.claude/
 
    # 或者中文版（便于中文用户自定义）
-   cp -r zh-CN/* ~/.claude/
+   cp -r templates/zh-CN/* ~/.claude/
    ```
 
 2. **配置 API 密钥**
@@ -36,15 +46,11 @@
 
 3. **配置 MCP 服务（可选但推荐）**
 
-   编辑 `~/.claude.json` 添加 MCP 服务：
+   使用 `npx zcc` 会自动配置 MCP 服务，或手动编辑 `~/.claude.json`：
 
    ```json
    {
      "mcpServers": {
-       "figma": {
-         "type": "sse",
-         "url": "http://127.0.0.1:3845/sse"
-       },
        "context7": {
          "type": "stdio",
          "command": "npx",
@@ -75,7 +81,6 @@
 
    **MCP 配置说明：**
 
-   - **Figma**：需要本地 Figma 应用开启 MCP Server，[官方文档](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Dev-Mode-MCP-Server)
    - **Exa**：需要填写你的 API Key，[获取地址](https://dashboard.exa.ai/api-keys)
 
 4. **开始使用**
@@ -90,22 +95,125 @@
    > - feat 和 workflow 这两套各有优势，可以都试试比较一下
    > - 生成的文档位置默认都是项目根目录下的 `.claude/xxx.md`，可以把 `.claude/` 加入项目的 `.gitignore` 里
 
+## ✨ ZCC 工具特性
+
+### 🌏 双语支持
+- 脚本交互语言：控制安装过程的提示语言
+- 配置文件语言：决定安装哪套配置文件（zh-CN/en）
+
+### 🔧 智能安装
+- 自动检测 Claude Code 安装状态
+- 支持 npm/yarn/pnpm 包管理器
+- 跨平台支持（Windows/macOS/Linux）
+- 自动配置 MCP 服务（新增）
+
+### 📦 完整配置
+- CLAUDE.md 系统指令
+- settings.json 设置文件
+- commands 自定义命令
+- agents AI 代理配置
+
+### 🔐 API 配置
+- 自定义 API 支持
+- API Key 自动配置
+- 支持稍后在 claude 命令中配置（如 OAuth）
+
+### 💾 配置管理
+- 智能备份现有配置（所有备份保存在 ~/.claude/backup/）
+- 配置合并选项
+- 安全的覆盖机制
+- MCP 配置修改前自动备份
+
+## 📖 使用说明
+
+### 交互式配置流程
+
+```bash
+$ npx zcc
+
+? Select script language / 选择脚本语言:
+  ❯ 简体中文
+    English
+
+? 选择 Claude Code 配置语言:
+  ❯ 简体中文 (zh-CN) - 中文版（便于中文用户自定义）
+    English (en) - 英文版（推荐，token 消耗更低）
+
+? 检测到 Claude Code 未安装，是否自动安装？(Y/n)
+
+✔ Claude Code 安装成功
+
+? 是否配置 API？
+  ❯ 配置 API
+    跳过（稍后在 claude 命令中自行配置，如 OAuth）
+
+? 请输入 API URL: https://api.anthropic.com
+? 请输入 API Key: sk-xxx
+
+? 检测到已有配置文件，如何处理？
+  ❯ 备份并覆盖全部
+    仅更新 Prompt 文档并备份旧配置
+    合并配置
+    跳过
+
+✔ 已备份所有配置文件到 ~/.claude/backup/xxx
+✔ 配置文件已复制到 ~/.claude
+✔ API 配置完成
+
+? 是否配置 MCP 服务？(Y/n)
+
+? 选择要安装的 MCP 服务（空格选择，回车确认）
+  ❯ ◯ 全部安装
+    ◯ Context7 文档查询 - 查询最新的库文档和代码示例
+    ◯ DeepWiki - 查询 GitHub 仓库文档和示例
+    ◯ Playwright 浏览器控制 - 直接控制浏览器进行自动化操作
+    ◯ Exa AI 搜索 - 使用 Exa AI 进行网页搜索
+
+? 请输入 Exa API Key（可从 https://dashboard.exa.ai/api-keys 获取）
+
+✔ MCP 服务已配置
+
+🎉 配置完成！使用 'claude' 命令开始体验。
+```
+
+### 命令行参数
+
+```bash
+# 指定配置语言
+npx zcc --config-lang zh-CN
+
+# 强制覆盖现有配置
+npx zcc --force
+
+# 跳过 Claude Code 安装检测
+npx zcc --skip-install
+
+# 帮助信息
+npx zcc --help
+```
+
 ## 📁 项目结构
 
 ```
 claude-code-config/
 ├── README.md              # 说明文档
-├── settings.json          # 主配置文件
-├── en/                    # 英文版
-│   ├── CLAUDE.md          # 核心原则
-│   ├── agents/            # AI 代理
-│   │   ├── planner.md     # 任务规划代理
-│   │   └── ui-ux-designer.md  # UI/UX 设计代理
-│   └── commands/          # 命令定义
-│       ├── feat.md        # 功能开发
-│       └── workflow.md    # 工作流命令
-└── zh-CN/                 # 中文版
-    └── ... (相同结构)
+├── package.json           # npm 包配置
+├── bin/
+│   └── zcc.mjs           # CLI 入口
+├── src/                  # 源代码
+│   ├── cli.ts           # CLI 主逻辑
+│   ├── commands/        # 命令实现
+│   ├── utils/           # 工具函数
+│   └── constants.ts     # 常量定义
+├── templates/            # 配置模板
+│   ├── en/              # 英文版
+│   │   ├── CLAUDE.md    # 核心原则
+│   │   ├── settings.json
+│   │   ├── agents/      # AI 代理
+│   │   └── commands/    # 命令定义
+│   └── zh-CN/           # 中文版
+│       └── ... (相同结构)
+└── dist/                # 构建输出
 ```
 
 ## ✨ 核心特性
@@ -159,6 +267,23 @@ claude-code-config/
 - **opus**：最强大，适合复杂任务
 - **sonnet**：平衡性能和成本
 - **haiku**：快速轻量级模型
+
+## 🛠️ 开发
+
+```bash
+# 克隆项目
+git clone https://github.com/UfoMiao/claude-code-config.git
+cd claude-code-config
+
+# 安装依赖（使用 pnpm）
+pnpm install
+
+# 构建项目
+pnpm build
+
+# 本地测试
+node bin/zcc.mjs
+```
 
 ## 💡 最佳实践
 

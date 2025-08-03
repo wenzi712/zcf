@@ -1,22 +1,38 @@
-# Claude Code Configuration
+# ZCC - Zero-config Claude Code
 
 [中文](README.md) | **English**
 
-> Professional AI programming assistant configuration framework with structured workflows and intelligent agent system
+> Zero-config, one-click setup for Claude Code with bilingual support and intelligent agent system
 
 ## 🚀 Quick Start
 
-1. **Copy configuration files**
+### One-Click Setup with npx (Recommended)
+
+```bash
+npx zcc
+```
+
+Now supports automatic MCP service configuration! The tool will prompt you to select and configure MCP services during setup.
+
+### Manual Configuration
+
+1. **Copy Configuration Files**
+
+   Choose to copy either Chinese or English configuration (English version uses fewer tokens, Chinese version is easier for Chinese users to customize):
 
    ```bash
    # Create configuration directory
    mkdir -p ~/.claude
 
-   # Copy English configuration files
-   cp -r en/* ~/.claude/
+   # Choose one language configuration to copy:
+   # English version (recommended, lower token consumption)
+   cp -r templates/en/* ~/.claude/
+
+   # Or Chinese version (easier for Chinese users to customize)
+   cp -r templates/zh-CN/* ~/.claude/
    ```
 
-2. **Configure API key**
+2. **Configure API Key**
 
    Edit ~/.claude/settings.json
 
@@ -30,15 +46,11 @@
 
 3. **Configure MCP Services (Optional but Recommended)**
 
-   Edit `~/.claude.json` to add MCP services:
+   Use `npx zcc` for automatic MCP service configuration, or manually edit `~/.claude.json`:
 
    ```json
    {
      "mcpServers": {
-       "figma": {
-         "type": "sse",
-         "url": "http://127.0.0.1:3845/sse"
-       },
        "context7": {
          "type": "stdio",
          "command": "npx",
@@ -69,37 +81,139 @@
 
    **MCP Configuration Notes:**
 
-   - **Figma**: Requires local Figma app with MCP Server enabled, [Official Guide](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Dev-Mode-MCP-Server)
-   - **Exa**: Requires your API Key, [Get API Key](https://dashboard.exa.ai/api-keys)
+   - **Exa**: Requires your API Key, [Get it here](https://dashboard.exa.ai/api-keys)
 
-4. **Start using**
+4. **Start Using**
 
-   - **For first-time project use, it's highly recommended to run `/init` to generate a CLAUDE.md summary for better AI understanding of project architecture**
-   - `<task description>` - Execute directly without any workflow, adhering to SOLID, KISS, DRY, and YAGNI principles; suitable for small tasks like bug fixes
-   - `/feat <task description>` - Start developing new features, divided into two phases: plan and UI
-   - `/workflow <task description>` - Run complete development workflow, not fully automated; starts with multiple solution options, asks for user feedback at each step, allows modifying plans, and provides maximum control
+   - **For first-time project use, strongly recommend running `/init` to generate CLAUDE.md for better AI understanding of project architecture**
+   - `<task description>` - Execute directly without workflow, following SOLID, KISS, DRY, and YAGNI principles, suitable for small tasks like bug fixes
+   - `/feat <task description>` - Start new feature development, divided into plan and UI phases
+   - `/workflow <task description>` - Execute complete development workflow, not automated, starts with multiple solution options, asks for user feedback at each step, allows plan modifications, maximum control
 
    > **PS**:
    >
    > - Both feat and workflow have their advantages, try both to compare
-   > - Generated documents are located by default at `.claude/xxx.md` in the project root, you can add `.claude/` to your project's `.gitignore`
+   > - Generated documents are located by default at `.claude/xxx.md` in project root, you can add `.claude/` to your project's `.gitignore`
+
+## ✨ ZCC Tool Features
+
+### 🌏 Bilingual Support
+- Script interaction language: Controls installation prompts language
+- Configuration file language: Determines which configuration set to install (zh-CN/en)
+
+### 🔧 Smart Installation
+- Auto-detects Claude Code installation status
+- Supports npm/yarn/pnpm package managers
+- Cross-platform support (Windows/macOS/Linux)
+- Automatic MCP service configuration (new feature)
+
+### 📦 Complete Configuration
+- CLAUDE.md system instructions
+- settings.json configuration file
+- commands custom commands
+- agents AI agent configurations
+
+### 🔐 API Configuration
+- Custom API support
+- Automatic API Key configuration
+- Support for later configuration in claude command (e.g., OAuth)
+
+### 💾 Configuration Management
+- Smart backup of existing configurations (all backups saved in ~/.claude/backup/)
+- Configuration merge option
+- Safe overwrite mechanism
+- Automatic backup before MCP configuration changes
+
+## 📖 Usage Instructions
+
+### Interactive Configuration Flow
+
+```bash
+$ npx zcc
+
+? Select script language / 选择脚本语言:
+  ❯ 简体中文
+    English
+
+? Select Claude Code configuration language:
+  ❯ 简体中文 (zh-CN) - Chinese (easier for Chinese users to customize)
+    English (en) - English (recommended, lower token consumption)
+
+? Claude Code not found. Install automatically? (Y/n)
+
+✔ Claude Code installed successfully
+
+? Configure API?
+  ❯ Configure API
+    Skip (configure later in claude command, e.g., OAuth)
+
+? Enter API URL: https://api.anthropic.com
+? Enter API Key: sk-xxx
+
+? Existing config detected. How to proceed?
+  ❯ Backup and overwrite all
+    Update Prompt documents only with backup
+    Merge config
+    Skip
+
+✔ All config files backed up to ~/.claude/backup/xxx
+✔ Config files copied to ~/.claude
+✔ API configured
+
+? Configure MCP services? (Y/n)
+
+? Select MCP services to install (space to select, enter to confirm)
+  ❯ ◯ Install all
+    ◯ Context7 Documentation Query - Query latest library docs and code examples
+    ◯ DeepWiki - Query GitHub repository docs and examples
+    ◯ Playwright Browser Control - Direct browser automation control
+    ◯ Exa AI Search - Web search using Exa AI
+
+? Enter Exa API Key (get from https://dashboard.exa.ai/api-keys)
+
+✔ MCP services configured
+
+🎉 Setup complete! Use 'claude' command to start.
+```
+
+### Command Line Options
+
+```bash
+# Specify configuration language
+npx zcc --config-lang zh-CN
+
+# Force overwrite existing configuration
+npx zcc --force
+
+# Skip Claude Code installation check
+npx zcc --skip-install
+
+# Help information
+npx zcc --help
+```
 
 ## 📁 Project Structure
 
 ```
 claude-code-config/
 ├── README.md              # Documentation
-├── settings.json          # Main configuration
-├── en/                    # English version
-│   ├── CLAUDE.md          # Core principles
-│   ├── agents/            # AI agents
-│   │   ├── planner.md     # Task planning agent
-│   │   └── ui-ux-designer.md  # UI/UX design agent
-│   └── commands/          # Commands
-│       ├── feat.md        # Feature development
-│       └── workflow.md    # Workflow command
-└── zh-CN/                 # Chinese version
-    └── ... (same structure)
+├── package.json           # npm package configuration
+├── bin/
+│   └── zcc.mjs           # CLI entry point
+├── src/                  # Source code
+│   ├── cli.ts           # CLI main logic
+│   ├── commands/        # Command implementations
+│   ├── utils/           # Utility functions
+│   └── constants.ts     # Constant definitions
+├── templates/            # Configuration templates
+│   ├── en/              # English version
+│   │   ├── CLAUDE.md    # Core principles
+│   │   ├── settings.json
+│   │   ├── agents/      # AI agents
+│   │   └── commands/    # Command definitions
+│   └── zh-CN/           # Chinese version
+│       └── ... (same structure)
+└── dist/                # Build output
 ```
 
 ## ✨ Core Features
@@ -112,7 +226,7 @@ claude-code-config/
 ### ⚡ Command System
 
 - **Feature Development** (`/feat`): Structured new feature development
-- **Workflow** (`/workflow`): Complete 6-phase development workflow
+- **Workflow** (`/workflow`): Complete six-phase development workflow
 
 ### 🔧 Smart Configuration
 
@@ -127,13 +241,13 @@ claude-code-config/
 1. **[Mode: Research]** - Understand requirements
 2. **[Mode: Ideate]** - Design solutions
 3. **[Mode: Plan]** - Create detailed plan
-4. **[Mode: Execute]** - Implement code
+4. **[Mode: Execute]** - Implement development
 5. **[Mode: Optimize]** - Improve quality
 6. **[Mode: Review]** - Final assessment
 
 ## ⚙️ Configuration
 
-### Basic Settings
+### Basic Configuration
 
 ```json
 {
@@ -154,11 +268,28 @@ claude-code-config/
 - **sonnet**: Balanced performance and cost
 - **haiku**: Fast lightweight model
 
+## 🛠️ Development
+
+```bash
+# Clone the project
+git clone https://github.com/UfoMiao/claude-code-config.git
+cd claude-code-config
+
+# Install dependencies (using pnpm)
+pnpm install
+
+# Build project
+pnpm build
+
+# Local testing
+node bin/zcc.mjs
+```
+
 ## 💡 Best Practices
 
 1. **Task Breakdown**: Keep tasks independent and testable
 2. **Code Quality**: Follow SOLID, KISS, DRY, and YAGNI principles
-3. **Documentation**: Store plans in `.claude/` directory
+3. **Documentation Management**: Store plans in `.claude/` directory
 
 ## 🔧 Troubleshooting
 
@@ -189,9 +320,9 @@ cat ~/.claude/settings.json | jq '.env'
 
 Some prompts in this project are inspired by the following excellent works:
 
-- [Linux.do - 分享一个让 AI 只生成必要的代码的通用 Prompt，欢迎一起调优~](https://linux.do/t/topic/830802)
-- [Linux.do - claude code 降智不怕，使用 agent 与 command 结合将任务做详细的拆分大概可以帮助到你](https://linux.do/t/topic/815230)
-- [Linux.do - cursor 快速开发规则](https://linux.do/t/topic/697566)
+- [Linux.do - Share a universal Prompt for AI to generate only necessary code, welcome to optimize together~](https://linux.do/t/topic/830802)
+- [Linux.do - Don't worry about claude code degradation, using agent and command combination to break down tasks in detail may help you](https://linux.do/t/topic/815230)
+- [Linux.do - cursor rapid development rules](https://linux.do/t/topic/697566)
 
 Thanks to these community contributors for sharing!
 

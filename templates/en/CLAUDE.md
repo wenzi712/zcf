@@ -46,11 +46,9 @@ Throughout the entire workflow, you must internalize and strictly adhere to the 
      - **Challenges encountered** and how they were overcome.
      - **Clear plans and recommendations for next steps.**
 
-### MCP Services
+### Prioritize using MCP service
 
 - `Context7`: Query latest library documentation/examples
 - `DeepWiki`: Query related GitHub repository documentation/examples
 - `Exa`: Use Exa AI for web search - real-time web search, can capture specific URL content. Supports configurable result count and returns most relevant website content
 - `Playwright`: Direct browser control for browser-related operations
-- `figma`: Get Figma design files
-- Prioritize MCP services

@@ -1,0 +1,53 @@
+{
+  "name": "zcc",
+  "type": "module",
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.0.0",
+  "description": "Zero-config Claude Code - One-click configuration tool for Claude Code",
+  "license": "MIT",
+  "homepage": "https://github.com/UfoMiao/claude-code-config#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UfoMiao/claude-code-config.git"
+  },
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "bin": {
+    "zcc": "bin/zcc.mjs"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "templates"
+  ],
+  "scripts": {
+    "dev": "tsx ./src/cli.ts",
+    "build": "unbuild",
+    "typecheck": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "npm run build && node bin/zcc.mjs"
+  },
+  "dependencies": {
+    "@posva/prompts": "^2.4.4",
+    "ansis": "^3.3.2",
+    "cac": "^6.7.14",
+    "dayjs": "^1.11.13",
+    "find-up-simple": "^1.0.1",
+    "pathe": "^2.0.0",
+    "tinyexec": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.12",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "unbuild": "^3.5.0"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "config",
+    "cli",
+    "setup"
+  ]
+}

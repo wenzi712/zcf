@@ -1,9 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  // "env": {
-  //   "ANTHROPIC_API_KEY": "sk-xxx",
-  //   "ANTHROPIC_BASE_URL": "https://xxx.xxx"
-  // },
+  "env": {},
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
