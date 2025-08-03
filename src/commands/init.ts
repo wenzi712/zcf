@@ -7,6 +7,7 @@ import type { McpServerConfig } from '../types';
 import { backupExistingConfig, configureApi, copyConfigFiles, ensureClaudeDir } from '../utils/config';
 import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer';
 import { backupMcpConfig, buildMcpServerConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
+import { getPlatform } from '../utils/platform';
 
 export interface InitOptions {
   lang?: SupportedLang;
@@ -55,8 +56,10 @@ export async function init(options: InitOptions = {}) {
     }
 
     // Step 3: Check and install Claude Code
+    let wasAlreadyInstalled = true;
     if (!options.skipInstall) {
       const installed = await isClaudeCodeInstalled();
+      wasAlreadyInstalled = installed;
       if (!installed) {
         const response = await prompts({
           type: 'confirm',
@@ -71,7 +74,7 @@ export async function init(options: InitOptions = {}) {
           console.log(ansis.yellow(i18n.skip));
         }
       } else {
-        console.log(ansis.green(`✔ Claude Code ${i18n.installSuccess}`));
+        console.log(ansis.green(`✔ ${i18n.installSuccess}`));
       }
     }
 
@@ -272,6 +275,11 @@ export async function init(options: InitOptions = {}) {
     // Step 9: Success message
     console.log(ansis.green(`✔ ${i18n.configSuccess} ${CLAUDE_DIR}`));
     console.log('\n' + ansis.cyan(i18n.complete));
+
+    // On Windows, show additional reminder if Claude was just installed
+    if (getPlatform() === 'windows' && !wasAlreadyInstalled) {
+      console.log(ansis.yellow(`\n${i18n.windowsRestartHint}`));
+    }
   } catch (error) {
     console.error(ansis.red(`${I18N[options.lang || 'en'].error}:`), error);
     process.exit(1);
