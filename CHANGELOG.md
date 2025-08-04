@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- ### 样式优化和文档改进
+
+  - **样式**: 更新 banner 文本对齐方式，提升视觉一致性
+  - **文档**:
+    - 移除 README 文件中的支持模型章节
+    - 添加项目截图到 README 和 README_EN
+    - 更新文档管理路径说明，明确计划存储位置为项目根目录下的 `.claude/plan/` 目录
+    - 优化 README 文档中的命令说明和格式
+
 ## 1.1.1
 
 ### Patch Changes
