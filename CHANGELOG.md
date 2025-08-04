@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.5
+
+### Patch Changes
+
+- refactor(config): 优化 settings 配置管理 / optimize settings configuration management
+
+  - **消除重复配置 / Removed duplicate configuration**: 移除 `configureApi` 函数中的硬编码配置 / Eliminated hardcoded settings in `configureApi` function
+  - **单一数据源 / Single source of truth**: 从模板 `settings.json` 读取默认配置 / Now reads default settings from template `settings.json`
+  - **提升可维护性 / Improved maintainability**: 配置修改只需更新模板文件 / Configuration changes only need to be made in template file
+  - **遵循 DRY 原则 / Following DRY principle**: 消除代码和模板间的配置重复 / Eliminated configuration duplication between code and templates
+
 ## 1.1.4
 
 ### Patch Changes

@@ -60,7 +60,7 @@ export function copyConfigFiles(lang: SupportedLang, onlyMd: boolean = false) {
   } else {
     // Copy all files from language-specific directory
     copyDirectory(sourceDir, CLAUDE_DIR);
-    
+
     // Copy base settings.json from templates root directory
     const baseSettingsPath = join(baseTemplateDir, 'settings.json');
     const destSettingsPath = join(CLAUDE_DIR, 'settings.json');
@@ -104,7 +104,7 @@ function copyDirectory(src: string, dest: string) {
     if (entry === 'settings.json') {
       continue;
     }
-    
+
     const srcPath = join(src, entry);
     const destPath = join(dest, entry);
     const stat = statSync(srcPath);
@@ -123,44 +123,41 @@ export interface ApiConfig {
   authType?: 'auth_token' | 'api_key';
 }
 
-export function configureApi(apiConfig: ApiConfig | null) {
-  if (!apiConfig) return;
+/**
+ * Read default settings.json configuration from template directory
+ */
+function getDefaultSettings(): any {
+  try {
+    // Get template directory path
+    const currentFileUrl = new URL(import.meta.url);
+    const currentFilePath = currentFileUrl.pathname;
+    const distDir = dirname(dirname(currentFilePath));
+    const rootDir = dirname(distDir);
+    const templateSettingsPath = join(rootDir, 'templates', 'settings.json');
 
-  let settings: any = {
-    $schema: 'https://json.schemastore.org/claude-code-settings.json',
-    env: {},
-    includeCoAuthoredBy: false,
-    permissions: {
-      allow: [
-        'Bash(*)',
-        'LS(*)',
-        'Read(*)',
-        'Write(*)',
-        'Edit(*)',
-        'MultiEdit(*)',
-        'Glob(*)',
-        'Grep(*)',
-        'WebFetch(*)',
-        'WebSearch(*)',
-        'TodoWrite(*)',
-        'NotebookRead(*)',
-        'NotebookEdit(*)',
-      ],
-      deny: [],
-    },
-    hooks: {},
-    model: 'opus',
-  };
+    if (existsSync(templateSettingsPath)) {
+      const content = readFileSync(templateSettingsPath, 'utf-8');
+      return JSON.parse(content);
+    }
+  } catch (error) {
+    console.error('Failed to read template settings.json:', error);
+    return {};
+  }
+}
 
+export function configureApi(apiConfig: ApiConfig | null): ApiConfig | null {
+  if (!apiConfig) return null;
+
+  // Get default configuration from template
+  let settings = getDefaultSettings();
+
+  // Merge with existing user configuration if available
   if (existsSync(SETTINGS_FILE)) {
     const content = readFileSync(SETTINGS_FILE, 'utf-8');
     try {
       const existingSettings = JSON.parse(content);
-      // Deep merge existing settings with defaults
-      settings = { ...settings, ...existingSettings };
-      if (existingSettings.env) {
-        settings.env = { ...settings.env, ...existingSettings.env };
-      }
+      // Use deepMerge for deep merge, preserving user's custom configuration
+      settings = deepMerge(settings, existingSettings);
     } catch (error) {
       console.error('Failed to parse existing settings.json, using defaults:', error);
     }
@@ -176,6 +173,7 @@ export function configureApi(apiConfig: ApiConfig | null) {
   settings.env.ANTHROPIC_BASE_URL = apiConfig.url;
 
   writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));
+  return apiConfig;
 }
 
 export function mergeConfigs(sourceFile: string, targetFile: string) {
@@ -220,7 +218,7 @@ export function applyAiLanguageDirective(aiOutputLang: AiOutputLanguage | string
   }
 
   let content = readFileSync(CLAUDE_MD_FILE, 'utf-8');
-  
+
   // Remove any existing language directive at the beginning
   const lines = content.split('\n');
   if (lines[0] && lines[0].startsWith('Always respond in')) {
@@ -246,7 +244,7 @@ export function applyAiLanguageDirective(aiOutputLang: AiOutputLanguage | string
 
   // Add the new directive at the beginning
   const newContent = directive + '\n\n' + content;
-  
+
   // Write back to the file
   writeFileSync(CLAUDE_MD_FILE, newContent, 'utf-8');
 }

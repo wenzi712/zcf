@@ -11,6 +11,7 @@ import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer';
 import { backupMcpConfig, buildMcpServerConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
+import { validateApiKey, formatApiKeyDisplay } from '../utils/validator';
 
 export interface InitOptions {
   lang?: SupportedLang;
@@ -198,7 +199,19 @@ export async function init(options: InitOptions = {}) {
           type: 'text',
           name: 'key',
           message: keyMessage,
-          validate: (value) => !!value || `${apiChoice === 'auth_token' ? 'Auth Token' : 'API Key'} is required`,
+          validate: (value) => {
+            if (!value) {
+              return `${apiChoice === 'auth_token' ? 'Auth Token' : 'API Key'} is required`;
+            }
+            
+            // Validate API Key format
+            const validation = validateApiKey(value, scriptLang);
+            if (!validation.isValid) {
+              return validation.error || 'Invalid API Key format';
+            }
+            
+            return true;
+          },
         });
         
         if (keyResponse.key === undefined) {
@@ -207,6 +220,9 @@ export async function init(options: InitOptions = {}) {
         }
         
         const key = keyResponse.key;
+        
+        // Display formatted API Key
+        console.log(ansis.gray(`  API Key: ${formatApiKeyDisplay(key)}`));
 
         apiConfig = { url, key, authType: apiChoice };
       }
@@ -241,8 +257,12 @@ export async function init(options: InitOptions = {}) {
 
     // Step 9: Apply API configuration (skip if only updating docs)
     if (apiConfig && !onlyUpdateDocs) {
-      configureApi(apiConfig);
-      console.log(ansis.green(`✔ ${i18n.apiConfigSuccess}`));
+      const configuredApi = configureApi(apiConfig);
+      if (configuredApi) {
+        console.log(ansis.green(`✔ ${i18n.apiConfigSuccess}`));
+        console.log(ansis.gray(`  URL: ${configuredApi.url}`));
+        console.log(ansis.gray(`  Key: ${formatApiKeyDisplay(configuredApi.key)}`));
+      }
     }
 
     // Step 10: Configure MCP services (skip if only updating docs)
