@@ -2,14 +2,16 @@ import prompts from '@posva/prompts';
 import ansis from 'ansis';
 import { existsSync } from 'node:fs';
 import { version } from '../../package.json';
-import type { SupportedLang } from '../constants';
+import type { AiOutputLanguage, SupportedLang } from '../constants';
 import { I18N, LANG_LABELS, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants';
 import { displayBanner } from '../utils/banner';
+import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
 import { updatePromptOnly } from './init';
 
 export interface UpdateOptions {
   configLang?: SupportedLang;
+  aiOutputLang?: AiOutputLanguage | string;
 }
 
 export async function update(options: UpdateOptions = {}) {
@@ -17,37 +19,9 @@ export async function update(options: UpdateOptions = {}) {
     // Display banner
     displayBanner('Update configuration for Claude Code');
 
-    // Read zcf config to get user's preferred language
-    let zcfConfig = readZcfConfig();
-    let scriptLang: SupportedLang;
-    
-    // If no zcf config, ask user to select script language (like init)
-    if (!zcfConfig) {
-      const langResponse = await prompts({
-        type: 'select',
-        name: 'lang',
-        message: 'Select script language / 选择脚本语言',
-        choices: SUPPORTED_LANGS.map((l) => ({
-          title: LANG_LABELS[l],
-          value: l,
-        })),
-      });
-
-      if (!langResponse.lang) {
-        console.log(ansis.yellow('Operation cancelled / 操作已取消'));
-        process.exit(0);
-      }
-
-      scriptLang = langResponse.lang as SupportedLang;
-      
-      // Save the selected language preference
-      updateZcfConfig({
-        version,
-        preferredLang: scriptLang,
-      });
-    } else {
-      scriptLang = zcfConfig.preferredLang;
-    }
+    // Get script language from config or ask user
+    const scriptLang = await selectScriptLanguage();
+    const zcfConfig = readZcfConfig();
     
     // Now use the selected script language for all messages
     const i18n = I18N[scriptLang];
@@ -83,15 +57,19 @@ export async function update(options: UpdateOptions = {}) {
       configLang = configResponse.lang as SupportedLang;
     }
 
+    // Select AI output language
+    const aiOutputLang = await resolveAiOutputLanguage(scriptLang, options.aiOutputLang, zcfConfig);
+
     console.log(ansis.cyan(`\n${i18n.updatingPrompts}\n`));
 
-    // Execute prompt-only update
-    await updatePromptOnly(configLang, scriptLang);
+    // Execute prompt-only update with AI language
+    await updatePromptOnly(configLang, scriptLang, aiOutputLang);
     
-    // Update zcf config with new version
+    // Update zcf config with new version and AI language preference
     updateZcfConfig({
       version,
       preferredLang: scriptLang,
+      aiOutputLang: aiOutputLang,
     });
   } catch (error) {
     const zcfConfig = readZcfConfig();

@@ -1,9 +1,10 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { ZCF_CONFIG_FILE, type SupportedLang } from '../constants';
+import { ZCF_CONFIG_FILE, type AiOutputLanguage, type SupportedLang } from '../constants';
 
 export interface ZcfConfig {
   version: string;
   preferredLang: SupportedLang;
+  aiOutputLang?: AiOutputLanguage | string;
   lastUpdated: string;
 }
 
@@ -33,6 +34,7 @@ export function updateZcfConfig(updates: Partial<ZcfConfig>): void {
   const newConfig: ZcfConfig = {
     version: updates.version || existingConfig?.version || '1.0.0',
     preferredLang: updates.preferredLang || existingConfig?.preferredLang || 'en',
+    aiOutputLang: updates.aiOutputLang || existingConfig?.aiOutputLang,
     lastUpdated: new Date().toISOString(),
   };
   writeZcfConfig(newConfig);

@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'pathe';
-import type { SupportedLang } from '../constants';
-import { CLAUDE_DIR, SETTINGS_FILE } from '../constants';
+import type { AiOutputLanguage, SupportedLang } from '../constants';
+import { AI_OUTPUT_LANGUAGES, CLAUDE_DIR, CLAUDE_MD_FILE, SETTINGS_FILE } from '../constants';
 
 export function ensureClaudeDir() {
   if (!existsSync(CLAUDE_DIR)) {
@@ -205,4 +205,42 @@ function deepMerge(target: any, source: any): any {
   }
 
   return result;
+}
+
+export function applyAiLanguageDirective(aiOutputLang: AiOutputLanguage | string) {
+  // Read the existing CLAUDE.md file
+  if (!existsSync(CLAUDE_MD_FILE)) {
+    return;
+  }
+
+  let content = readFileSync(CLAUDE_MD_FILE, 'utf-8');
+  
+  // Remove any existing language directive at the beginning
+  const lines = content.split('\n');
+  if (lines[0] && lines[0].startsWith('Always respond in')) {
+    lines.shift(); // Remove the first line
+    // Also remove empty line after it if exists
+    if (lines[0] === '') {
+      lines.shift();
+    }
+    content = lines.join('\n');
+  }
+
+  // Prepare the language directive
+  let directive = '';
+  if (aiOutputLang === 'custom') {
+    // Custom language will be handled by the caller
+    return;
+  } else if (AI_OUTPUT_LANGUAGES[aiOutputLang as AiOutputLanguage]) {
+    directive = AI_OUTPUT_LANGUAGES[aiOutputLang as AiOutputLanguage].directive;
+  } else {
+    // It's a custom language string
+    directive = `Always respond in ${aiOutputLang}`;
+  }
+
+  // Add the new directive at the beginning
+  const newContent = directive + '\n\n' + content;
+  
+  // Write back to the file
+  writeFileSync(CLAUDE_MD_FILE, newContent, 'utf-8');
 }

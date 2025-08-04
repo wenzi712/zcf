@@ -2,23 +2,25 @@ import prompts from '@posva/prompts';
 import ansis from 'ansis';
 import { existsSync } from 'node:fs';
 import { version } from '../../package.json';
-import type { SupportedLang } from '../constants';
+import type { AiOutputLanguage, SupportedLang } from '../constants';
 import { CLAUDE_DIR, I18N, LANG_LABELS, MCP_SERVICES, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants';
 import type { McpServerConfig } from '../types';
 import { displayBanner } from '../utils/banner';
-import { backupExistingConfig, configureApi, copyConfigFiles, ensureClaudeDir } from '../utils/config';
+import { applyAiLanguageDirective, backupExistingConfig, configureApi, copyConfigFiles, ensureClaudeDir } from '../utils/config';
 import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer';
 import { backupMcpConfig, buildMcpServerConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
-import { updateZcfConfig } from '../utils/zcf-config';
+import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
+import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
 
 export interface InitOptions {
   lang?: SupportedLang;
   configLang?: SupportedLang;
+  aiOutputLang?: AiOutputLanguage | string;
   force?: boolean;
 }
 
 
-export async function updatePromptOnly(configLang: SupportedLang, scriptLang: SupportedLang) {
+export async function updatePromptOnly(configLang: SupportedLang, scriptLang: SupportedLang, aiOutputLang?: AiOutputLanguage | string) {
   const i18n = I18N[scriptLang];
   
   // Backup existing config
@@ -29,6 +31,11 @@ export async function updatePromptOnly(configLang: SupportedLang, scriptLang: Su
   
   // Copy only documentation files
   copyConfigFiles(configLang, true);
+  
+  // Apply AI language directive if provided
+  if (aiOutputLang) {
+    applyAiLanguageDirective(aiOutputLang);
+  }
   
   console.log(ansis.green(`✔ ${i18n.configSuccess} ${CLAUDE_DIR}`));
   console.log('\n' + ansis.cyan(i18n.complete));
@@ -42,30 +49,7 @@ export async function init(options: InitOptions = {}) {
   console.log(ansis.gray(`  Version: ${ansis.cyan(version)}  |  ${ansis.cyan('https://github.com/UfoMiao/zcf')}\n`));
 
     // Step 1: Select script language
-    let scriptLang = options.lang;
-    if (!scriptLang) {
-      const response = await prompts({
-        type: 'select',
-        name: 'lang',
-        message: 'Select script language / 选择脚本语言',
-        choices: SUPPORTED_LANGS.map((l) => ({
-          title: LANG_LABELS[l],
-          value: l,
-        })),
-      });
-      
-      if (!response.lang) {
-        console.log(ansis.yellow('操作已取消 / Operation cancelled'));
-        process.exit(0);
-      }
-      
-      scriptLang = response.lang as SupportedLang;
-    }
-
-    if (!scriptLang) {
-      console.error(ansis.red('Language not selected'));
-      process.exit(1);
-    }
+    const scriptLang = await selectScriptLanguage(options.lang);
 
     const i18n = I18N[scriptLang];
 
@@ -90,7 +74,11 @@ export async function init(options: InitOptions = {}) {
       configLang = response.lang as SupportedLang;
     }
 
-    // Step 3: Check and install Claude Code
+    // Step 3: Select AI output language
+    const zcfConfig = readZcfConfig();
+    const aiOutputLang = await resolveAiOutputLanguage(scriptLang, options.aiOutputLang, zcfConfig);
+
+    // Step 4: Check and install Claude Code
     const installed = await isClaudeCodeInstalled();
     if (!installed) {
       const response = await prompts({
@@ -114,7 +102,7 @@ export async function init(options: InitOptions = {}) {
       console.log(ansis.green(`✔ ${i18n.installSuccess}`));
     }
 
-    // Step 4: Handle existing config
+    // Step 5: Handle existing config
     ensureClaudeDir();
     let onlyUpdateDocs = false;
     let action = 'new'; // default action for new installation
@@ -149,7 +137,7 @@ export async function init(options: InitOptions = {}) {
       }
     }
 
-    // Step 5: Configure API (skip if only updating docs or if user chose to skip)
+    // Step 6: Configure API (skip if only updating docs or if user chose to skip)
     let apiConfig = null;
     const isNewInstall = !existsSync(SETTINGS_FILE);
     if (!onlyUpdateDocs && (isNewInstall || action === 'backup' || action === 'merge')) {
@@ -211,7 +199,7 @@ export async function init(options: InitOptions = {}) {
       }
     }
 
-    // Step 6: Execute the chosen action
+    // Step 7: Execute the chosen action
     if (action === 'backup') {
       const backupDir = backupExistingConfig();
       if (backupDir) {
@@ -235,13 +223,16 @@ export async function init(options: InitOptions = {}) {
       copyConfigFiles(configLang, false);
     }
 
-    // Step 7: Apply API configuration (skip if only updating docs)
+    // Step 8: Apply language directive to CLAUDE.md
+    applyAiLanguageDirective(aiOutputLang);
+
+    // Step 9: Apply API configuration (skip if only updating docs)
     if (apiConfig && !onlyUpdateDocs) {
       configureApi(apiConfig);
       console.log(ansis.green(`✔ ${i18n.apiConfigSuccess}`));
     }
 
-    // Step 8: Configure MCP services (skip if only updating docs)
+    // Step 10: Configure MCP services (skip if only updating docs)
     if (!onlyUpdateDocs) {
       const mcpResponse = await prompts({
         type: 'confirm',
@@ -347,13 +338,14 @@ export async function init(options: InitOptions = {}) {
       }
     }
 
-    // Step 9: Save zcf config
+    // Step 11: Save zcf config
     updateZcfConfig({
       version,
       preferredLang: scriptLang,
+      aiOutputLang: aiOutputLang,
     });
 
-    // Step 10: Success message
+    // Step 12: Success message
     console.log(ansis.green(`✔ ${i18n.configSuccess} ${CLAUDE_DIR}`));
     console.log('\n' + ansis.cyan(i18n.complete));
   } catch (error) {

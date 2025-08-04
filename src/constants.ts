@@ -16,10 +16,21 @@ export const LANG_LABELS = {
   en: 'English',
 } as const;
 
+export const AI_OUTPUT_LANGUAGES = {
+  'zh-CN': { label: '简体中文', directive: 'Always respond in Chinese-simplified' },
+  en: { label: 'English', directive: 'Always respond in English' },
+  custom: { label: 'Custom', directive: '' },
+} as const;
+
+export type AiOutputLanguage = keyof typeof AI_OUTPUT_LANGUAGES;
+
 export const I18N = {
   'zh-CN': {
     selectScriptLang: '选择脚本语言',
     selectConfigLang: '选择 Claude Code 配置语言',
+    selectAiOutputLang: '选择 AI 输出语言',
+    aiOutputLangHint: 'AI 将使用此语言回复你的问题',
+    enterCustomLanguage: '请输入自定义语言（例如：Japanese, French 等）',
     configLangHint: {
       'zh-CN': '中文版（便于中文用户自定义）',
       en: '英文版（推荐，token 消耗更低）',
@@ -61,12 +72,15 @@ export const I18N = {
     updateConfigLangPrompt: '选择配置语言',
     updateConfigLangChoice: {
       'zh-CN': '中文版配置',
-      'en': '英文版配置'
-    }
+      en: '英文版配置',
+    },
   },
   en: {
     selectScriptLang: 'Select script language',
     selectConfigLang: 'Select Claude Code configuration language',
+    selectAiOutputLang: 'Select AI output language',
+    aiOutputLangHint: 'AI will respond to you in this language',
+    enterCustomLanguage: 'Enter custom language (e.g., Japanese, French, etc.)',
     configLangHint: {
       'zh-CN': 'Chinese (easier for Chinese users to customize)',
       en: 'English (recommended, lower token consumption)',
@@ -108,8 +122,8 @@ export const I18N = {
     updateConfigLangPrompt: 'Select configuration language',
     updateConfigLangChoice: {
       'zh-CN': 'Chinese configuration',
-      'en': 'English configuration'
-    }
+      en: 'English configuration',
+    },
   },
 };
 

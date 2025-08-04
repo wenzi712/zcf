@@ -32,6 +32,7 @@ npx zcf u        # Import workflows only: Quick add AI workflows and command sys
 Full initialization (`npx zcf`) will automatically:
 
 - ✅ Detect and install Claude Code
+- ✅ Select AI output language (new feature)
 - ✅ Configure API keys
 - ✅ Select and configure MCP services
 - ✅ Set up all necessary configuration files
@@ -52,10 +53,11 @@ After configuration:
 
 ## ✨ ZCF Tool Features
 
-### 🌏 Bilingual Support
+### 🌏 Multi-language Support
 
 - Script interaction language: Controls installation prompts language
 - Configuration file language: Determines which configuration set to install (zh-CN/en)
+- AI output language: Choose the language for AI responses (supports Chinese, English, and custom languages)
 
 ### 🔧 Smart Installation
 
@@ -98,6 +100,13 @@ $ npx zcf
 ? Select Claude Code configuration language:
   ❯ 简体中文 (zh-CN) - Chinese (easier for Chinese users to customize)
     English (en) - English (recommended, lower token consumption)
+
+? Select AI output language:
+  AI will respond to you in this language
+  ❯ 简体中文
+    English
+    Custom
+    (Supports Japanese, French, German, and more)
 
 ? Claude Code not found. Install automatically? (Y/n)
 
