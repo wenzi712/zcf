@@ -27,6 +27,7 @@ pnpm test
 1. **CLI 入口** (`src/cli.ts`)：使用 cac 构建的命令行界面，处理用户交互和命令解析
 
 2. **初始化流程** (`src/commands/init.ts`)：九步配置流程
+
    - 选择脚本语言（中文/英文）
    - 选择配置语言（决定复制哪套模板）
    - 检测并安装 Claude Code
@@ -38,6 +39,7 @@ pnpm test
    - 生成并保存 ~/.claude.json
 
 3. **工具函数**
+
    - `utils/installer.ts`：Claude Code 安装检测和自动安装
    - `utils/config.ts`：配置文件管理（备份、复制、合并）
    - `utils/platform.ts`：跨平台路径处理
@@ -53,6 +55,7 @@ pnpm test
 ### 构建配置
 
 使用 unbuild 构建工具，配置在 `build.config.ts`：
+
 - 入口：src/index 和 src/cli
 - 输出：ESM 格式到 dist/
 - 内联所有依赖
@@ -60,6 +63,7 @@ pnpm test
 ### 发布流程
 
 作为 npm 包 `zcf`，支持 npx 直接执行：
+
 - bin 入口：`bin/zcf.mjs`
 - 发布文件：dist、bin、templates
 
@@ -70,3 +74,6 @@ pnpm test
 - 使用 prompts 处理交互
 - 使用 ansis 处理终端颜色
 - 路径处理使用 pathe 确保跨平台兼容
+- 使用 dayjs 处理时间格式化
+- 代码注释用英文
+- 使用 changeset 进行版本管理
