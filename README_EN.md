@@ -4,6 +4,8 @@
 
 > Zero-config, one-click setup for Claude Code with bilingual support and intelligent agent system
 
+![Rendering](./src/assets/screenshot.webp)
+
 ## 🚀 Quick Start
 
 ### Choose based on your situation:
