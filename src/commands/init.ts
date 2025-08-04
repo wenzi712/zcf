@@ -8,7 +8,7 @@ import type { McpServerConfig } from '../types';
 import { displayBanner } from '../utils/banner';
 import { applyAiLanguageDirective, backupExistingConfig, configureApi, copyConfigFiles, ensureClaudeDir } from '../utils/config';
 import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer';
-import { backupMcpConfig, buildMcpServerConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
+import { addCompletedOnboarding, backupMcpConfig, buildMcpServerConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
 import { validateApiKey, formatApiKeyDisplay } from '../utils/validator';
@@ -262,6 +262,13 @@ export async function init(options: InitOptions = {}) {
         console.log(ansis.green(`✔ ${i18n.apiConfigSuccess}`));
         console.log(ansis.gray(`  URL: ${configuredApi.url}`));
         console.log(ansis.gray(`  Key: ${formatApiKeyDisplay(configuredApi.key)}`));
+        
+        // Add hasCompletedOnboarding flag after successful API configuration
+        try {
+          addCompletedOnboarding();
+        } catch (error) {
+          console.error(ansis.red('Failed to set onboarding completion flag:'), error);
+        }
       }
     }
 

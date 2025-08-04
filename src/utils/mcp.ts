@@ -1,20 +1,20 @@
 import dayjs from 'dayjs';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'pathe';
-import { CLAUDE_DIR, MCP_CONFIG_FILE } from '../constants';
-import type { McpConfiguration, McpServerConfig } from '../types';
+import { CLAUDE_DIR, ClAUDE_CONFIG_FILE } from '../constants';
+import type { ClaudeConfiguration, McpServerConfig } from '../types';
 
 export function getMcpConfigPath(): string {
-  return MCP_CONFIG_FILE;
+  return ClAUDE_CONFIG_FILE;
 }
 
-export function readMcpConfig(): McpConfiguration | null {
-  if (!existsSync(MCP_CONFIG_FILE)) {
+export function readMcpConfig(): ClaudeConfiguration | null {
+  if (!existsSync(ClAUDE_CONFIG_FILE)) {
     return null;
   }
 
   try {
-    const content = readFileSync(MCP_CONFIG_FILE, 'utf-8');
+    const content = readFileSync(ClAUDE_CONFIG_FILE, 'utf-8');
     return JSON.parse(content);
   } catch (error) {
     console.error('Failed to parse MCP config:', error);
@@ -22,17 +22,17 @@ export function readMcpConfig(): McpConfiguration | null {
   }
 }
 
-export function writeMcpConfig(config: McpConfiguration): void {
-  const dir = dirname(MCP_CONFIG_FILE);
+export function writeMcpConfig(config: ClaudeConfiguration): void {
+  const dir = dirname(ClAUDE_CONFIG_FILE);
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true });
   }
 
-  writeFileSync(MCP_CONFIG_FILE, JSON.stringify(config, null, 2));
+  writeFileSync(ClAUDE_CONFIG_FILE, JSON.stringify(config, null, 2));
 }
 
 export function backupMcpConfig(): string | null {
-  if (!existsSync(MCP_CONFIG_FILE)) {
+  if (!existsSync(ClAUDE_CONFIG_FILE)) {
     return null;
   }
 
@@ -46,7 +46,7 @@ export function backupMcpConfig(): string | null {
       mkdirSync(backupBaseDir, { recursive: true });
     }
 
-    const content = readFileSync(MCP_CONFIG_FILE, 'utf-8');
+    const content = readFileSync(ClAUDE_CONFIG_FILE, 'utf-8');
     writeFileSync(backupPath, content);
     return backupPath;
   } catch (error) {
@@ -56,10 +56,10 @@ export function backupMcpConfig(): string | null {
 }
 
 export function mergeMcpServers(
-  existing: McpConfiguration | null,
+  existing: ClaudeConfiguration | null,
   newServers: Record<string, McpServerConfig>
-): McpConfiguration {
-  const config: McpConfiguration = existing || { mcpServers: {} };
+): ClaudeConfiguration {
+  const config: ClaudeConfiguration = existing || { mcpServers: {} };
 
   if (!config.mcpServers) {
     config.mcpServers = {};
@@ -94,4 +94,23 @@ export function buildMcpServerConfig(
   }
 
   return config;
+}
+
+export function addCompletedOnboarding(): void {
+  try {
+    // Read existing config or create new one
+    let config = readMcpConfig();
+    if (!config) {
+      config = { mcpServers: {} };
+    }
+
+    // Add hasCompletedOnboarding flag
+    config.hasCompletedOnboarding = true;
+
+    // Write updated config
+    writeMcpConfig(config);
+  } catch (error) {
+    console.error('Failed to add hasCompletedOnboarding flag:', error);
+    throw error;
+  }
 }

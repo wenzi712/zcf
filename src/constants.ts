@@ -5,7 +5,7 @@ import type { McpService } from './types';
 export const CLAUDE_DIR = join(homedir(), '.claude');
 export const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json');
 export const CLAUDE_MD_FILE = join(CLAUDE_DIR, 'CLAUDE.md');
-export const MCP_CONFIG_FILE = join(homedir(), '.claude.json');
+export const ClAUDE_CONFIG_FILE = join(homedir(), '.claude.json');
 export const ZCF_CONFIG_FILE = join(homedir(), '.zcf.json');
 
 export const SUPPORTED_LANGS = ['zh-CN', 'en'] as const;

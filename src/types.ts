@@ -16,6 +16,7 @@ export interface McpServerConfig {
   env?: Record<string, string>
 }
 
-export interface McpConfiguration {
+export interface ClaudeConfiguration {
   mcpServers: Record<string, McpServerConfig>
+  hasCompletedOnboarding?: boolean
 }

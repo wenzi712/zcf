@@ -77,3 +77,4 @@ pnpm test
 - 使用 dayjs 处理时间格式化
 - 代码注释用英文
 - 使用 changeset 进行版本管理
+- CHANGELOG 用双语,不要在同一行,整体一个语言,中文在上,英文在下
