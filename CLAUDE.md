@@ -43,11 +43,12 @@ pnpm test
    - `utils/platform.ts`：跨平台路径处理
    - `utils/mcp.ts`：MCP 配置管理（读取、写入、合并、备份）
 
-4. **模板系统** (`templates/`)：包含中英文两套完整配置
-   - `CLAUDE.md`：系统指令和原则
-   - `settings.json`：API 和权限配置
-   - `agents/`：AI 代理定义（planner、ui-ux-designer）
-   - `commands/`：自定义命令（feat、workflow）
+4. **模板系统** (`templates/`)：优化的配置结构
+   - `settings.json`：基础配置（含隐私保护环境变量）
+   - `en/` 和 `zh-CN/`：语言特定配置
+     - `CLAUDE.md`：系统指令和原则
+     - `agents/`：AI 代理定义（planner、ui-ux-designer）
+     - `commands/`：自定义命令（feat、workflow）
 
 ### 构建配置
 

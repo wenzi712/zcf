@@ -1,5 +1,8 @@
 # ZCF - Zero-Config Claude-Code Flow
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
+
 **中文** | [English](README_EN.md)
 
 > 零配置，一键搞定 Claude Code 环境设置 - 支持中英文双语配置和智能代理系统
@@ -198,9 +201,9 @@ claude-code-config/
 │   ├── utils/           # 工具函数
 │   └── constants.ts     # 常量定义
 ├── templates/            # 配置模板
+│   ├── settings.json    # 基础配置（含隐私保护环境变量）
 │   ├── en/              # 英文版
 │   │   ├── CLAUDE.md    # 核心原则
-│   │   ├── settings.json
 │   │   ├── agents/      # AI 代理
 │   │   └── commands/    # 命令定义
 │   └── zh-CN/           # 中文版

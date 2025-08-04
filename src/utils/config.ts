@@ -48,6 +48,7 @@ export function copyConfigFiles(lang: SupportedLang, onlyMd: boolean = false) {
   const distDir = dirname(dirname(currentFilePath));
   const rootDir = dirname(distDir);
   const sourceDir = join(rootDir, 'templates', lang);
+  const baseTemplateDir = join(rootDir, 'templates');
 
   if (!existsSync(sourceDir)) {
     throw new Error(`Template directory not found: ${sourceDir}`);
@@ -57,8 +58,15 @@ export function copyConfigFiles(lang: SupportedLang, onlyMd: boolean = false) {
     // Only copy .md files and maintain directory structure
     copyMdFiles(sourceDir, CLAUDE_DIR);
   } else {
-    // Copy all files
+    // Copy all files from language-specific directory
     copyDirectory(sourceDir, CLAUDE_DIR);
+    
+    // Copy base settings.json from templates root directory
+    const baseSettingsPath = join(baseTemplateDir, 'settings.json');
+    const destSettingsPath = join(CLAUDE_DIR, 'settings.json');
+    if (existsSync(baseSettingsPath)) {
+      copyFileSync(baseSettingsPath, destSettingsPath);
+    }
   }
 }
 
@@ -92,6 +100,11 @@ function copyDirectory(src: string, dest: string) {
   const entries = readdirSync(src);
 
   for (const entry of entries) {
+    // Skip settings.json in language-specific directories (will use base template)
+    if (entry === 'settings.json') {
+      continue;
+    }
+    
     const srcPath = join(src, entry);
     const destPath = join(dest, entry);
     const stat = statSync(srcPath);
@@ -153,7 +166,7 @@ export function configureApi(apiConfig: ApiConfig | null) {
   }
 
   // Update API configuration
-  settings.env.ANTHROPIC_API_KEY = apiConfig.key;
+  settings.env.ANTHROPIC_AUTH_TOKEN = apiConfig.key;
   settings.env.ANTHROPIC_BASE_URL = apiConfig.url;
 
   writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));

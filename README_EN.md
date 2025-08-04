@@ -1,5 +1,8 @@
 # ZCF - Zero-Config Claude-Code Flow
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
+
 [中文](README.md) | **English**
 
 > Zero-config, one-click setup for Claude Code with bilingual support and intelligent agent system
@@ -198,9 +201,9 @@ claude-code-config/
 │   ├── utils/           # Utility functions
 │   └── constants.ts     # Constant definitions
 ├── templates/            # Configuration templates
+│   ├── settings.json    # Base configuration (with privacy env vars)
 │   ├── en/              # English version
 │   │   ├── CLAUDE.md    # Core principles
-│   │   ├── settings.json
 │   │   ├── agents/      # AI agents
 │   │   └── commands/    # Command definitions
 │   └── zh-CN/           # Chinese version
