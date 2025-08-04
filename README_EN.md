@@ -6,17 +6,28 @@
 
 ## 🚀 Quick Start
 
+### Choose based on your situation:
+
+#### 🆕 First time using Claude Code
 ```bash
-npx zcf          # Initialize configuration (default)
-npx zcf u        # Update prompts with backup (short for update)
+npx zcf          # Full setup: Install Claude Code + Configure API + Set up MCP services
 ```
 
-Initialization will automatically:
+#### 🔄 Already have Claude Code installed
+```bash
+npx zcf u        # Import workflows only: Quick add AI workflows and command system
+```
 
-- Detect and install Claude Code
-- Configure API keys
-- Select and configure MCP services
-- Set up all necessary configuration files
+> **Note**: `zcf u` is short for `zcf update`, designed for existing users to import workflow-related files only, preserving your API and MCP configurations.
+
+### Setup Process
+
+Full initialization (`npx zcf`) will automatically:
+
+- ✅ Detect and install Claude Code
+- ✅ Configure API keys
+- ✅ Select and configure MCP services
+- ✅ Set up all necessary configuration files
 
 ### Usage
 
@@ -94,7 +105,7 @@ $ npx zcf
 
 ? Existing config detected. How to proceed?
   ❯ Backup and overwrite all
-    Update Prompt documents only with backup
+    Update workflow-related md files only with backup
     Merge config
     Skip
 
@@ -125,7 +136,7 @@ $ npx zcf
 | Command      | Alias   | Description                        |
 | ------------ | ------- | ---------------------------------- |
 | `zcf`        | -       | Initialize configuration (default) |
-| `zcf update` | `zcf u` | Update prompts with backup         |
+| `zcf update` | `zcf u` | Update workflow-related md files with backup         |
 
 #### Common Options
 
@@ -138,7 +149,7 @@ npx zcf -c zh-CN            # Using short option
 npx zcf --force
 npx zcf -f                 # Using short option
 
-# Update prompts with backup (preserve API and MCP configs)
+# Update workflow-related md files with backup (preserve API and MCP configs)
 npx zcf u                  # Using update command
 npx zcf update             # Full command
 
@@ -157,7 +168,7 @@ npx zcf -v
 # First-time installation, interactive setup
 npx zcf
 
-# Update prompts with backup, keep API and MCP configs
+# Update workflow-related md files with backup, keep API and MCP configs
 npx zcf u
 
 # Force reinitialize with Chinese config

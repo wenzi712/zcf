@@ -39,38 +39,38 @@ cli.help((sections) => {
   
   // Add commands section with aliases
   sections.push({
-    title: ansis.yellow('Commands:'),
+    title: ansis.yellow('Commands / 命令:'),
     body: [
-      `  ${ansis.cyan('zcf')}              Initialize configuration (default)`,
-      `  ${ansis.cyan('zcf update')} | ${ansis.cyan('u')}   Update prompts only with backup`,
+      `  ${ansis.cyan('zcf')}              Initialize configuration (default) / 初始化配置（默认）`,
+      `  ${ansis.cyan('zcf update')} | ${ansis.cyan('u')}   Update workflow-related md files / 仅更新工作流相关md`,
       '',
-      ansis.gray('  Shortcut:'),
-      `  ${ansis.cyan('zcf u')}            Quick update`
+      ansis.gray('  Shortcut / 快捷方式:'),
+      `  ${ansis.cyan('zcf u')}            Quick update / 快速更新`
     ].join('\n')
   })
   
   // Add options section
   sections.push({
-    title: ansis.yellow('Options:'),
+    title: ansis.yellow('Options / 选项:'),
     body: [
-      `  ${ansis.green('--config-lang, -c')} <lang>  Configuration language (zh-CN, en)`,
-      `  ${ansis.green('--force, -f')}           Force overwrite existing configuration`,
-      `  ${ansis.green('--help, -h')}            Display help`,
-      `  ${ansis.green('--version, -v')}         Display version`
+      `  ${ansis.green('--config-lang, -c')} <lang>  Configuration language / 配置语言 (zh-CN, en)`,
+      `  ${ansis.green('--force, -f')}               Force overwrite / 强制覆盖现有配置`,
+      `  ${ansis.green('--help, -h')}                Display help / 显示帮助`,
+      `  ${ansis.green('--version, -v')}             Display version / 显示版本`
     ].join('\n')
   })
   
   // Add examples section
   sections.push({
-    title: ansis.yellow('Examples:'),
+    title: ansis.yellow('Examples / 示例:'),
     body: [
-      ansis.gray('  # Initialize with interactive prompts'),
+      ansis.gray('  # Initialize with interactive prompts / 交互式初始化'),
       `  ${ansis.cyan('npx zcf')}`,
       '',
-      ansis.gray('  # Update prompts only'),
+      ansis.gray('  # Update workflow-related md files only / 仅更新工作流相关md文件'),
       `  ${ansis.cyan('npx zcf u')}`,
       '',
-      ansis.gray('  # Force overwrite with Chinese config'),
+      ansis.gray('  # Force overwrite with Chinese config / 强制使用中文配置覆盖'),
       `  ${ansis.cyan('npx zcf -c zh-CN -f')}`,
       `  ${ansis.cyan('npx zcf --config-lang zh-CN --force')}`
     ].join('\n')
