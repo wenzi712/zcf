@@ -24,6 +24,5 @@
     ],
     "deny": []
   },
-  "hooks": {},
-  "model": "opus"
+  "hooks": {}
 }
