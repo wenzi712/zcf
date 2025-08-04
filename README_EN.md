@@ -237,12 +237,6 @@ claude-code-config/
 5. **[Mode: Optimize]** - Improve quality
 6. **[Mode: Review]** - Final assessment
 
-## ⚙️ Supported Models
-
-- **opus**: Most powerful, for complex tasks
-- **sonnet**: Balanced performance and cost
-- **haiku**: Fast lightweight model
-
 ## 🛠️ Development
 
 ```bash
