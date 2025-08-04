@@ -262,7 +262,7 @@ node bin/zcf.mjs
 
 1. **Task Breakdown**: Keep tasks independent and testable
 2. **Code Quality**: Follow SOLID, KISS, DRY, and YAGNI principles
-3. **Documentation Management**: Store plans in `.claude/` directory
+3. **Documentation Management**: The plan will be stored in the `.claude/plan/` directory at the project root
 
 ## 🔧 Troubleshooting
 
