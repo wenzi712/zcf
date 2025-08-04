@@ -75,9 +75,11 @@ npx zcf u        # 仅导入工作流：快速添加 AI 工作流和命令系统
 
 ### 🔐 API 配置
 
-- 自定义 API 支持
-- API Key 自动配置
-- 支持稍后在 claude 命令中配置（如 OAuth）
+- 支持两种认证方式：
+  - **Auth Token**：适用于通过 OAuth 或浏览器登录获取的令牌
+  - **API Key**：适用于从 Anthropic Console 获取的 API 密钥
+- 自定义 API URL 支持
+- 支持稍后在 claude 命令中配置
 
 ### 💾 配置管理
 
@@ -112,12 +114,15 @@ $ npx zcf
 
 ✔ Claude Code 安装成功
 
-? 是否配置 API？
-  ❯ 配置 API
-    跳过（稍后在 claude 命令中自行配置，如 OAuth）
+? 选择 API 认证方式
+  ❯ 使用 Auth Token (OAuth 认证)
+    适用于通过 OAuth 或浏览器登录获取的令牌
+    使用 API Key (密钥认证)
+    适用于从 Anthropic Console 获取的 API 密钥
+    跳过（稍后手动配置）
 
 ? 请输入 API URL: https://api.anthropic.com
-? 请输入 API Key: sk-xxx
+? 请输入 Auth Token 或 API Key: xxx
 
 ? 检测到已有配置文件，如何处理？
   ❯ 备份并覆盖全部

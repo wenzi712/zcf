@@ -146,8 +146,20 @@ export async function init(options: InitOptions = {}) {
         name: 'apiChoice',
         message: i18n.configureApi,
         choices: [
-          { title: i18n.customApi, value: 'custom' },
-          { title: i18n.skipApi, value: 'skip' },
+          { 
+            title: i18n.useAuthToken, 
+            value: 'auth_token',
+            description: ansis.gray(i18n.authTokenDesc)
+          },
+          { 
+            title: i18n.useApiKey, 
+            value: 'api_key',
+            description: ansis.gray(i18n.apiKeyDesc)
+          },
+          { 
+            title: i18n.skipApi, 
+            value: 'skip'
+          },
         ],
       });
       
@@ -158,7 +170,7 @@ export async function init(options: InitOptions = {}) {
       
       const apiChoice = apiResponse.apiChoice;
 
-      if (apiChoice === 'custom') {
+      if (apiChoice === 'auth_token' || apiChoice === 'api_key') {
         const urlResponse = await prompts({
           type: 'text',
           name: 'url',
@@ -181,11 +193,12 @@ export async function init(options: InitOptions = {}) {
         
         const url = urlResponse.url;
 
+        const keyMessage = apiChoice === 'auth_token' ? i18n.enterAuthToken : i18n.enterApiKey;
         const keyResponse = await prompts({
           type: 'text',
           name: 'key',
-          message: i18n.enterApiKey,
-          validate: (value) => !!value || 'API Key is required',
+          message: keyMessage,
+          validate: (value) => !!value || `${apiChoice === 'auth_token' ? 'Auth Token' : 'API Key'} is required`,
         });
         
         if (keyResponse.key === undefined) {
@@ -195,7 +208,7 @@ export async function init(options: InitOptions = {}) {
         
         const key = keyResponse.key;
 
-        apiConfig = { url, key };
+        apiConfig = { url, key, authType: apiChoice };
       }
     }
 

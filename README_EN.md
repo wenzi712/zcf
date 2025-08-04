@@ -75,9 +75,11 @@ After configuration:
 
 ### 🔐 API Configuration
 
-- Custom API support
-- Automatic API Key configuration
-- Support for later configuration in claude command (e.g., OAuth)
+- Supports two authentication methods:
+  - **Auth Token**: For tokens obtained via OAuth or browser login
+  - **API Key**: For API keys from Anthropic Console
+- Custom API URL support
+- Support for manual configuration later
 
 ### 💾 Configuration Management
 
@@ -112,12 +114,15 @@ $ npx zcf
 
 ✔ Claude Code installed successfully
 
-? Configure API?
-  ❯ Configure API
-    Skip (configure later in claude command, e.g., OAuth)
+? Select API authentication method
+  ❯ Use Auth Token (OAuth authentication)
+    For tokens obtained via OAuth or browser login
+    Use API Key (Key authentication)
+    For API keys from Anthropic Console
+    Skip (configure manually later)
 
 ? Enter API URL: https://api.anthropic.com
-? Enter API Key: sk-xxx
+? Enter Auth Token or API Key: xxx
 
 ? Existing config detected. How to proceed?
   ❯ Backup and overwrite all

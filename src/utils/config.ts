@@ -120,6 +120,7 @@ function copyDirectory(src: string, dest: string) {
 export interface ApiConfig {
   url: string;
   key: string;
+  authType?: 'auth_token' | 'api_key';
 }
 
 export function configureApi(apiConfig: ApiConfig | null) {
@@ -165,8 +166,13 @@ export function configureApi(apiConfig: ApiConfig | null) {
     }
   }
 
-  // Update API configuration
-  settings.env.ANTHROPIC_AUTH_TOKEN = apiConfig.key;
+  // Update API configuration based on auth type
+  if (apiConfig.authType === 'api_key') {
+    settings.env.ANTHROPIC_API_KEY = apiConfig.key;
+  } else {
+    // Default to AUTH_TOKEN for backward compatibility
+    settings.env.ANTHROPIC_AUTH_TOKEN = apiConfig.key;
+  }
   settings.env.ANTHROPIC_BASE_URL = apiConfig.url;
 
   writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));

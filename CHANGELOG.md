@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.4
+
+### Patch Changes
+
+- feat: 增强 API 配置功能，支持选择 AUTH_TOKEN 或 API_KEY 认证方式
+
+  - 用户现在可以选择使用 ANTHROPIC_AUTH_TOKEN（OAuth 认证）或 ANTHROPIC_API_KEY（密钥认证）
+  - 每个认证选项都提供了清晰的描述说明
+  - 根据用户选择设置正确的环境变量
+  - 更新了中英文文档说明
+
 ## 1.1.3
 
 ### Patch Changes
