@@ -9,11 +9,13 @@
 ### Choose based on your situation:
 
 #### 🆕 First time using Claude Code
+
 ```bash
-npx zcf          # Full setup: Install Claude Code + Configure API + Set up MCP services
+npx zcf          # Full setup: Install Claude Code + Import workflows + Configure API + Set up MCP services
 ```
 
 #### 🔄 Already have Claude Code installed
+
 ```bash
 npx zcf u        # Import workflows only: Quick add AI workflows and command system
 ```
@@ -133,10 +135,10 @@ $ npx zcf
 
 #### Commands Quick Reference
 
-| Command      | Alias   | Description                        |
-| ------------ | ------- | ---------------------------------- |
-| `zcf`        | -       | Initialize configuration (default) |
-| `zcf update` | `zcf u` | Update workflow-related md files with backup         |
+| Command      | Alias   | Description                                  |
+| ------------ | ------- | -------------------------------------------- |
+| `zcf`        | -       | Initialize configuration (default)           |
+| `zcf update` | `zcf u` | Update workflow-related md files with backup |
 
 #### Common Options
 
