@@ -1,14 +1,13 @@
 import prompts from '@posva/prompts';
 import ansis from 'ansis';
 import type { AiOutputLanguage, SupportedLang } from '../constants';
-import { I18N } from '../constants';
+import { CLAUDE_DIR, I18N } from '../constants';
 import type { ApiConfig } from '../types/config';
 import {
   applyAiLanguageDirective,
   backupExistingConfig,
   configureApi,
   copyConfigFiles,
-  ensureClaudeDir,
   getExistingApiConfig,
 } from './config';
 import { configureAiPersonality } from './ai-personality';
@@ -266,6 +265,6 @@ export async function updatePromptOnly(
   // Configure AI personality
   await configureAiPersonality(scriptLang);
 
-  console.log(ansis.green(`✔ ${i18n.configSuccess} ${ensureClaudeDir()}`));
+  console.log(ansis.green(`✔ ${i18n.configSuccess} ${CLAUDE_DIR}`));
   console.log('\n' + ansis.cyan(i18n.complete));
 }

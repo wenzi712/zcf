@@ -102,7 +102,7 @@ export const I18N = {
     },
     // Menu related
     selectFunction: '请选择功能',
-    enterChoice: '请输入选项',
+    enterChoice: '请输入选项，回车确认',
     menuOptions: {
       fullInit: '完整初始化',
       importWorkflow: '导入工作流',
@@ -273,7 +273,7 @@ export const I18N = {
     },
     // Menu related
     selectFunction: 'Select function',
-    enterChoice: 'Enter your choice',
+    enterChoice: 'Enter your choice, and press enter',
     menuOptions: {
       fullInit: 'Full initialization',
       importWorkflow: 'Import workflow',

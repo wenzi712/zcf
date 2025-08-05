@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.1
+
+### Patch Changes
+
+- 修复配置文件路径显示 undefined 的问题
+
+  - 修复在更新配置时输出消息显示 "配置文件已复制到 undefined" 的问题
+  - 现在会正确显示实际的配置目录路径（如 ~/.claude）
+
+  Fixed undefined output in config file path display
+
+  - Fixed issue where update command showed "Config files copied to undefined"
+  - Now correctly displays the actual config directory path (e.g., ~/.claude)
+
 ## 2.0.0
 
 ### Major Changes
