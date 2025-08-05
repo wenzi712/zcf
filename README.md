@@ -285,6 +285,16 @@ node bin/zcf.mjs
 2. 检查 `~/.claude/` 目录下的配置文件
 3. 确保 Claude Code 已正确安装
 
+### Windows 平台支持
+
+ZCF 已完全支持 Windows 平台：
+
+- **自动检测**：在 Windows 系统上会自动使用兼容的 `cmd /c npx` 格式
+- **配置修复**：现有的错误配置会在更新时自动修复
+- **零配置**：Windows 用户无需任何额外操作，与 macOS/Linux 体验一致
+
+如果在 Windows 上遇到 MCP 连接问题，运行 `npx zcf` 会自动修复配置格式。
+
 ## 🙏 鸣谢
 
 本项目的部分 Prompt 参考了以下优秀作品：

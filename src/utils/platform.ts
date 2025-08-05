@@ -8,6 +8,17 @@ export function getPlatform() {
   return 'linux';
 }
 
+export function isWindows(): boolean {
+  return getPlatform() === 'windows';
+}
+
+export function getMcpCommand(): string[] {
+  if (isWindows()) {
+    return ['cmd', '/c', 'npx'];
+  }
+  return ['npx'];
+}
+
 export async function commandExists(command: string): Promise<boolean> {
   try {
     const cmd = getPlatform() === 'windows' ? 'where' : 'which';

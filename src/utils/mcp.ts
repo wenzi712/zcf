@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'pathe';
 import { CLAUDE_DIR, ClAUDE_CONFIG_FILE } from '../constants';
 import type { ClaudeConfiguration, McpServerConfig } from '../types';
+import { getMcpCommand, isWindows } from './platform';
 
 export function getMcpConfigPath(): string {
   return ClAUDE_CONFIG_FILE;
@@ -71,17 +72,28 @@ export function mergeMcpServers(
   return config;
 }
 
+function applyPlatformCommand(config: McpServerConfig): void {
+  if (config.command === 'npx' && isWindows()) {
+    const mcpCmd = getMcpCommand();
+    config.command = mcpCmd[0];
+    config.args = [...mcpCmd.slice(1), ...(config.args || [])];
+  }
+}
+
 export function buildMcpServerConfig(
   baseConfig: McpServerConfig,
   apiKey?: string,
   placeholder: string = 'YOUR_EXA_API_KEY'
 ): McpServerConfig {
-  if (!apiKey) {
-    return { ...baseConfig };
-  }
-
   // Deep clone the config to avoid mutation
   const config = JSON.parse(JSON.stringify(baseConfig));
+
+  // Apply platform-specific command
+  applyPlatformCommand(config);
+
+  if (!apiKey) {
+    return config;
+  }
 
   // Replace API key placeholder in args if exists
   if (config.args) {
@@ -96,6 +108,23 @@ export function buildMcpServerConfig(
   return config;
 }
 
+export function fixWindowsMcpConfig(config: ClaudeConfiguration): ClaudeConfiguration {
+  if (!isWindows() || !config.mcpServers) {
+    return config;
+  }
+
+  const fixed = { ...config };
+
+  // Fix each MCP server configuration
+  for (const [, serverConfig] of Object.entries(fixed.mcpServers)) {
+    if (serverConfig && typeof serverConfig === 'object' && 'command' in serverConfig) {
+      applyPlatformCommand(serverConfig);
+    }
+  }
+
+  return fixed;
+}
+
 export function addCompletedOnboarding(): void {
   try {
     // Read existing config or create new one
@@ -106,6 +135,9 @@ export function addCompletedOnboarding(): void {
 
     // Add hasCompletedOnboarding flag
     config.hasCompletedOnboarding = true;
+
+    // Fix Windows config if needed
+    config = fixWindowsMcpConfig(config);
 
     // Write updated config
     writeMcpConfig(config);

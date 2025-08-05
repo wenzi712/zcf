@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- 添加 Windows 平台 MCP 配置支持
+
+  - 自动检测 Windows 系统并使用兼容的 `cmd /c npx` 命令格式
+  - 修复现有配置中的 Windows 兼容性问题
+  - 添加平台检测工具函数 `isWindows()` 和 `getMcpCommand()`
+  - 优化 MCP 配置生成逻辑，提取公共代码避免重复
+  - 在 Windows 系统上显示友好提示信息
+  - 更新中英文文档说明 Windows 支持
+
+  Add Windows platform MCP configuration support
+
+  - Auto-detect Windows system and use compatible `cmd /c npx` command format
+  - Fix Windows compatibility issues in existing configurations
+  - Add platform detection utilities `isWindows()` and `getMcpCommand()`
+  - Optimize MCP config generation logic, extract common code to avoid duplication
+  - Show friendly prompt on Windows systems
+  - Update README documentation for Windows support
+
 ## 1.1.6
 
 ### Patch Changes
@@ -61,11 +83,13 @@
 - **功能增强：添加 AI 输出语言选择功能**
 
   - 🌏 **新增 AI 输出语言选择**：用户可在初始化和更新时选择 AI 回复的语言
+
     - 支持多种预设语言（中文、英文等）
     - 支持自定义语言输入
     - 智能记忆用户偏好，避免重复询问
 
   - 🔧 **代码优化**：
+
     - 重构代码结构，提取公共方法到 `utils/prompts.ts`
     - 消除 init 和 update 命令中的重复代码
     - 优化 settings.json 配置结构，消除重复文件
@@ -77,11 +101,13 @@
   **Feature Enhancement: Added AI output language selection functionality**
 
   - 🌏 **Added AI output language selection**: Users can choose AI response language during initialization and updates
+
     - Support for multiple preset languages (Chinese, English, etc.)
     - Support for custom language input
     - Smart memory of user preferences to avoid repeated prompts
 
   - 🔧 **Code optimization**:
+
     - Refactored code structure, extracted common methods to `utils/prompts.ts`
     - Eliminated duplicate code in init and update commands
     - Optimized settings.json configuration structure, eliminated duplicate files
@@ -206,6 +232,7 @@
 - 跨平台支持（Windows、macOS、Linux）
 
 **Initial version release**
+
 - Support for Chinese and English bilingual configuration
 - Automatic detection and installation of Claude Code
 - Intelligent configuration file management (backup, merge, skip)

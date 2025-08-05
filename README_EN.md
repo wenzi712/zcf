@@ -285,6 +285,16 @@ If you encounter issues:
 2. Check configuration files in `~/.claude/` directory
 3. Ensure Claude Code is properly installed
 
+### Windows Platform Support
+
+ZCF fully supports Windows platform:
+
+- **Auto-detection**: Automatically uses compatible `cmd /c npx` format on Windows systems
+- **Config repair**: Existing incorrect configurations are automatically fixed during updates
+- **Zero-config**: Windows users don't need any extra steps, same experience as macOS/Linux
+
+If you encounter MCP connection issues on Windows, running `npx zcf` will automatically fix the configuration format.
+
 ## 🙏 Acknowledgments
 
 Some prompts in this project are inspired by the following excellent works:

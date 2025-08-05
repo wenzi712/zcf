@@ -8,7 +8,8 @@ import type { McpServerConfig } from '../types';
 import { displayBanner } from '../utils/banner';
 import { applyAiLanguageDirective, backupExistingConfig, configureApi, copyConfigFiles, ensureClaudeDir } from '../utils/config';
 import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer';
-import { addCompletedOnboarding, backupMcpConfig, buildMcpServerConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
+import { addCompletedOnboarding, backupMcpConfig, buildMcpServerConfig, fixWindowsMcpConfig, mergeMcpServers, readMcpConfig, writeMcpConfig } from '../utils/mcp';
+import { isWindows } from '../utils/platform';
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
 import { validateApiKey, formatApiKeyDisplay } from '../utils/validator';
@@ -287,6 +288,11 @@ export async function init(options: InitOptions = {}) {
       }
 
       if (mcpResponse.shouldConfigureMcp) {
+        // Show Windows-specific notice
+        if (isWindows()) {
+          console.log(ansis.blue(`ℹ ${scriptLang === 'zh-CN' ? '检测到 Windows 系统，将自动配置兼容格式' : 'Windows detected, will configure compatible format'}`));
+        }
+        
         // Create choices array with "All" option first
         const choices = [
           {
@@ -365,7 +371,10 @@ export async function init(options: InitOptions = {}) {
 
           // Merge with existing config
           const existingConfig = readMcpConfig();
-          const mergedConfig = mergeMcpServers(existingConfig, newServers);
+          let mergedConfig = mergeMcpServers(existingConfig, newServers);
+          
+          // Fix Windows config if needed
+          mergedConfig = fixWindowsMcpConfig(mergedConfig);
 
           // Write the config with error handling
           try {
