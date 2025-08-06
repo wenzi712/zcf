@@ -1,4 +1,4 @@
-import prompts from '@posva/prompts';
+import inquirer from 'inquirer';
 import ansis from 'ansis';
 import { I18N } from '../constants';
 import { displayBannerWithInfo } from '../utils/banner';
@@ -14,6 +14,7 @@ import { init } from './init';
 import { update } from './update';
 import { selectScriptLanguage } from '../utils/prompts';
 import { readZcfConfig } from '../utils/zcf-config';
+import { handleExitPromptError, handleGeneralError } from '../utils/error-handler';
 
 export async function showMainMenu() {
   try {
@@ -74,8 +75,8 @@ export async function showMainMenu() {
       console.log('');
 
       // Get user input
-      const response = await prompts({
-        type: 'text',
+      const { choice } = await inquirer.prompt<{ choice: string }>({
+        type: 'input',
         name: 'choice',
         message: i18n.enterChoice || 'Enter your choice',
         validate: (value) => {
@@ -84,14 +85,14 @@ export async function showMainMenu() {
         },
       });
 
-      if (!response.choice) {
+      if (!choice) {
         console.log(ansis.yellow(i18n.cancelled));
         exitMenu = true;
         break;
       }
 
       // Handle menu selection
-      switch (response.choice.toLowerCase()) {
+      switch (choice.toLowerCase()) {
         case '1':
           await init({ lang: scriptLang, skipBanner: true });
           break;
@@ -117,20 +118,6 @@ export async function showMainMenu() {
           const newLang = await changeScriptLanguageFeature(scriptLang);
           if (newLang !== scriptLang) {
             scriptLang = newLang;
-            // Show return to menu prompt in the new language immediately
-            console.log('\n' + ansis.dim('─'.repeat(50)) + '\n');
-            const newI18n = I18N[scriptLang];
-            const continueResponse = await prompts({
-              type: 'confirm',
-              name: 'continue',
-              message: newI18n.returnToMenu,
-              initial: true,
-            });
-            if (!continueResponse.continue) {
-              exitMenu = true;
-              console.log(ansis.cyan(newI18n.goodbye));
-            }
-            continue; // Skip the normal flow and go to next iteration
           }
           break;
         case 'q':
@@ -140,34 +127,32 @@ export async function showMainMenu() {
       }
 
       // Add spacing between operations
-      if (!exitMenu && response.choice.toLowerCase() !== 'q') {
+      if (!exitMenu && choice.toLowerCase() !== 'q') {
+        // Skip confirmation for ZCF configuration options (0 and -)
+        if (choice === '0' || choice === '-') {
+          console.log('\n' + ansis.dim('─'.repeat(50)) + '\n');
+          continue; // Directly return to menu
+        }
+
         console.log('\n' + ansis.dim('─'.repeat(50)) + '\n');
 
-        // Ask if user wants to continue
-        const continueResponse = await prompts({
+        // Ask if user wants to continue for other options
+        const { continue: shouldContinue } = await inquirer.prompt<{ continue: boolean }>({
           type: 'confirm',
           name: 'continue',
           message: i18n.returnToMenu,
-          initial: true,
+          default: true,
         });
 
-        if (!continueResponse.continue) {
+        if (!shouldContinue) {
           exitMenu = true;
           console.log(ansis.cyan(i18n.goodbye));
         }
       }
     }
   } catch (error) {
-    const zcfConfig = readZcfConfig();
-    const defaultLang = zcfConfig?.preferredLang || 'en';
-    const errorMsg = I18N[defaultLang].error;
-    console.error(ansis.red(`${errorMsg}:`), error);
-
-    // Log error details for debugging
-    if (error instanceof Error) {
-      console.error(ansis.gray(`Stack: ${error.stack}`));
+    if (!handleExitPromptError(error)) {
+      handleGeneralError(error);
     }
-
-    process.exit(1);
   }
 }

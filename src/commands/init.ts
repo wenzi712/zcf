@@ -1,4 +1,4 @@
-import prompts from '@posva/prompts';
+import inquirer from 'inquirer';
 import ansis from 'ansis';
 import { existsSync } from 'node:fs';
 import { version } from '../../package.json';
@@ -7,6 +7,7 @@ import { CLAUDE_DIR, I18N, LANG_LABELS, MCP_SERVICES, SETTINGS_FILE, SUPPORTED_L
 import type { McpServerConfig } from '../types';
 import { configureAiPersonality } from '../utils/ai-personality';
 import { displayBannerWithInfo } from '../utils/banner';
+import { handleExitPromptError, handleGeneralError } from '../utils/error-handler';
 import {
   applyAiLanguageDirective,
   backupExistingConfig,
@@ -59,22 +60,22 @@ export async function init(options: InitOptions = {}) {
     // Step 2: Select config language
     let configLang = options.configLang;
     if (!configLang) {
-      const response = await prompts({
-        type: 'select',
+      const { lang } = await inquirer.prompt<{ lang: SupportedLang }>({
+        type: 'list',
         name: 'lang',
         message: i18n.selectConfigLang,
         choices: SUPPORTED_LANGS.map((l) => ({
-          title: `${LANG_LABELS[l]} - ${i18n.configLangHint[l]}`,
+          name: `${LANG_LABELS[l]} - ${i18n.configLangHint[l]}`,
           value: l,
         })),
       });
 
-      if (!response.lang) {
+      if (!lang) {
         console.log(ansis.yellow(i18n.cancelled));
         process.exit(0);
       }
 
-      configLang = response.lang as SupportedLang;
+      configLang = lang;
     }
 
     // Step 3: Select AI output language
@@ -84,19 +85,19 @@ export async function init(options: InitOptions = {}) {
     // Step 4: Check and install Claude Code
     const installed = await isClaudeCodeInstalled();
     if (!installed) {
-      const response = await prompts({
+      const { shouldInstall } = await inquirer.prompt<{ shouldInstall: boolean }>({
         type: 'confirm',
         name: 'shouldInstall',
         message: i18n.installPrompt,
-        initial: true,
+        default: true,
       });
 
-      if (response.shouldInstall === undefined) {
+      if (shouldInstall === undefined) {
         console.log(ansis.yellow(i18n.cancelled));
         process.exit(0);
       }
 
-      if (response.shouldInstall) {
+      if (shouldInstall) {
         await installClaudeCode(scriptLang);
       } else {
         console.log(ansis.yellow(i18n.skip));
@@ -111,24 +112,23 @@ export async function init(options: InitOptions = {}) {
     let action = 'new'; // default action for new installation
 
     if (existsSync(SETTINGS_FILE) && !options.force) {
-      const actionResponse = await prompts({
-        type: 'select',
+      const { action } = await inquirer.prompt<{ action: string }>({
+        type: 'list',
         name: 'action',
         message: i18n.existingConfig,
         choices: [
-          { title: i18n.backupAndOverwrite, value: 'backup' },
-          { title: i18n.updateDocsOnly, value: 'docs-only' },
-          { title: i18n.mergeConfig, value: 'merge' },
-          { title: i18n.skip, value: 'skip' },
+          { name: i18n.backupAndOverwrite, value: 'backup' },
+          { name: i18n.updateDocsOnly, value: 'docs-only' },
+          { name: i18n.mergeConfig, value: 'merge' },
+          { name: i18n.skip, value: 'skip' },
         ],
       });
 
-      if (!actionResponse.action) {
+      if (!action) {
         console.log(ansis.yellow(i18n.cancelled));
         process.exit(0);
       }
 
-      action = actionResponse.action;
 
       if (action === 'skip') {
         console.log(ansis.yellow(i18n.skip));
@@ -161,65 +161,65 @@ export async function init(options: InitOptions = {}) {
         console.log(ansis.gray(`  ${i18n.apiConfigAuthType}: ${existingApiConfig.authType || i18n.notConfigured}\n`));
 
         // Ask user what to do with existing config
-        const actionResponse = await prompts({
-          type: 'select',
+        const { action: apiAction } = await inquirer.prompt<{ action: string }>({
+          type: 'list',
           name: 'action',
           message: i18n.selectApiAction,
           choices: [
-            { title: i18n.keepExistingConfig, value: 'keep' },
-            { title: i18n.modifyAllConfig, value: 'modify-all' },
-            { title: i18n.modifyPartialConfig, value: 'modify-partial' },
-            { title: i18n.skipApi, value: 'skip' },
+            { name: i18n.keepExistingConfig, value: 'keep' },
+            { name: i18n.modifyAllConfig, value: 'modify-all' },
+            { name: i18n.modifyPartialConfig, value: 'modify-partial' },
+            { name: i18n.skipApi, value: 'skip' },
           ],
         });
 
-        if (!actionResponse.action) {
+        if (!apiAction) {
           console.log(ansis.yellow(i18n.cancelled));
           process.exit(0);
         }
 
-        if (actionResponse.action === 'keep' || actionResponse.action === 'skip') {
+        if (apiAction === 'keep' || apiAction === 'skip') {
           // Keep existing config, no changes needed
           apiConfig = null;
-        } else if (actionResponse.action === 'modify-partial') {
+        } else if (apiAction === 'modify-partial') {
           // Handle partial modification
           await modifyApiConfigPartially(existingApiConfig, i18n, scriptLang);
           apiConfig = null; // No need to configure again
-        } else if (actionResponse.action === 'modify-all') {
+        } else if (apiAction === 'modify-all') {
           // Proceed with full configuration
           apiConfig = await configureApiCompletely(i18n, scriptLang);
         }
       } else {
         // No existing config, proceed with normal flow
-        const apiResponse = await prompts({
-          type: 'select',
+        const { apiChoice } = await inquirer.prompt<{ apiChoice: string }>({
+          type: 'list',
           name: 'apiChoice',
           message: i18n.configureApi,
           choices: [
             {
-              title: i18n.useAuthToken,
+              name: `${i18n.useAuthToken} - ${ansis.gray(i18n.authTokenDesc)}`,
               value: 'auth_token',
-              description: ansis.gray(i18n.authTokenDesc),
+              short: i18n.useAuthToken,
             },
             {
-              title: i18n.useApiKey,
+              name: `${i18n.useApiKey} - ${ansis.gray(i18n.apiKeyDesc)}`,
               value: 'api_key',
-              description: ansis.gray(i18n.apiKeyDesc),
+              short: i18n.useApiKey,
             },
             {
-              title: i18n.skipApi,
+              name: i18n.skipApi,
               value: 'skip',
             },
           ],
         });
 
-        if (!apiResponse.apiChoice) {
+        if (!apiChoice) {
           console.log(ansis.yellow(i18n.cancelled));
           process.exit(0);
         }
 
-        if (apiResponse.apiChoice !== 'skip') {
-          apiConfig = await configureApiCompletely(i18n, scriptLang, apiResponse.apiChoice);
+        if (apiChoice !== 'skip') {
+          apiConfig = await configureApiCompletely(i18n, scriptLang, apiChoice as 'auth_token' | 'api_key');
         }
       }
     }
@@ -272,19 +272,19 @@ export async function init(options: InitOptions = {}) {
 
     // Step 10: Configure MCP services (skip if only updating docs)
     if (!onlyUpdateDocs) {
-      const mcpResponse = await prompts({
+      const { shouldConfigureMcp } = await inquirer.prompt<{ shouldConfigureMcp: boolean }>({
         type: 'confirm',
         name: 'shouldConfigureMcp',
         message: i18n.configureMcp,
-        initial: true,
+        default: true,
       });
 
-      if (mcpResponse.shouldConfigureMcp === undefined) {
+      if (shouldConfigureMcp === undefined) {
         console.log(ansis.yellow(i18n.cancelled));
         process.exit(0);
       }
 
-      if (mcpResponse.shouldConfigureMcp) {
+      if (shouldConfigureMcp) {
         // Show Windows-specific notice
         if (isWindows()) {
           console.log(
@@ -312,21 +312,19 @@ export async function init(options: InitOptions = {}) {
           })),
         ];
 
-        const selectedResponse = await prompts({
-          type: 'multiselect',
+        const { services } = await inquirer.prompt<{ services: string[] }>({
+          type: 'checkbox',
           name: 'services',
-          message: i18n.selectMcpServices,
+          message: i18n.selectMcpServices + ' ' + ansis.gray(i18n.spaceToSelectReturn),
           choices,
-          instructions: false,
-          hint: i18n.spaceToSelectReturn,
         });
 
-        if (selectedResponse.services === undefined) {
+        if (services === undefined) {
           console.log(ansis.yellow(i18n.cancelled));
           process.exit(0);
         }
 
-        let selectedServices = selectedResponse.services || [];
+        let selectedServices = services || [];
 
         // If "ALL" is selected, select all services
         if (selectedServices.includes('ALL')) {
@@ -351,20 +349,20 @@ export async function init(options: InitOptions = {}) {
 
             // Handle services that require API key
             if (service.requiresApiKey) {
-              const apiKeyResponse = await prompts({
-                type: 'text',
+              const { apiKey } = await inquirer.prompt<{ apiKey: string }>({
+                type: 'input',
                 name: 'apiKey',
                 message: service.apiKeyPrompt![scriptLang],
                 validate: (value) => !!value || i18n.keyRequired,
               });
 
-              if (apiKeyResponse.apiKey === undefined) {
+              if (apiKey === undefined) {
                 console.log(ansis.yellow(`${i18n.skip}: ${service.name[scriptLang]}`));
                 continue;
               }
 
-              if (apiKeyResponse.apiKey) {
-                config = buildMcpServerConfig(service.config, apiKeyResponse.apiKey, service.apiKeyPlaceholder);
+              if (apiKey) {
+                config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder);
               } else {
                 // Skip this service if no API key provided
                 continue;
@@ -403,7 +401,8 @@ export async function init(options: InitOptions = {}) {
     console.log(ansis.green(`✔ ${i18n.configSuccess} ${CLAUDE_DIR}`));
     console.log('\n' + ansis.cyan(i18n.complete));
   } catch (error) {
-    console.error(ansis.red(`${I18N[options.lang || 'en'].error}:`), error);
-    process.exit(1);
+    if (!handleExitPromptError(error)) {
+      handleGeneralError(error, options.lang);
+    }
   }
 }

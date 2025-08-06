@@ -1,4 +1,4 @@
-import prompts from '@posva/prompts';
+import inquirer from 'inquirer';
 import ansis from 'ansis';
 import { version } from '../../package.json';
 import type { AiOutputLanguage, SupportedLang } from '../constants';
@@ -25,36 +25,39 @@ export async function selectAiOutputLanguage(
   // Set default selection
   const defaultChoice = defaultLang || (scriptLang === 'zh-CN' ? 'zh-CN' : 'en');
 
-  const aiLangResponse = await prompts({
-    type: 'select',
+  const { lang } = await inquirer.prompt<{ lang: string }>({
+    type: 'list',
     name: 'lang',
     message: i18n.selectAiOutputLang,
-    choices: aiLangChoices,
-    initial: aiLangChoices.findIndex((c) => c.value === defaultChoice),
+    choices: aiLangChoices.map(choice => ({
+      name: choice.title,
+      value: choice.value,
+    })),
+    default: defaultChoice,
   });
 
-  if (!aiLangResponse.lang) {
+  if (!lang) {
     console.log(ansis.yellow(i18n.cancelled));
     process.exit(0);
   }
 
-  let aiOutputLang = aiLangResponse.lang as AiOutputLanguage;
+  let aiOutputLang = lang as AiOutputLanguage;
 
   // If custom language selected, ask for the specific language
   if (aiOutputLang === 'custom') {
-    const customLangResponse = await prompts({
-      type: 'text',
+    const { customLang } = await inquirer.prompt<{ customLang: string }>({
+      type: 'input',
       name: 'customLang',
       message: i18n.enterCustomLanguage,
       validate: (value) => !!value || i18n.languageRequired,
     });
 
-    if (!customLangResponse.customLang) {
+    if (!customLang) {
       console.log(ansis.yellow(i18n.cancelled));
       process.exit(0);
     }
 
-    return customLangResponse.customLang;
+    return customLang;
   }
 
   return aiOutputLang;
@@ -76,22 +79,22 @@ export async function selectScriptLanguage(currentLang?: SupportedLang): Promise
   }
 
   // Ask user to select
-  const response = await prompts({
-    type: 'select',
+  const { lang } = await inquirer.prompt<{ lang: SupportedLang }>({
+    type: 'list',
     name: 'lang',
     message: 'Select ZCF display language / 选择ZCF显示语言',
     choices: SUPPORTED_LANGS.map((l) => ({
-      title: LANG_LABELS[l],
+      name: LANG_LABELS[l],
       value: l,
     })),
   });
 
-  if (!response.lang) {
+  if (!lang) {
     console.log(ansis.yellow('Operation cancelled / 操作已取消'));
     process.exit(0);
   }
 
-  const scriptLang = response.lang as SupportedLang;
+  const scriptLang = lang;
 
   // Save the selected language preference
   updateZcfConfig({

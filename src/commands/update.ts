@@ -1,4 +1,4 @@
-import prompts from '@posva/prompts';
+import inquirer from 'inquirer';
 import ansis from 'ansis';
 import { existsSync } from 'node:fs';
 import { version } from '../../package.json';
@@ -8,6 +8,7 @@ import { displayBanner } from '../utils/banner';
 import { updatePromptOnly } from '../utils/config-operations';
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
+import { handleExitPromptError, handleGeneralError } from '../utils/error-handler';
 
 export interface UpdateOptions {
   configLang?: SupportedLang;
@@ -42,22 +43,22 @@ export async function update(options: UpdateOptions = {}) {
       console.log(ansis.dim(`  ${i18n.configLangHint['zh-CN']}`));
       console.log(ansis.dim(`  ${i18n.configLangHint['en']}\n`));
       
-      const configResponse = await prompts({
-        type: 'select',
+      const { lang } = await inquirer.prompt<{ lang: SupportedLang }>({
+        type: 'list',
         name: 'lang',
         message: i18n.updateConfigLangPrompt,
         choices: SUPPORTED_LANGS.map((l) => ({
-          title: `${LANG_LABELS[l]} - ${i18n.configLangHint[l]}`,
+          name: `${LANG_LABELS[l]} - ${i18n.configLangHint[l]}`,
           value: l,
         })),
       });
 
-      if (!configResponse.lang) {
+      if (!lang) {
         console.log(ansis.yellow(i18n.cancelled));
         process.exit(0);
       }
 
-      configLang = configResponse.lang as SupportedLang;
+      configLang = lang;
     }
 
     // Select AI output language
@@ -75,10 +76,8 @@ export async function update(options: UpdateOptions = {}) {
       aiOutputLang: aiOutputLang,
     });
   } catch (error) {
-    const zcfConfig = readZcfConfig();
-    const defaultLang = zcfConfig?.preferredLang || 'en';
-    const errorMsg = I18N[defaultLang].error;
-    console.error(ansis.red(`${errorMsg}:`), error);
-    process.exit(1);
+    if (!handleExitPromptError(error)) {
+      handleGeneralError(error);
+    }
   }
 }

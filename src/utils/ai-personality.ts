@@ -1,4 +1,4 @@
-import prompts from '@posva/prompts';
+import inquirer from 'inquirer';
 import ansis from 'ansis';
 import { join } from 'pathe';
 import type { SupportedLang } from '../constants';
@@ -77,6 +77,7 @@ export function getPersonalityInfo(personalityId: string): AiPersonality | undef
 export async function configureAiPersonality(scriptLang: SupportedLang, showExisting: boolean = true) {
   const i18n = I18N[scriptLang];
   const existingPersonality = getExistingPersonality();
+  
   // Show existing personality if any
   if (showExisting && existingPersonality) {
     const personalityInfo = getPersonalityInfo(existingPersonality);
@@ -86,14 +87,14 @@ export async function configureAiPersonality(scriptLang: SupportedLang, showExis
         ansis.gray(`  ${i18n.currentPersonality || 'Current personality'}: ${personalityInfo.name[scriptLang]}`)
       );
 
-      const modifyResponse = await prompts({
+      const { modify } = await inquirer.prompt<{ modify: boolean }>({
         type: 'confirm',
         name: 'modify',
         message: i18n.modifyPersonality || 'Modify AI personality?',
-        initial: false,
+        default: false,
       });
 
-      if (!modifyResponse.modify) {
+      if (!modify) {
         console.log(ansis.green(`✔ ${i18n.keepPersonality || 'Keeping existing personality'}`));
         return;
       }
@@ -101,45 +102,44 @@ export async function configureAiPersonality(scriptLang: SupportedLang, showExis
   }
 
   // Select personality
-  const personalityResponse = await prompts({
-    type: 'select',
+  const { personality } = await inquirer.prompt<{ personality: string }>({
+    type: 'list',
     name: 'personality',
     message: i18n.selectAiPersonality || 'Select AI personality',
     choices: AI_PERSONALITIES.map((p) => ({
-      title: p.name[scriptLang],
+      name: p.id !== 'custom'
+        ? `${p.name[scriptLang]} - ${ansis.gray(p.directive[scriptLang].substring(0, 50) + '...')}`
+        : `${p.name[scriptLang]} - ${ansis.gray(i18n.customPersonalityHint || 'Define your own personality')}`,
       value: p.id,
-      description:
-        p.id !== 'custom'
-          ? ansis.gray(p.directive[scriptLang].substring(0, 50) + '...')
-          : ansis.gray(i18n.customPersonalityHint || 'Define your own personality'),
+      short: p.name[scriptLang],
     })),
-    initial: existingPersonality ? AI_PERSONALITIES.findIndex((p) => p.id === existingPersonality) : 0,
+    default: existingPersonality ? AI_PERSONALITIES.findIndex((p) => p.id === existingPersonality) : 0,
   });
 
-  if (!personalityResponse.personality) {
+  if (!personality) {
     console.log(ansis.yellow(i18n.cancelled));
     return;
   }
 
   let directive = '';
 
-  if (personalityResponse.personality === 'custom') {
+  if (personality === 'custom') {
     // Ask for custom directive
-    const customResponse = await prompts({
-      type: 'text',
-      name: 'directive',
+    const { customDirective } = await inquirer.prompt<{ customDirective: string }>({
+      type: 'input',
+      name: 'customDirective',
       message: i18n.enterCustomPersonality || 'Enter custom personality directive',
       validate: (value) => !!value || i18n.directiveCannotBeEmpty,
     });
 
-    if (!customResponse.directive) {
+    if (!customDirective) {
       console.log(ansis.yellow(i18n.cancelled));
       return;
     }
 
-    directive = customResponse.directive;
+    directive = customDirective;
   } else {
-    const selected = AI_PERSONALITIES.find((p) => p.id === personalityResponse.personality);
+    const selected = AI_PERSONALITIES.find((p) => p.id === personality);
     if (selected) {
       directive = selected.directive[scriptLang];
     }
@@ -149,7 +149,7 @@ export async function configureAiPersonality(scriptLang: SupportedLang, showExis
   await applyPersonalityDirective(directive);
 
   // Save personality choice to config
-  updateZcfConfig({ aiPersonality: personalityResponse.personality });
+  updateZcfConfig({ aiPersonality: personality });
 
   console.log(ansis.green(`✔ ${i18n.personalityConfigured || 'AI personality configured'}`));
 }

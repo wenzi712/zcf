@@ -30,7 +30,7 @@ pnpm test
 
    - 选择 ZCF 显示语言（中文/英文）
    - 选择配置语言（决定复制哪套模板）
-   - 选择 AI 输出语言和个性（v2.0新增）
+   - 选择 AI 输出语言和个性（v2.0 新增）
    - 检测并安装 Claude Code
    - 处理现有配置（备份/合并/跳过）
    - 配置 API（支持部分修改）
@@ -43,27 +43,27 @@ pnpm test
 
    - `init.ts`：完整初始化流程
    - `update.ts`：更新工作流文件
-   - `menu.ts`：交互式菜单系统（v2.0新增）
+   - `menu.ts`：交互式菜单系统（v2.0 新增）
 
 4. **工具函数**
 
    - `utils/installer.ts`：Claude Code 安装检测和自动安装
    - `utils/config.ts`：配置文件管理（备份、复制、合并）
-   - `utils/config-operations.ts`：配置部分修改（v2.0新增）
-   - `utils/config-validator.ts`：配置验证（v2.0新增）
+   - `utils/config-operations.ts`：配置部分修改（v2.0 新增）
+   - `utils/config-validator.ts`：配置验证（v2.0 新增）
    - `utils/platform.ts`：跨平台路径处理
    - `utils/mcp.ts`：MCP 配置管理（读取、写入、合并、备份）
-   - `utils/ai-personality.ts`：AI 个性化配置（v2.0新增）
-   - `utils/features.ts`：功能模块管理（v2.0新增）
-   - `utils/zcf-config.ts`：ZCF 配置持久化（v2.0新增）
+   - `utils/ai-personality.ts`：AI 个性化配置（v2.0 新增）
+   - `utils/features.ts`：功能模块管理（v2.0 新增）
+   - `utils/zcf-config.ts`：ZCF 配置持久化（v2.0 新增）
 
 5. **模板系统** (`templates/`)：优化的配置结构
-   - `CLAUDE.md`：项目级配置模板（v2.0新增）
+   - `CLAUDE.md`：项目级配置模板（v2.0 新增）
    - `settings.json`：基础配置（含隐私保护环境变量）
    - `en/` 和 `zh-CN/`：语言特定配置
-     - `rules.md`：系统指令和原则（原CLAUDE.md）
-     - `personality.md`：AI 个性化指令（v2.0新增）
-     - `mcp.md`：MCP 服务使用说明（v2.0新增）
+     - `rules.md`：系统指令和原则（原 CLAUDE.md）
+     - `personality.md`：AI 个性化指令（v2.0 新增）
+     - `mcp.md`：MCP 服务使用说明（v2.0 新增）
      - `agents/`：AI 代理定义（planner、ui-ux-designer）
      - `commands/`：自定义命令（feat、workflow）
 
@@ -86,7 +86,7 @@ pnpm test
 
 - TypeScript 严格模式
 - ESM 模块系统
-- 使用 @posva/prompts 处理交互
+- 使用 inquirer 处理交互
 - 使用 ansis 处理终端颜色
 - 路径处理使用 pathe 确保跨平台兼容
 - 使用 dayjs 处理时间格式化

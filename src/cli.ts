@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import cac from 'cac'
-import ansis from 'ansis'
-import { version } from '../package.json'
-import { init } from './commands/init'
-import { update } from './commands/update'
-import { showMainMenu } from './commands/menu'
+import ansis from 'ansis';
+import cac from 'cac';
+import { version } from '../package.json';
+import { init } from './commands/init';
+import { showMainMenu } from './commands/menu';
+import { update } from './commands/update';
 
-const cli = cac('zcf')
+const cli = cac('zcf');
 
 // Default command - show menu
 cli
@@ -20,13 +20,13 @@ cli
       await init({
         lang: lang || options.lang,
         configLang: options.configLang,
-        force: options.force
-      })
+        force: options.force,
+      });
     } else {
       // Show menu by default
-      await showMainMenu()
+      await showMainMenu();
     }
-  })
+  });
 
 // Init command
 cli
@@ -41,9 +41,9 @@ cli
       lang: options.lang,
       configLang: options.configLang,
       aiOutputLang: options.aiOutputLang,
-      force: options.force
-    })
-  })
+      force: options.force,
+    });
+  });
 
 // Update command
 cli
@@ -51,31 +51,33 @@ cli
   .alias('u')
   .option('--config-lang, -c <lang>', 'Configuration language (zh-CN, en)')
   .action(async (options) => {
-    await update({ configLang: options.configLang })
-  })
+    await update({ configLang: options.configLang });
+  });
 
 // Custom help with aliases
 cli.help((sections) => {
   // Add custom header
   sections.unshift({
     title: '',
-    body: ansis.cyan.bold(`ZCF - Zero-Config Claude-Code Flow v${version}`)
-  })
-  
+    body: ansis.cyan.bold(`ZCF - Zero-Config Claude-Code Flow v${version}`),
+  });
+
   // Add commands section with aliases
   sections.push({
     title: ansis.yellow('Commands / 命令:'),
     body: [
       `  ${ansis.cyan('zcf')}              Show interactive menu (default) / 显示交互式菜单（默认）`,
-      `  ${ansis.cyan('zcf init')} | ${ansis.cyan('i')}     Initialize Claude Code configuration / 初始化 Claude Code 配置`,
+      `  ${ansis.cyan('zcf init')} | ${ansis.cyan(
+        'i'
+      )}     Initialize Claude Code configuration / 初始化 Claude Code 配置`,
       `  ${ansis.cyan('zcf update')} | ${ansis.cyan('u')}   Update workflow-related md files / 仅更新工作流相关md`,
       '',
       ansis.gray('  Shortcuts / 快捷方式:'),
       `  ${ansis.cyan('zcf i')}            Quick init / 快速初始化`,
-      `  ${ansis.cyan('zcf u')}            Quick update / 快速更新`
-    ].join('\n')
-  })
-  
+      `  ${ansis.cyan('zcf u')}            Quick update / 快速更新`,
+    ].join('\n'),
+  });
+
   // Add options section
   sections.push({
     title: ansis.yellow('Options / 选项:'),
@@ -84,10 +86,10 @@ cli.help((sections) => {
       `  ${ansis.green('--config-lang, -c')} <lang>  Configuration language / 配置语言 (zh-CN, en)`,
       `  ${ansis.green('--force, -f')}               Force overwrite / 强制覆盖现有配置`,
       `  ${ansis.green('--help, -h')}                Display help / 显示帮助`,
-      `  ${ansis.green('--version, -v')}             Display version / 显示版本`
-    ].join('\n')
-  })
-  
+      `  ${ansis.green('--version, -v')}             Display version / 显示版本`,
+    ].join('\n'),
+  });
+
   // Add examples section
   sections.push({
     title: ansis.yellow('Examples / 示例:'),
@@ -105,12 +107,12 @@ cli.help((sections) => {
       '',
       ansis.gray('  # Force overwrite with Chinese config / 强制使用中文配置覆盖'),
       `  ${ansis.cyan('npx zcf --init -c zh-CN -f')}`,
-      `  ${ansis.cyan('npx zcf --init --config-lang zh-CN --force')}`
-    ].join('\n')
-  })
-  
-  return sections
-})
+      `  ${ansis.cyan('npx zcf --init --config-lang zh-CN --force')}`,
+    ].join('\n'),
+  });
 
-cli.version(version)
-cli.parse()
+  return sections;
+});
+
+cli.version(version);
+cli.parse();

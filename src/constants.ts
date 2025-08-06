@@ -125,7 +125,7 @@ export const I18N = {
       changeLanguage: '更改 ZCF 界面语言',
     },
     returnToMenu: '返回主菜单？',
-    goodbye: '再见！👋',
+    goodbye: '👋 感谢使用 ZCF！再见！',
     // Model config
     selectDefaultModel: '选择默认模型',
     modelConfigSuccess: '默认模型已配置',
@@ -296,7 +296,7 @@ export const I18N = {
       changeLanguage: 'Change ZCF interface language',
     },
     returnToMenu: 'Return to main menu?',
-    goodbye: 'Goodbye! 👋',
+    goodbye: '👋 Thanks for using ZCF! Goodbye!',
     // Model config
     selectDefaultModel: 'Select default model',
     modelConfigSuccess: 'Default model configured',

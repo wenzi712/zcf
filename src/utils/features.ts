@@ -1,4 +1,4 @@
-import prompts from '@posva/prompts';
+import inquirer from 'inquirer';
 import ansis from 'ansis';
 import { existsSync, unlinkSync } from 'node:fs';
 import type { SupportedLang } from '../constants';
@@ -47,26 +47,26 @@ export async function configureApiFeature(scriptLang: SupportedLang) {
     console.log(ansis.gray(`  ${i18n.apiConfigAuthType}: ${existingApiConfig.authType || i18n.notConfigured}\n`));
     
     // Ask user what to do with existing config
-    const actionResponse = await prompts({
-      type: 'select',
+    const { action } = await inquirer.prompt<{ action: string }>({
+      type: 'list',
       name: 'action',
       message: i18n.selectApiAction,
       choices: [
-        { title: i18n.keepExistingConfig, value: 'keep' },
-        { title: i18n.modifyAllConfig, value: 'modify-all' },
-        { title: i18n.modifyPartialConfig, value: 'modify-partial' },
+        { name: i18n.keepExistingConfig, value: 'keep' },
+        { name: i18n.modifyAllConfig, value: 'modify-all' },
+        { name: i18n.modifyPartialConfig, value: 'modify-partial' },
       ],
     });
     
-    if (!actionResponse.action) {
+    if (!action) {
       handleCancellation(scriptLang);
       return;
     }
     
-    if (actionResponse.action === 'keep') {
+    if (action === 'keep') {
       console.log(ansis.green(`✔ ${i18n.keepExistingConfig}`));
       return;
-    } else if (actionResponse.action === 'modify-partial') {
+    } else if (action === 'modify-partial') {
       // Handle partial modification
       await modifyApiConfigPartially(existingApiConfig, i18n, scriptLang);
       return;
@@ -75,36 +75,33 @@ export async function configureApiFeature(scriptLang: SupportedLang) {
   }
   
   // Full configuration (new or modify-all)
-  const apiResponse = await prompts({
-    type: 'select',
+  const { apiChoice } = await inquirer.prompt<{ apiChoice: string }>({
+    type: 'list',
     name: 'apiChoice',
     message: i18n.configureApi,
     choices: [
       { 
-        title: i18n.useAuthToken, 
+        name: `${i18n.useAuthToken} - ${ansis.gray(i18n.authTokenDesc)}`,
         value: 'auth_token',
-        description: ansis.gray(i18n.authTokenDesc)
+        short: i18n.useAuthToken
       },
       { 
-        title: i18n.useApiKey, 
+        name: `${i18n.useApiKey} - ${ansis.gray(i18n.apiKeyDesc)}`,
         value: 'api_key',
-        description: ansis.gray(i18n.apiKeyDesc)
+        short: i18n.useApiKey
       },
-      { 
-        title: i18n.skipApi, 
-        value: 'skip'
-      },
+      { name: i18n.skipApi, value: 'skip' },
     ],
   });
   
-  if (!apiResponse.apiChoice || apiResponse.apiChoice === 'skip') {
+  if (!apiChoice || apiChoice === 'skip') {
     return;
   }
   
-  const apiChoice = apiResponse.apiChoice;
   
-  const urlResponse = await prompts({
-    type: 'text',
+  
+  const { url } = await inquirer.prompt<{ url: string }>({
+    type: 'input',
     name: 'url',
     message: i18n.enterApiUrl,
     validate: (value) => {
@@ -118,14 +115,14 @@ export async function configureApiFeature(scriptLang: SupportedLang) {
     },
   });
   
-  if (!urlResponse.url) {
+  if (!url) {
     handleCancellation(scriptLang);
     return;
   }
   
   const keyMessage = apiChoice === 'auth_token' ? i18n.enterAuthToken : i18n.enterApiKey;
-  const keyResponse = await prompts({
-    type: 'text',
+  const { key } = await inquirer.prompt<{ key: string }>({
+    type: 'input',
     name: 'key',
     message: keyMessage,
     validate: (value) => {
@@ -142,12 +139,12 @@ export async function configureApiFeature(scriptLang: SupportedLang) {
     },
   });
   
-  if (!keyResponse.key) {
+  if (!key) {
     handleCancellation(scriptLang);
     return;
   }
   
-  const apiConfig = { url: urlResponse.url, key: keyResponse.key, authType: apiChoice };
+  const apiConfig = { url, key, authType: apiChoice as 'auth_token' | 'api_key' };
   const configuredApi = configureApi(apiConfig);
   
   if (configuredApi) {
@@ -163,14 +160,14 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
   
   // Check if Windows needs fix
   if (isWindows()) {
-    const fixResponse = await prompts({
+    const { fixWindows } = await inquirer.prompt<{ fixWindows: boolean }>({
       type: 'confirm',
       name: 'fixWindows',
       message: i18n.fixWindowsMcp || 'Fix Windows MCP configuration?',
-      initial: true
+      default: true
     });
     
-    if (fixResponse.fixWindows) {
+    if (fixWindows) {
       const existingConfig = readMcpConfig() || { mcpServers: {} };
       const fixedConfig = fixWindowsMcpConfig(existingConfig);
       writeMcpConfig(fixedConfig);
@@ -192,20 +189,18 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
     })),
   ];
 
-  const selectedResponse = await prompts({
-    type: 'multiselect',
+  const { services } = await inquirer.prompt<{ services: string[] }>({
+    type: 'checkbox',
     name: 'services',
-    message: i18n.selectMcpServices,
+    message: i18n.selectMcpServices + ' ' + ansis.gray(i18n.spaceToSelectReturn),
     choices,
-    instructions: false,
-    hint: i18n.spaceToSelectReturn,
   });
 
-  if (!selectedResponse.services) {
+  if (!services) {
     return;
   }
 
-  let selectedServices = selectedResponse.services || [];
+  let selectedServices = services || [];
   if (selectedServices.includes('ALL')) {
     selectedServices = MCP_SERVICES.map((s) => s.id);
   }
@@ -225,15 +220,15 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
       let config = service.config;
 
       if (service.requiresApiKey) {
-        const apiKeyResponse = await prompts({
-          type: 'text',
+        const { apiKey } = await inquirer.prompt<{ apiKey: string }>({
+          type: 'input',
           name: 'apiKey',
           message: service.apiKeyPrompt![scriptLang],
           validate: (value) => !!value || i18n.keyRequired,
         });
 
-        if (apiKeyResponse.apiKey) {
-          config = buildMcpServerConfig(service.config, apiKeyResponse.apiKey, service.apiKeyPlaceholder);
+        if (apiKey) {
+          config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder);
         } else {
           continue;
         }
@@ -255,22 +250,22 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
 export async function configureDefaultModelFeature(scriptLang: SupportedLang) {
   const i18n = I18N[scriptLang];
   
-  const modelResponse = await prompts({
-    type: 'select',
+  const { model } = await inquirer.prompt<{ model: 'opus' | 'sonnet' }>({
+    type: 'list',
     name: 'model',
     message: i18n.selectDefaultModel || 'Select default model',
     choices: [
-      { title: 'Opus', value: 'opus' as const },
-      { title: 'Sonnet', value: 'sonnet' as const },
+      { name: 'Opus', value: 'opus' as const },
+      { name: 'Sonnet', value: 'sonnet' as const },
     ],
   });
   
-  if (!modelResponse.model) {
+  if (!model) {
     handleCancellation(scriptLang);
     return;
   }
   
-  updateDefaultModel(modelResponse.model);
+  updateDefaultModel(model);
   console.log(ansis.green(`✔ ${i18n.modelConfigSuccess || 'Default model configured'}`));
 }
 
@@ -278,27 +273,27 @@ export async function configureDefaultModelFeature(scriptLang: SupportedLang) {
 export async function configureAiMemoryFeature(scriptLang: SupportedLang) {
   const i18n = I18N[scriptLang];
   
-  const memoryResponse = await prompts({
-    type: 'select',
+  const { option } = await inquirer.prompt<{ option: string }>({
+    type: 'list',
     name: 'option',
     message: i18n.selectMemoryOption || 'Select configuration option',
     choices: [
       { 
-        title: i18n.configureAiLanguage || 'Configure AI output language',
+        name: i18n.configureAiLanguage || 'Configure AI output language',
         value: 'language'
       },
       { 
-        title: i18n.configureAiPersonality || 'Configure AI personality',
+        name: i18n.configureAiPersonality || 'Configure AI personality',
         value: 'personality'
       },
     ],
   });
   
-  if (!memoryResponse.option) {
+  if (!option) {
     return;
   }
   
-  if (memoryResponse.option === 'language') {
+  if (option === 'language') {
     const zcfConfig = readZcfConfig();
     const aiOutputLang = await resolveAiOutputLanguage(scriptLang, undefined, zcfConfig);
     applyAiLanguageDirective(aiOutputLang);
@@ -313,14 +308,14 @@ export async function configureAiMemoryFeature(scriptLang: SupportedLang) {
 export async function clearZcfCacheFeature(scriptLang: SupportedLang) {
   const i18n = I18N[scriptLang];
   
-  const confirmResponse = await prompts({
+  const { confirm } = await inquirer.prompt<{ confirm: boolean }>({
     type: 'confirm',
     name: 'confirm',
     message: i18n.confirmClearCache || 'Clear all ZCF preferences cache?',
-    initial: false
+    default: false
   });
   
-  if (!confirmResponse.confirm) {
+  if (!confirm) {
     handleCancellation(scriptLang);
     return;
   }
@@ -337,23 +332,23 @@ export async function clearZcfCacheFeature(scriptLang: SupportedLang) {
 export async function changeScriptLanguageFeature(currentLang: SupportedLang): Promise<SupportedLang> {
   const i18n = I18N[currentLang];
   
-  const langResponse = await prompts({
-    type: 'select',
+  const { lang } = await inquirer.prompt<{ lang: SupportedLang }>({
+    type: 'list',
     name: 'lang',
     message: i18n.selectScriptLang,
     choices: SUPPORTED_LANGS.map((l) => ({
-      title: LANG_LABELS[l],
+      name: LANG_LABELS[l],
       value: l,
     })),
-    initial: SUPPORTED_LANGS.indexOf(currentLang)
+    default: SUPPORTED_LANGS.indexOf(currentLang)
   });
   
-  if (!langResponse.lang) {
+  if (!lang) {
     return currentLang;
   }
   
-  updateZcfConfig({ preferredLang: langResponse.lang });
-  console.log(ansis.green(`✔ ${I18N[langResponse.lang as SupportedLang].languageChanged || 'Language changed'}`));
+  updateZcfConfig({ preferredLang: lang });
+  console.log(ansis.green(`✔ ${I18N[lang].languageChanged || 'Language changed'}`));
   
-  return langResponse.lang;
+  return lang;
 }
