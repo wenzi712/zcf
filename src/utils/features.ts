@@ -24,6 +24,7 @@ import { readZcfConfig, updateZcfConfig } from './zcf-config';
 import { validateApiKey, formatApiKeyDisplay } from './validator';
 import { configureAiPersonality } from './ai-personality';
 import { modifyApiConfigPartially } from './config-operations';
+import { selectMcpServices } from './mcp-selector';
 
 // Helper function to handle cancelled operations
 function handleCancellation(scriptLang: SupportedLang): void {
@@ -175,34 +176,11 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
     }
   }
   
-  // Show MCP services selection
-  const choices = [
-    {
-      title: ansis.bold(i18n.allServices),
-      value: 'ALL',
-      selected: false,
-    },
-    ...MCP_SERVICES.map((service) => ({
-      title: `${service.name[scriptLang]} - ${ansis.gray(service.description[scriptLang])}`,
-      value: service.id,
-      selected: false,
-    })),
-  ];
-
-  const { services } = await inquirer.prompt<{ services: string[] }>({
-    type: 'checkbox',
-    name: 'services',
-    message: i18n.selectMcpServices + ' ' + ansis.gray(i18n.spaceToSelectReturn),
-    choices,
-  });
-
-  if (!services) {
+  // Use common MCP selector
+  const selectedServices = await selectMcpServices(scriptLang);
+  
+  if (!selectedServices) {
     return;
-  }
-
-  let selectedServices = services || [];
-  if (selectedServices.includes('ALL')) {
-    selectedServices = MCP_SERVICES.map((s) => s.id);
   }
 
   if (selectedServices.length > 0) {

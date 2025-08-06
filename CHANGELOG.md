@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.1.2
+
+### Patch Changes
+
+- ## 优化
+
+  - 优化初始化流程，移除文档更新的特殊处理
+  - 简化配置步骤，提升用户体验
+  - 减少不必要的代码复杂度
+
+  ## Optimization
+
+  - Optimize initialization process and remove special handling for document updates
+  - Simplify configuration steps to improve user experience
+  - Reduce unnecessary code complexity
+
 ## 2.1.1
 
 ### Patch Changes

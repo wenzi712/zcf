@@ -81,7 +81,7 @@ export const I18N = {
     configSuccess: '配置文件已复制到',
     apiConfigSuccess: 'API 配置完成',
     mcpConfigSuccess: 'MCP 服务已配置',
-    selectMcpServices: '选择要安装的 MCP 服务（空格选择，回车确认）',
+    selectMcpServices: '选择要安装的 MCP 服务（空格选择，a全选，i反选，回车确认）',
     allServices: '全部安装',
     mcpServiceInstalled: '已选择的 MCP 服务',
     enterExaApiKey: '请输入 Exa API Key（可从 https://dashboard.exa.ai/api-keys 获取）',
@@ -256,7 +256,8 @@ export const I18N = {
     configSuccess: 'Config files copied to',
     apiConfigSuccess: 'API configured',
     mcpConfigSuccess: 'MCP services configured',
-    selectMcpServices: 'Select MCP services to install (space to select, enter to confirm)',
+    selectMcpServices:
+      'Select MCP services to install (space to select, a to select all, i to deselect, enter to confirm)',
     allServices: 'Install all',
     mcpServiceInstalled: 'Selected MCP services',
     enterExaApiKey: 'Enter Exa API Key (get from https://dashboard.exa.ai/api-keys)',
