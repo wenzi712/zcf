@@ -1,5 +1,53 @@
 # Changelog
 
+## 2.1.0
+
+### Minor Changes
+
+- faca88e: 新增 Termux 环境支持和增强的命令检测功能
+
+  - 支持在 Termux 环境下运行 ZCF
+  - 增强命令检测机制，自动识别可用命令
+
+- 429794a: 修复中文模板文件的 description 字段使用中文描述
+
+  - 将 workflow.md 的英文描述改为中文
+  - 扩充 feat.md 的中文描述，使其更详细
+  - 优化 workflow 命令的需求完整性评分机制
+
+- 8b19bde: 修复 API 配置修改后无法返回菜单的问题
+
+  - 修复部分修改功能执行后无法正确返回菜单
+  - 改进菜单导航流程
+
+- 22aa4cf: 替换 @posva/prompts 为 inquirer 解决 UI 渲染问题
+
+  - 解决交互式界面渲染异常
+  - 提升用户交互体验
+
+---
+
+- faca88e: Add Termux environment support with enhanced command detection
+
+  - Support running ZCF in Termux environment
+  - Enhanced command detection to automatically identify available commands
+
+- 429794a: Fix Chinese template files description fields to use Chinese descriptions
+
+  - Changed workflow.md description from English to Chinese
+  - Enhanced feat.md Chinese description with more details
+  - Optimized workflow command requirement scoring mechanism
+
+- 8b19bde: Fixed the issue where some modification functions could not return to the menu
+
+  - Fixed menu return issue after API configuration modifications
+  - Improved menu navigation flow
+
+- 22aa4cf: Replace @posva/prompts with inquirer to resolve UI rendering issues
+
+  - Resolved interactive UI rendering anomalies
+  - Enhanced user interaction experience
+
 ## 2.0.1
 
 ### Patch Changes
