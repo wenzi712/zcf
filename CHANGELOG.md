@@ -1,5 +1,45 @@
 # Changelog
 
+## 2.3.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 添加危险操作确认机制，提升 Claude Code 使用安全性
+  - 优化技术执行指南文档，减少 token 消耗约 30%
+
+  ## New Features
+
+  - Add dangerous operations confirmation mechanism for improved Claude Code safety
+  - Optimize technical execution guidelines documentation, reducing token consumption by ~30%
+
+  ## 详细说明
+
+  ### 危险操作确认
+
+  需要用户确认的操作：
+
+  - 文件系统：删除、批量修改、移动系统文件
+  - 代码提交：git commit、push、reset --hard
+  - 系统配置：环境变量、系统设置、权限变更
+  - 数据操作：数据库删除、结构变更、批量更新
+  - 网络请求：发送敏感数据、调用生产 API
+  - 包管理：全局安装/卸载、更新核心依赖
+
+  ### Details
+
+  ### Dangerous Operations Confirmation
+
+  Operations requiring user confirmation:
+
+  - File System: Delete, bulk modifications, move system files
+  - Code Commits: git commit, push, reset --hard
+  - System Config: Environment variables, system settings, permissions
+  - Data Operations: Database deletions, schema changes, bulk updates
+  - Network Requests: Send sensitive data, call production APIs
+  - Package Management: Global install/uninstall, update core dependencies
+
 ## 2.2.0
 
 ### Minor Changes
