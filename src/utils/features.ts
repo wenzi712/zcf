@@ -25,6 +25,7 @@ import { validateApiKey, formatApiKeyDisplay } from './validator';
 import { configureAiPersonality } from './ai-personality';
 import { modifyApiConfigPartially } from './config-operations';
 import { selectMcpServices } from './mcp-selector';
+import { importRecommendedEnv, importRecommendedPermissions, openSettingsJson } from './simple-config';
 
 // Helper function to handle cancelled operations
 function handleCancellation(scriptLang: SupportedLang): void {
@@ -329,4 +330,53 @@ export async function changeScriptLanguageFeature(currentLang: SupportedLang): P
   console.log(ansis.green(`✔ ${I18N[lang].languageChanged || 'Language changed'}`));
   
   return lang;
+}
+
+// Configure environment variables and permissions
+export async function configureEnvPermissionFeature(scriptLang: SupportedLang) {
+  const i18n = I18N[scriptLang];
+  
+  const { choice } = await inquirer.prompt<{ choice: string }>({
+    type: 'list',
+    name: 'choice',
+    message: i18n.selectEnvPermissionOption,
+    choices: [
+      {
+        name: `${i18n.importRecommendedEnv} ${ansis.gray('- ' + i18n.importRecommendedEnvDesc)}`,
+        value: 'env'
+      },
+      {
+        name: `${i18n.importRecommendedPermissions} ${ansis.gray('- ' + i18n.importRecommendedPermissionsDesc)}`,
+        value: 'permissions'
+      },
+      {
+        name: `${i18n.openSettingsJson} ${ansis.gray('- ' + i18n.openSettingsJsonDesc)}`,
+        value: 'open'
+      }
+    ]
+  });
+  
+  if (!choice) {
+    handleCancellation(scriptLang);
+    return;
+  }
+  
+  try {
+    switch (choice) {
+      case 'env':
+        await importRecommendedEnv();
+        console.log(ansis.green(`✅ ${i18n.envImportSuccess}`));
+        break;
+      case 'permissions':
+        await importRecommendedPermissions();
+        console.log(ansis.green(`✅ ${i18n.permissionsImportSuccess}`));
+        break;
+      case 'open':
+        console.log(ansis.cyan(i18n.openingSettingsJson));
+        await openSettingsJson();
+        break;
+    }
+  } catch (error: any) {
+    console.error(ansis.red(`${i18n.error}: ${error.message}`));
+  }
 }

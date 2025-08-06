@@ -8,7 +8,7 @@
 
 > Zero-config, one-click setup for Claude Code with bilingual support, intelligent agent system and personalized AI assistant
 
-![Rendering](./src/assets/screenshot.webp)
+![Rendering](./src/assets/screenshot-en.webp)
 
 ## 🚀 Quick Start
 

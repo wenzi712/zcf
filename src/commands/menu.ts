@@ -7,6 +7,7 @@ import {
   configureMcpFeature,
   configureDefaultModelFeature,
   configureAiMemoryFeature,
+  configureEnvPermissionFeature,
   clearZcfCacheFeature,
   changeScriptLanguageFeature,
 } from '../utils/features';
@@ -61,6 +62,11 @@ export async function showMainMenu() {
           '- ' + i18n.menuDescriptions.configureAiMemory
         )}`
       );
+      console.log(
+        `  ${ansis.cyan('7.')} ${i18n.menuOptions.configureEnvPermission} ${ansis.gray(
+          '- ' + i18n.menuDescriptions.configureEnvPermission
+        )}`
+      );
       console.log('');
       console.log('  ------------ ZCF ------------');
       console.log(
@@ -80,7 +86,7 @@ export async function showMainMenu() {
         name: 'choice',
         message: i18n.enterChoice || 'Enter your choice',
         validate: (value) => {
-          const valid = ['1', '2', '3', '4', '5', '6', '0', '-', 'q', 'Q'];
+          const valid = ['1', '2', '3', '4', '5', '6', '7', '0', '-', 'q', 'Q'];
           return valid.includes(value) || i18n.invalidChoice;
         },
       });
@@ -110,6 +116,9 @@ export async function showMainMenu() {
           break;
         case '6':
           await configureAiMemoryFeature(scriptLang);
+          break;
+        case '7':
+          await configureEnvPermissionFeature(scriptLang);
           break;
         case '-':
           await clearZcfCacheFeature(scriptLang);
