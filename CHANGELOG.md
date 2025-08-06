@@ -1,5 +1,35 @@
 # Changelog
 
+## 2.4.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 添加环境变量和权限导入功能，支持从 settings.json 批量导入配置
+  - 添加文档更新检查功能，任务完成后自动提醒更新相关文档
+  - 更新技术执行指南，添加文档更新检查流程
+  - 优化交互式菜单，支持配置环境变量和权限
+
+  ## New Features
+
+  - Add environment variables and permissions import feature, support bulk import from settings.json
+  - Add documentation update check functionality, auto-remind to update docs after task completion
+  - Update technical execution guidelines with documentation update check process
+  - Enhance interactive menu with environment variables and permissions configuration
+
+  ## 文档更新
+
+  - 更新 README.md 和 README_EN.md，补充 v2.1-v2.3 版本特性说明
+  - 更新 CLAUDE.md，添加完整的版本特性更新历史
+  - 更新截图，反映最新的交互界面
+
+  ## Documentation Updates
+
+  - Update README.md and README_EN.md with v2.1-v2.3 version features
+  - Update CLAUDE.md with complete version feature update history
+  - Update screenshots to reflect latest interactive interface
+
 ## 2.3.0
 
 ### Minor Changes
