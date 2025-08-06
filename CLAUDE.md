@@ -16,11 +16,16 @@ pnpm typecheck
 
 # 本地测试构建结果
 pnpm test
+
+# 版本管理
+pnpm changeset
+pnpm version
+pnpm release
 ```
 
 ## 项目架构
 
-这是一个 Claude Code 零配置工具 (ZCF - Zero-Config Claude-Code Flow)，用于自动化配置 Claude Code 的工作环境。
+这是一个 Claude Code 零配置工具 (ZCF - Zero-Config Claude-Code Flow)，用于自动化配置 Claude Code 的工作环境。当前版本: v2.3.0
 
 ### 核心组件
 
@@ -43,15 +48,15 @@ pnpm test
 
    - `init.ts`：完整初始化流程
    - `update.ts`：更新工作流文件
-   - `menu.ts`：交互式菜单系统（v2.0 新增）
+   - `menu.ts`：交互式菜单系统（v2.0 新增，现使用 inquirer 提供更稳定的 UI）
 
 4. **工具函数**
 
-   - `utils/installer.ts`：Claude Code 安装检测和自动安装
+   - `utils/installer.ts`：Claude Code 安装检测和自动安装（支持增强命令检测）
    - `utils/config.ts`：配置文件管理（备份、复制、合并）
    - `utils/config-operations.ts`：配置部分修改（v2.0 新增）
    - `utils/config-validator.ts`：配置验证（v2.0 新增）
-   - `utils/platform.ts`：跨平台路径处理
+   - `utils/platform.ts`：跨平台路径处理（支持 Windows/macOS/Linux/Termux）
    - `utils/mcp.ts`：MCP 配置管理（读取、写入、合并、备份）
    - `utils/ai-personality.ts`：AI 个性化配置（v2.0 新增）
    - `utils/features.ts`：功能模块管理（v2.0 新增）
@@ -64,6 +69,7 @@ pnpm test
      - `rules.md`：系统指令和原则（原 CLAUDE.md）
      - `personality.md`：AI 个性化指令（v2.0 新增）
      - `mcp.md`：MCP 服务使用说明（v2.0 新增）
+     - `technical-guides.md`：技术执行指南（v2.2 新增，包含危险操作确认和路径处理）
      - `agents/`：AI 代理定义（planner、ui-ux-designer）
      - `commands/`：自定义命令（feat、workflow）
 
@@ -86,7 +92,7 @@ pnpm test
 
 - TypeScript 严格模式
 - ESM 模块系统
-- 使用 inquirer 处理交互
+- 使用 inquirer 处理交互（v2.1 中替换了 @posva/prompts，解决 UI 渲染问题）
 - 使用 ansis 处理终端颜色
 - 路径处理使用 pathe 确保跨平台兼容
 - 使用 dayjs 处理时间格式化
@@ -95,9 +101,27 @@ pnpm test
 - CHANGELOG 用双语,不要在同一行,整体一个语言,中文在上,英文在下
 - 不需要主动 npm 发布，有 github actions 自动发布
 
-## v2.0 新增特性
+## 版本特性更新
 
-- **交互式菜单**：`zcf menu` 命令提供可视化配置管理
+### v2.3.0 新增特性
+- **危险操作确认机制**：提升 Claude Code 使用安全性
+- **优化技术指南**：减少 token 消耗约 30%
+
+### v2.2.0 新增特性
+- **技术执行指南**：提供命令执行最佳实践
+- **跨平台路径处理**：自动为包含空格的路径添加引号
+- **优先使用 ripgrep**：提升文件内容搜索性能
+
+### v2.1.0 新增特性
+- **Termux 环境支持**：支持在 Android 终端运行
+- **增强命令检测**：自动识别可用命令
+- **修复和优化**：
+  - 修复 API 配置后返回菜单问题
+  - 替换 @posva/prompts 为 inquirer
+  - 修复中文模板描述
+
+### v2.0.0 新增特性
+- **交互式菜单**：`zcf` 默认命令提供可视化配置管理
 - **AI 个性化**：支持多种预设人格和自定义人格
 - **配置增强**：
   - API 配置部分修改

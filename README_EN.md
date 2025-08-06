@@ -86,9 +86,11 @@ After configuration:
 
 - Auto-detects Claude Code installation status
 - Uses npm for automatic installation (ensures compatibility)
-- Cross-platform support (Windows/macOS/Linux)
+- Cross-platform support (Windows/macOS/Linux/Termux)
 - Automatic MCP service configuration
 - Smart configuration merging and partial modification support (v2.0 new)
+- Enhanced command detection mechanism (v2.1 new)
+- Dangerous operation confirmation mechanism (v2.3 new)
 
 ### 📦 Complete Configuration
 
@@ -123,7 +125,7 @@ After configuration:
 ```bash
 $ npx zcf
 
- ZCF - Zero-Config Claude-Code Flow v2.0.0
+ ZCF - Zero-Config Claude-Code Flow v2.3.0
 
 ? Select ZCF display language / 选择ZCF显示语言:
   ❯ 简体中文
@@ -136,7 +138,8 @@ Select function:
   3. Configure API - Manage API authentication
   4. Configure MCP services - Manage MCP integrations
   5. Configure default model - Set default AI model
-  6. Configure AI memory - Set up AI memory management
+  6. Configure AI personality - Set AI assistant personality
+  7. Configure AI memory - Set up AI memory management
 
   ------------ ZCF ------------
   0. Change language - Switch interface language
@@ -353,8 +356,12 @@ If you encounter issues:
 1. Re-run `npx zcf` to reconfigure
 2. Check configuration files in `~/.claude/` directory
 3. Ensure Claude Code is properly installed
+4. If paths contain spaces, ZCF will automatically handle quote wrapping
+5. Use ripgrep (`rg`) preferentially for file searching for better performance
 
-### Windows Platform Support
+### Cross-Platform Support
+
+#### Windows Platform
 
 ZCF fully supports Windows platform:
 
@@ -363,6 +370,27 @@ ZCF fully supports Windows platform:
 - **Zero-config**: Windows users don't need any extra steps, same experience as macOS/Linux
 
 If you encounter MCP connection issues on Windows, running `npx zcf` will automatically fix the configuration format.
+
+#### Termux Support (v2.1 new)
+
+ZCF now supports running in Android Termux environment:
+
+- **Auto-adaptation**: Automatically detects Termux environment and uses compatible configuration
+- **Enhanced detection**: Intelligently identifies available commands, ensuring normal operation in restricted environments
+- **Full functionality**: Enjoy the same complete features in Termux as on desktop systems
+
+### Security Features (v2.3 new)
+
+#### Dangerous Operation Confirmation Mechanism
+
+To protect user data security, the following operations require explicit confirmation:
+
+- **File System**: Delete files/directories, bulk modifications, move system files
+- **Code Commits**: `git commit`, `git push`, `git reset --hard`
+- **System Config**: Modify environment variables, system settings, permissions
+- **Data Operations**: Database deletions, schema changes, bulk updates
+- **Network Requests**: Send sensitive data, call production APIs
+- **Package Management**: Global install/uninstall, update core dependencies
 
 ## 🙏 Acknowledgments
 

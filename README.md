@@ -86,9 +86,11 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 
 - 自动检测 Claude Code 安装状态
 - 使用 npm 进行自动安装（确保兼容性）
-- 跨平台支持（Windows/macOS/Linux）
+- 跨平台支持（Windows/macOS/Linux/Termux）
 - 自动配置 MCP 服务
 - 智能配置合并和部分修改支持（v2.0 新增）
+- 增强的命令检测机制（v2.1 新增）
+- 危险操作确认机制（v2.3 新增）
 
 ### 📦 完整配置
 
@@ -123,7 +125,7 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 ```bash
 $ npx zcf
 
- ZCF - Zero-Config Claude-Code Flow v2.0.0
+ ZCF - Zero-Config Claude-Code Flow v2.3.0
 
 ? Select ZCF display language / 选择ZCF显示语言:
   ❯ 简体中文
@@ -137,6 +139,7 @@ $ npx zcf
   4. 配置 MCP 服务 - 管理 MCP 集成
   5. 配置默认模型 - 设置默认 AI 模型
   6. 配置 AI 个性 - 设置 AI 助手人格
+  7. 配置 AI 记忆 - 管理 AI 记忆设置
 
   ------------ ZCF ------------
   0. 更改语言 - 切换界面语言
@@ -353,8 +356,12 @@ node bin/zcf.mjs
 1. 重新运行 `npx zcf` 重新配置
 2. 检查 `~/.claude/` 目录下的配置文件
 3. 确保 Claude Code 已正确安装
+4. 如果路径包含空格，ZCF 会自动处理引号包裹
+5. 优先使用 ripgrep (`rg`) 进行文件搜索以获得更好性能
 
-### Windows 平台支持
+### 跨平台支持
+
+#### Windows 平台
 
 ZCF 已完全支持 Windows 平台：
 
@@ -363,6 +370,27 @@ ZCF 已完全支持 Windows 平台：
 - **零配置**：Windows 用户无需任何额外操作，与 macOS/Linux 体验一致
 
 如果在 Windows 上遇到 MCP 连接问题，运行 `npx zcf` 会自动修复配置格式。
+
+#### Termux 支持（v2.1 新增）
+
+ZCF 现已支持在 Android Termux 环境中运行：
+
+- **自动适配**：自动检测 Termux 环境并使用兼容配置
+- **增强检测**：智能识别可用命令，确保在受限环境中正常工作
+- **完整功能**：在 Termux 中享受与桌面系统相同的完整功能
+
+### 安全特性（v2.3 新增）
+
+#### 危险操作确认机制
+
+为保护用户数据安全，以下操作需要明确确认：
+
+- **文件系统**：删除文件/目录、批量修改、移动系统文件
+- **代码提交**：`git commit`、`git push`、`git reset --hard`
+- **系统配置**：修改环境变量、系统设置、权限变更
+- **数据操作**：数据库删除、模式更改、批量更新
+- **网络请求**：发送敏感数据、调用生产环境 API
+- **包管理**：全局安装/卸载、更新核心依赖
 
 ## 🙏 鸣谢
 
