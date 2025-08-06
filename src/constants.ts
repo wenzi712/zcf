@@ -212,6 +212,8 @@ export const I18N = {
     openingSettingsJson: '正在打开 settings.json...',
     // Misc
     spaceToSelectReturn: '- 空格选择，回车提交',
+    // Windows detection
+    windowsDetected: '检测到 Windows 系统，将自动配置兼容格式',
   },
   en: {
     selectScriptLang: 'Select ZCF display language',
@@ -402,6 +404,8 @@ export const I18N = {
     openingSettingsJson: 'Opening settings.json...',
     // Misc
     spaceToSelectReturn: '- Space to select. Return to submit',
+    // Windows detection
+    windowsDetected: 'Windows detected, will configure compatible format',
   },
 };
 

@@ -281,15 +281,7 @@ export async function init(options: InitOptions = {}) {
       if (shouldConfigureMcp) {
         // Show Windows-specific notice
         if (isWindows()) {
-          console.log(
-            ansis.blue(
-              `ℹ ${
-                scriptLang === 'zh-CN'
-                  ? '检测到 Windows 系统，将自动配置兼容格式'
-                  : 'Windows detected, will configure compatible format'
-              }`
-            )
-          );
+          console.log(ansis.blue(`ℹ ${I18N[scriptLang].windowsDetected}`));
         }
 
         // Use common MCP selector
