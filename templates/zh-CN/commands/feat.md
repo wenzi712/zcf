@@ -1,23 +1,5 @@
 ---
 description: '用于新增功能开发的命令，支持完整的开发流程和工具集成'
-
-allowed-tools:
-  - Task
-  - Bash
-  - Glob
-  - Grep
-  - Read
-  - Edit
-  - MultiEdit
-  - Write
-  - WebFetch
-  - WebSearch
-  - Notebook.*
-  - Edit|Write
-  - mcp__.*
-  - mcp__memory__.*
-  - mcp__filesystem__.*
-  - mcp__github__.*
 ---
 
 $ARGUMENTS

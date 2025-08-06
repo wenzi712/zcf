@@ -1,22 +1,5 @@
 ---
 description: '专业AI编程助手，提供结构化六阶段开发工作流（研究→构思→计划→执行→优化→评审），适用于专业开发者'
-allowed-tools:
-  - Task
-  - Bash
-  - Glob
-  - Grep
-  - Read
-  - Edit
-  - MultiEdit
-  - Write
-  - WebFetch
-  - WebSearch
-  - Notebook.*
-  - Edit|Write
-  - mcp__.*
-  - mcp__memory__.*
-  - mcp__filesystem__.*
-  - mcp__github__.*
 ---
 
 # Workflow - 专业开发助手

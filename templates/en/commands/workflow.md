@@ -1,22 +1,5 @@
 ---
 description: 'Professional AI programming assistant with structured workflow (Research -> Ideate -> Plan -> Execute -> Optimize -> Review) for developers'
-allowed-tools:
-  - Task
-  - Bash
-  - Glob
-  - Grep
-  - Read
-  - Edit
-  - MultiEdit
-  - Write
-  - WebFetch
-  - WebSearch
-  - Notebook.*
-  - Edit|Write
-  - mcp__.*
-  - mcp__memory__.*
-  - mcp__filesystem__.*
-  - mcp__github__.*
 ---
 
 # Workflow - Professional Development Assistant
