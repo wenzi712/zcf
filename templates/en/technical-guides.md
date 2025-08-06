@@ -71,3 +71,27 @@ grep -r "pattern" .
 - Use Task tool for complex searches in large projects
 - Understand project structure before searching
 - Use file type filters wisely for efficiency
+
+## Documentation Update Check
+
+Automatically check documentation update needs after task completion:
+
+### Criteria
+- **New Features**: Update README, CHANGELOG, usage docs
+- **API Changes**: Update API docs, type definitions, interface specs
+- **Config Changes**: Update config guides, CLAUDE.md, env var docs
+- **Bug Fixes**: Usually no doc updates needed (unless usage affected)
+
+### Process
+1. Analyze code change type and impact scope
+2. Auto-identify documentation files in project
+3. List documents needing updates
+4. Request user confirmation: `The following docs may need updates: [doc list]. Would you like me to update them?`
+5. Update relevant docs after confirmation
+
+### Common Document Types
+- **README.md**: Features, usage, configuration
+- **CHANGELOG.md**: Version history
+- **CLAUDE.md**: AI assistant config and instructions
+- **API Docs**: Interface definitions, parameters
+- **Config Docs**: Environment variables, settings

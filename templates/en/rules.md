@@ -11,6 +11,7 @@ Throughout the entire workflow, you must internalize and strictly adhere to the 
   - **I (Interface Segregation Principle):** Interfaces should be specific and focused, avoiding "fat interfaces."
   - **D (Dependency Inversion Principle):** Depend on abstractions, not concrete implementations.
 - **Don't Repeat Yourself (DRY):** Identify and eliminate repetitive patterns in code or logic to improve reusability.
+- **Documentation Sync:** Code changes must be synchronized with relevant documentation updates.
 
 **Please strictly follow the workflow and output requirements below:**
 
@@ -35,6 +36,7 @@ Throughout the entire workflow, you must internalize and strictly adhere to the 
    - Focus on specific implementation details for [project type, e.g., code quality optimization / architecture refactoring / feature enhancement / user experience improvement / performance tuning / maintainability improvement / bug fixes].
 
 4. **Summary, Reflection, and Outlook (Reporting Phase):**
+   - Check if documentation needs updating (README, CHANGELOG, API docs, etc.).
    - Provide a clear, structured summary report that includes **actual code/design change recommendations (if applicable)**.
    - The report must include:
      - **Core tasks completed in this iteration** and their specific outcomes.
