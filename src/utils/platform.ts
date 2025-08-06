@@ -1,4 +1,5 @@
 import { platform } from 'node:os';
+import { existsSync } from 'node:fs';
 import { exec } from 'tinyexec';
 
 export function getPlatform() {
@@ -6,6 +7,16 @@ export function getPlatform() {
   if (p === 'win32') return 'windows';
   if (p === 'darwin') return 'macos';
   return 'linux';
+}
+
+export function isTermux(): boolean {
+  return !!(process.env.PREFIX && process.env.PREFIX.includes('com.termux')) || 
+         !!process.env.TERMUX_VERSION ||
+         existsSync('/data/data/com.termux/files/usr');
+}
+
+export function getTermuxPrefix(): string {
+  return process.env.PREFIX || '/data/data/com.termux/files/usr';
 }
 
 export function isWindows(): boolean {
@@ -21,10 +32,47 @@ export function getMcpCommand(): string[] {
 
 export async function commandExists(command: string): Promise<boolean> {
   try {
+    // First try standard which/where command
     const cmd = getPlatform() === 'windows' ? 'where' : 'which';
     const res = await exec(cmd, [command]);
-    return res.exitCode === 0;
+    if (res.exitCode === 0) {
+      return true;
+    }
   } catch {
-    return false;
+    // Continue to fallback checks
   }
+
+  // For Termux environment, check specific paths
+  if (isTermux()) {
+    const termuxPrefix = getTermuxPrefix();
+    const possiblePaths = [
+      `${termuxPrefix}/bin/${command}`,
+      `${termuxPrefix}/usr/bin/${command}`,
+      `/data/data/com.termux/files/usr/bin/${command}`
+    ];
+    
+    for (const path of possiblePaths) {
+      if (existsSync(path)) {
+        return true;
+      }
+    }
+  }
+
+  // Final fallback: check common paths on Linux/Mac
+  if (getPlatform() !== 'windows') {
+    const commonPaths = [
+      `/usr/local/bin/${command}`,
+      `/usr/bin/${command}`,
+      `/bin/${command}`,
+      `${process.env.HOME}/.local/bin/${command}`
+    ];
+    
+    for (const path of commonPaths) {
+      if (existsSync(path)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }

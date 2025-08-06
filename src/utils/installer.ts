@@ -1,5 +1,6 @@
 import { exec } from 'tinyexec'
-import { commandExists } from './platform'
+import ansis from 'ansis'
+import { commandExists, isTermux, getTermuxPrefix } from './platform'
 import type { SupportedLang } from '../constants'
 import { I18N } from '../constants'
 
@@ -9,19 +10,33 @@ export async function isClaudeCodeInstalled(): Promise<boolean> {
 
 export async function installClaudeCode(lang: SupportedLang): Promise<void> {
   const i18n = I18N[lang]
+  
+  // Check if running in Termux
+  if (isTermux()) {
+    console.log(ansis.yellow(`ℹ ${i18n.termuxDetected}`))
+    const termuxPrefix = getTermuxPrefix()
+    console.log(ansis.gray(i18n.termuxPathInfo.replace('{path}', termuxPrefix)))
+    console.log(ansis.gray(`Node.js: ${termuxPrefix}/bin/node`))
+    console.log(ansis.gray(`npm: ${termuxPrefix}/bin/npm`))
+  }
+  
   console.log(i18n.installing)
   
   try {
-    // Check if npm is available
-    if (!await commandExists('npm')) {
-      throw new Error(i18n.npmNotFound)
-    }
-    
     // Always use npm for installation to ensure automatic updates work
+    // Note: If the user can run 'npx zcf', npm is already available
     await exec('npm', ['install', '-g', '@anthropic-ai/claude-code'])
     console.log(`✔ ${i18n.installSuccess}`)
+    
+    // Additional hint for Termux users
+    if (isTermux()) {
+      console.log(ansis.gray(`\nClaude Code installed to: ${getTermuxPrefix()}/bin/claude`))
+    }
   } catch (error) {
     console.error(`✖ ${i18n.installFailed}`)
+    if (isTermux()) {
+      console.error(ansis.yellow(`\n${i18n.termuxInstallHint}\n`))
+    }
     throw error
   }
 }

@@ -30,7 +30,7 @@ import {
   readMcpConfig,
   writeMcpConfig,
 } from '../utils/mcp';
-import { isWindows } from '../utils/platform';
+import { isWindows, isTermux } from '../utils/platform';
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
 import { formatApiKeyDisplay } from '../utils/validator';
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
@@ -56,6 +56,12 @@ export async function init(options: InitOptions = {}) {
     const scriptLang = await selectScriptLanguage(options.lang);
 
     const i18n = I18N[scriptLang];
+    
+    // Show Termux environment info if detected
+    if (isTermux()) {
+      console.log(ansis.yellow(`\nℹ ${i18n.termuxDetected}`));
+      console.log(ansis.gray(i18n.termuxEnvironmentInfo));
+    }
 
     // Step 2: Select config language
     let configLang = options.configLang;
