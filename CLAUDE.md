@@ -93,6 +93,7 @@ pnpm test
 - 代码注释用英文
 - 使用 changeset 进行版本管理
 - CHANGELOG 用双语,不要在同一行,整体一个语言,中文在上,英文在下
+- 不需要主动 npm 发布，有 github actions 自动发布
 
 ## v2.0 新增特性
 

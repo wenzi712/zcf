@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1
+
+### Patch Changes
+
+- 修复 npm 发布透明日志冲突问题
+
+  Fix npm publish transparency log conflict issue
+
 ## 2.1.0
 
 ### Minor Changes
