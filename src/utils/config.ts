@@ -12,9 +12,10 @@ import {
   type CopyDirOptions 
 } from './fs-operations';
 import { readJsonConfig, writeJsonConfig } from './json-config';
-import { deepMerge, mergeArraysUnique } from './object-utils';
+import { deepMerge } from './object-utils';
 import type { ClaudeSettings, ApiConfig } from '../types/config';
 import { readZcfConfig } from './zcf-config';
+import { mergeAndCleanPermissions } from './permission-cleaner';
 export type { ApiConfig } from '../types/config';
 
 export function ensureClaudeDir() {
@@ -211,11 +212,11 @@ export function mergeSettingsFile(templatePath: string, targetPath: string): voi
     // Ensure user's env vars are preserved
     mergedSettings.env = mergedEnv;
     
-    // Handle permissions.allow array specially to avoid duplicates
+    // Handle permissions.allow array specially to avoid duplicates and clean invalid entries
     if (mergedSettings.permissions && mergedSettings.permissions.allow) {
-      mergedSettings.permissions.allow = mergeArraysUnique(
-        templateSettings.permissions?.allow || [],
-        existingSettings.permissions?.allow || []
+      mergedSettings.permissions.allow = mergeAndCleanPermissions(
+        templateSettings.permissions?.allow,
+        existingSettings.permissions?.allow
       );
     }
     

@@ -5,6 +5,7 @@ import { SETTINGS_FILE, CLAUDE_DIR } from '../constants.js';
 import { ensureDir } from './fs-operations.js';
 import { exec } from 'tinyexec';
 import { getPlatform } from './platform.js';
+import { mergeAndCleanPermissions } from './permission-cleaner.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -54,8 +55,18 @@ export async function importRecommendedPermissions(): Promise<void> {
   const templateSettings = getTemplateSettings();
   const currentSettings = loadCurrentSettings();
 
-  // Merge permissions
-  currentSettings.permissions = templateSettings.permissions;
+  // Merge permissions with cleanup
+  if (templateSettings.permissions && templateSettings.permissions.allow) {
+    currentSettings.permissions = {
+      ...templateSettings.permissions,
+      allow: mergeAndCleanPermissions(
+        templateSettings.permissions.allow,
+        currentSettings.permissions?.allow
+      )
+    };
+  } else {
+    currentSettings.permissions = templateSettings.permissions;
+  }
 
   saveSettings(currentSettings);
 }
