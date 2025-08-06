@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.4.1
+
+### Patch Changes
+
+- ## 修复
+
+  - 修复权限配置合并时的冗余和无效项问题
+  - 自动清理 v2.0 之前版本的无效 `mcp__.*` 权限配置
+  - 移除以模板权限开头的冗余权限（如存在 `Bash` 时移除 `Bash(*)`）
+  - 优化 Windows 系统检测提示的显示逻辑
+
+  ## Fixes
+
+  - Fix redundant and invalid items in permission configuration merging
+  - Automatically clean up invalid `mcp__.*` permission configs from versions before v2.0
+  - Remove redundant permissions that start with template permissions (e.g., remove `Bash(*)` when `Bash` exists)
+  - Optimize Windows system detection message display logic
+
+  ## 技术改进
+
+  - 新增 `permission-cleaner` 工具模块，提供可复用的权限清理函数
+  - 改进权限合并逻辑，确保配置文件的整洁性
+
+  ## Technical Improvements
+
+  - Add `permission-cleaner` utility module providing reusable permission cleanup functions
+  - Improve permission merging logic to ensure configuration file cleanliness
+
 ## 2.4.0
 
 ### Minor Changes
