@@ -114,11 +114,10 @@ export async function init(options: InitOptions = {}) {
 
     // Step 5: Handle existing config
     ensureClaudeDir();
-    let onlyUpdateDocs = false;
     let action = 'new'; // default action for new installation
 
     if (existsSync(SETTINGS_FILE) && !options.force) {
-      const { action } = await inquirer.prompt<{ action: string }>({
+      const { action: userAction } = await inquirer.prompt<{ action: string }>({
         type: 'list',
         name: 'action',
         message: i18n.existingConfig,
@@ -130,26 +129,24 @@ export async function init(options: InitOptions = {}) {
         ],
       });
 
-      if (!action) {
+      if (!userAction) {
         console.log(ansis.yellow(i18n.cancelled));
         process.exit(0);
       }
 
+      action = userAction;
 
+      // Handle special cases early
       if (action === 'skip') {
         console.log(ansis.yellow(i18n.skip));
-        return; // Exit early if user chooses to skip
-      }
-
-      if (action === 'docs-only') {
-        onlyUpdateDocs = true;
+        return;
       }
     }
 
-    // Step 6: Configure API (skip if only updating docs or if user chose to skip)
+    // Step 6: Configure API (skip if only updating docs)
     let apiConfig = null;
     const isNewInstall = !existsSync(SETTINGS_FILE);
-    if (!onlyUpdateDocs && (isNewInstall || action === 'backup' || action === 'merge')) {
+    if (action !== 'docs-only' && (isNewInstall || ['backup', 'merge'].includes(action))) {
       // Check for existing API configuration
       const existingApiConfig = getExistingApiConfig();
 
@@ -231,26 +228,16 @@ export async function init(options: InitOptions = {}) {
     }
 
     // Step 7: Execute the chosen action
-    if (action === 'backup') {
+    if (['backup', 'docs-only', 'merge'].includes(action)) {
       const backupDir = backupExistingConfig();
       if (backupDir) {
         console.log(ansis.gray(`✔ ${i18n.backupSuccess}: ${backupDir}`));
       }
-      copyConfigFiles(configLang, false);
-    } else if (action === 'docs-only') {
-      const backupDir = backupExistingConfig();
-      if (backupDir) {
-        console.log(ansis.gray(`✔ ${i18n.backupSuccess}: ${backupDir}`));
-      }
+    }
+
+    if (action === 'docs-only') {
       copyConfigFiles(configLang, true);
-    } else if (action === 'merge') {
-      const backupDir = backupExistingConfig();
-      if (backupDir) {
-        console.log(ansis.gray(`✔ ${i18n.backupSuccess}: ${backupDir}`));
-      }
-      copyConfigFiles(configLang, false);
-      // Merge will be handled after API config
-    } else if (action === 'new') {
+    } else if (['backup', 'merge', 'new'].includes(action)) {
       copyConfigFiles(configLang, false);
     }
 
@@ -260,7 +247,7 @@ export async function init(options: InitOptions = {}) {
     await configureAiPersonality(scriptLang);
 
     // Step 9: Apply API configuration (skip if only updating docs)
-    if (apiConfig && !onlyUpdateDocs) {
+    if (apiConfig && action !== 'docs-only') {
       const configuredApi = configureApi(apiConfig);
       if (configuredApi) {
         console.log(ansis.green(`✔ ${i18n.apiConfigSuccess}`));
@@ -277,7 +264,7 @@ export async function init(options: InitOptions = {}) {
     }
 
     // Step 10: Configure MCP services (skip if only updating docs)
-    if (!onlyUpdateDocs) {
+    if (action !== 'docs-only') {
       const { shouldConfigureMcp } = await inquirer.prompt<{ shouldConfigureMcp: boolean }>({
         type: 'confirm',
         name: 'shouldConfigureMcp',

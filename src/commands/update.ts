@@ -26,10 +26,10 @@ export async function update(options: UpdateOptions = {}) {
     // Get script language from config or ask user
     const scriptLang = await selectScriptLanguage();
     const zcfConfig = readZcfConfig();
-    
+
     // Now use the selected script language for all messages
     const i18n = I18N[scriptLang];
-    
+
     // Check if config exists
     if (!existsSync(SETTINGS_FILE)) {
       console.log(ansis.yellow(i18n.noExistingConfig));
@@ -39,10 +39,6 @@ export async function update(options: UpdateOptions = {}) {
     // Select config language if not provided
     let configLang = options.configLang as SupportedLang;
     if (!configLang) {
-      // Display hint in user's preferred language
-      console.log(ansis.dim(`  ${i18n.configLangHint['zh-CN']}`));
-      console.log(ansis.dim(`  ${i18n.configLangHint['en']}\n`));
-      
       const { lang } = await inquirer.prompt<{ lang: SupportedLang }>({
         type: 'list',
         name: 'lang',
@@ -68,7 +64,7 @@ export async function update(options: UpdateOptions = {}) {
 
     // Execute prompt-only update with AI language
     await updatePromptOnly(configLang, scriptLang, aiOutputLang);
-    
+
     // Update zcf config with new version and AI language preference
     updateZcfConfig({
       version,

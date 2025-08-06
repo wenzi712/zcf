@@ -32,8 +32,8 @@ export const I18N = {
     aiOutputLangHint: 'AI 将使用此语言回复你的问题',
     enterCustomLanguage: '请输入自定义语言（例如：Japanese, French 等）',
     configLangHint: {
-      'zh-CN': '中文版（便于中文用户自定义）',
-      en: '英文版（推荐，token 消耗更低）',
+      'zh-CN': '便于中文用户自定义',
+      en: '推荐，token 消耗更低',
     },
     installPrompt: '检测到 Claude Code 未安装，是否自动安装？',
     installing: '正在安装 Claude Code...',
@@ -207,8 +207,8 @@ export const I18N = {
     aiOutputLangHint: 'AI will respond to you in this language',
     enterCustomLanguage: 'Enter custom language (e.g., Japanese, French, etc.)',
     configLangHint: {
-      'zh-CN': 'Chinese (easier for Chinese users to customize)',
-      en: 'English (recommended, lower token consumption)',
+      'zh-CN': 'easier for Chinese users to customize',
+      en: 'recommended, lower token consumption',
     },
     installPrompt: 'Claude Code not found. Install automatically?',
     installing: 'Installing Claude Code...',
