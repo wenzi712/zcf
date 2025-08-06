@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.2.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 添加技术执行指南文档，提供命令执行最佳实践
+  - 新增 /zcf-release 自动化发版命令
+  - 支持跨平台路径处理，自动为包含空格的路径添加引号
+  - 优先使用 ripgrep 提升文件内容搜索性能
+
+  ## New Features
+
+  - Add technical execution guidelines with command best practices
+  - Add /zcf-release automated release command
+  - Support cross-platform path handling with automatic quotes for paths with spaces
+  - Prioritize ripgrep for better file content search performance
+
+  ## 文档更新
+
+  - 新增中英文技术指南模板文件
+  - 更新项目级 CLAUDE.md 模板
+
+  ## Documentation Updates
+
+  - Add technical guide template files in Chinese and English
+  - Update project-level CLAUDE.md template
+
 ## 2.1.2
 
 ### Patch Changes
