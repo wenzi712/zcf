@@ -19,6 +19,7 @@ npx zcf          # Open interactive menu and choose operations based on your nee
 ```
 
 Menu options include:
+
 - `1` Full initialization (equivalent to `zcf i`)
 - `2` Import workflows (equivalent to `zcf u`)
 - `3-6` Configuration management (API, MCP, Model, AI personality, etc.)
@@ -42,7 +43,8 @@ npx zcf u        # Update workflows only: Quick add AI workflows and command sys
 npx zcf → select 2  # Execute workflow update via menu
 ```
 
-> **Note**: 
+> **Note**:
+>
 > - Since v2.0, `zcf` opens the interactive menu by default, providing a visual operation interface
 > - You can choose operations through the menu or use commands directly for quick execution
 > - `zcf i` = full initialization, `zcf u` = update workflows only
@@ -130,12 +132,12 @@ $ npx zcf
 Select function:
   -------- Claude Code --------
   1. Full initialization - Install and configure everything
-  2. Import workflows - Update AI workflows and commands  
+  2. Import workflows - Update AI workflows and commands
   3. Configure API - Manage API authentication
   4. Configure MCP services - Manage MCP integrations
   5. Configure default model - Set default AI model
   6. Configure AI memory - Set up AI memory management
-  
+
   ------------ ZCF ------------
   0. Change language - Switch interface language
   -. Clear cache - Clear ZCF cache files
@@ -314,12 +316,12 @@ claude-code-config/
 
 ### Six-Phase Workflow
 
-1. **[Mode: Research]** - Understand requirements
-2. **[Mode: Ideate]** - Design solutions
-3. **[Mode: Plan]** - Create detailed plan
-4. **[Mode: Execute]** - Implement development
-5. **[Mode: Optimize]** - Improve quality
-6. **[Mode: Review]** - Final assessment
+1. [Mode: Research] - Understand requirements
+2. [Mode: Ideate] - Design solutions
+3. [Mode: Plan] - Create detailed plan
+4. [Mode: Execute] - Implement development
+5. [Mode: Optimize] - Improve quality
+6. [Mode: Review] - Final assessment
 
 ## 🛠️ Development
 

@@ -1,5 +1,5 @@
 ---
-description: 新增功能
+description: '用于新增功能开发的命令，支持完整的开发流程和工具集成'
 
 allowed-tools:
   - Task
