@@ -1,74 +1,73 @@
 # Technical Execution Guidelines
 
-This document provides best practices that Claude Code should follow when executing specific technical tasks.
+This document provides best practices for Claude Code when executing technical tasks.
+
+## Dangerous Operations Confirmation
+
+**Important**: The following operations require explicit user confirmation before execution:
+
+### Operations Requiring Confirmation
+- **File System**: Delete files/directories, bulk modifications, move system files
+- **Code Commits**: `git commit`, `git push`, `git reset --hard`
+- **System Config**: Modify environment variables, system settings, permissions
+- **Data Operations**: Database deletions, schema changes, bulk updates
+- **Network Requests**: Send sensitive data, call production APIs
+- **Package Management**: Global install/uninstall, update core dependencies
+
+### Confirmation Process
+Before executing dangerous operations:
+1. Clearly explain the operation and its impacts
+2. Wait for explicit user confirmation (e.g., "yes", "confirm", "proceed")
+3. If user hesitates or declines, provide more information or alternatives
 
 ## Command Execution Best Practices
 
 ### Path Handling Standards
 
-**Important**: Always use double quotes to wrap file paths when executing commands on all operating systems, especially on Windows.
+**Important**: Always use double quotes to wrap file paths when executing commands.
 
-#### Correct Examples
 ```bash
-# ✅ Correct: Paths wrapped in double quotes
+# ✅ Correct
 cd "C:\Users\name\My Documents"
-python "C:\Program Files\MyApp\script.py"
 node "/path/with spaces/app.js"
-```
 
-#### Incorrect Examples
-```bash
-# ❌ Incorrect: No quotes, backslashes will be swallowed on Windows
+# ❌ Incorrect
 cd C:\Users\name\My Documents
-python C:\Program Files\MyApp\script.py
 ```
 
 ### Cross-Platform Compatibility
+- Prefer forward slashes `/` as path separators
+- When using backslashes, ensure paths are double-quoted
 
-- Prefer forward slashes `/` as path separators (supported by most tools)
-- When backslashes must be used, ensure paths are wrapped in double quotes
-- Be mindful of spaces and special characters even with relative paths
+## Search Tool Usage
 
-## Search Tool Usage Guidelines
+### Content Search
+**Always prioritize `rg` (ripgrep)** - faster and won't timeout.
 
-### Content Search Priority
-
-**Always prioritize `rg` (ripgrep) for file content searches** over `grep`.
-
-> **Note**: ripgrep requires user installation. Most developers already have this tool installed. If `rg` command is not found, remind users to install:
-> - macOS: `brew install ripgrep`
-> - Windows: `scoop install ripgrep` or `choco install ripgrep`
-> - Linux: `sudo apt-get install ripgrep` or see [official installation guide](https://github.com/BurntSushi/ripgrep#installation)
-
-#### Reasons
-1. **Superior Performance**: rg won't timeout in large codebases (e.g., Chromium, Emacs)
-2. **Faster Execution**: rg is significantly faster than grep
-3. **Smarter Defaults**: Automatically respects .gitignore files
-
-#### Usage Examples
 ```bash
-# ✅ Prefer rg
-rg "search pattern" .
-rg -i "case insensitive" src/
+# ✅ Preferred
+rg "pattern" .
 rg -t js "console.log" .
 
-# ⚠️ Only use grep when rg is unavailable
+# ⚠️ Fallback
 grep -r "pattern" .
 ```
 
+> Note: If `rg` unavailable, remind user to install: `brew/scoop/apt install ripgrep`
+
 ### File Finding
-- Use Glob tool for filename pattern matching
+- Use Glob tool for pattern matching
 - Use LS tool for directory listings
-- Avoid using `find` command (specialized tools are more efficient)
+- Avoid using `find` command
 
 ## Tool Usage Principles
 
-1. **Prefer Specialized Tools**: Use Read, Write, Edit tools instead of cat, echo commands
+1. **Prefer Specialized Tools**: Use Read, Write, Edit instead of cat, echo
 2. **Batch Operations**: Call multiple tools simultaneously for efficiency
-3. **Error Handling**: Check for path quoting issues first when commands fail
+3. **Error Handling**: Check path quoting first when commands fail
 
-## Performance Optimization Tips
+## Performance Optimization
 
 - Use Task tool for complex searches in large projects
-- Understand project structure before searching to narrow scope
-- Use search parameters wisely (e.g., file type filters) for efficiency
+- Understand project structure before searching
+- Use file type filters wisely for efficiency
