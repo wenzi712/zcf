@@ -1,5 +1,51 @@
 # Changelog
 
+## 2.5.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 添加完整的测试套件，包括单元测试和集成测试
+  - 新增测试覆盖率报告功能
+  - 支持 vitest 测试框架的多种运行模式
+  - 添加测试辅助工具和 mock 支持
+  - 新增 CI/CD 测试覆盖率检查
+
+  ## New Features
+
+  - Add comprehensive test suite including unit and integration tests
+  - Add test coverage reporting functionality
+  - Support multiple vitest test framework run modes
+  - Add test helpers and mock support
+  - Add CI/CD test coverage checks
+
+  ## 优化
+
+  - 重构 CLI 架构，将命令设置逻辑分离到独立模块
+  - 改进项目文档结构，README 英文版改为 README_zh.md
+  - 更新 CLAUDE.md 开发指南，添加详细的测试说明
+  - 优化 CI 工作流程，集成测试覆盖率检查
+
+  ## Optimization
+
+  - Refactor CLI architecture, separate command setup logic to standalone module
+  - Improve project documentation structure, rename README English version to README_zh.md
+  - Update CLAUDE.md development guide with detailed testing instructions
+  - Optimize CI workflow with integrated test coverage checks
+
+  ## 文档
+
+  - 新增完整的测试文档 (test/README.md)
+  - 更新开发命令说明，添加测试相关命令
+  - 完善架构说明，包含测试策略和覆盖率目标
+
+  ## Documentation
+
+  - Add comprehensive testing documentation (test/README.md)
+  - Update development command instructions with testing commands
+  - Improve architecture documentation including test strategy and coverage goals
+
 ## 2.4.1
 
 ### Patch Changes
