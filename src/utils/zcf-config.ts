@@ -14,7 +14,12 @@ export function readZcfConfig(): ZcfConfig | null {
 }
 
 export function writeZcfConfig(config: ZcfConfig): void {
-  writeJsonConfig(ZCF_CONFIG_FILE, config);
+  try {
+    writeJsonConfig(ZCF_CONFIG_FILE, config);
+  } catch (error) {
+    // Silently fail if cannot write config - user's system may have permission issues
+    // The app should still work without saved preferences
+  }
 }
 
 export function updateZcfConfig(updates: Partial<ZcfConfig>): void {

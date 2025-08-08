@@ -7,10 +7,6 @@ vi.mock('inquirer', () => ({
   }
 }));
 
-vi.mock('node:fs', () => ({
-  existsSync: vi.fn()
-}));
-
 vi.mock('ansis', () => ({
   default: {
     green: (text: string) => text,
@@ -73,11 +69,9 @@ describe('update command', () => {
       const { readZcfConfig, updateZcfConfig } = await import('../../../src/utils/zcf-config');
       const { selectScriptLanguage, resolveAiOutputLanguage } = await import('../../../src/utils/prompts');
       const { updatePromptOnly } = await import('../../../src/utils/config-operations');
-      const { existsSync } = await import('node:fs');
       
       vi.mocked(selectScriptLanguage).mockResolvedValue('zh-CN');
       vi.mocked(readZcfConfig).mockReturnValue({ preferredLang: 'zh-CN' } as any);
-      vi.mocked(existsSync).mockReturnValue(true);
       vi.mocked(inquirer.prompt).mockResolvedValue({ lang: 'zh-CN' });
       vi.mocked(resolveAiOutputLanguage).mockResolvedValue('chinese-simplified');
       vi.mocked(updatePromptOnly).mockResolvedValue(undefined);
@@ -91,16 +85,18 @@ describe('update command', () => {
 
     it('should handle update without existing config', async () => {
       const { update } = await import('../../../src/commands/update');
-      const { selectScriptLanguage } = await import('../../../src/utils/prompts');
-      const { existsSync } = await import('node:fs');
+      const { selectScriptLanguage, resolveAiOutputLanguage } = await import('../../../src/utils/prompts');
+      const { updatePromptOnly } = await import('../../../src/utils/config-operations');
+      const inquirer = await import('inquirer');
       
       vi.mocked(selectScriptLanguage).mockResolvedValue('en');
-      vi.mocked(existsSync).mockReturnValue(false);
+      vi.mocked(inquirer.default.prompt).mockResolvedValue({ lang: 'en' });
+      vi.mocked(resolveAiOutputLanguage).mockResolvedValue('english');
       
       await update({ skipBanner: true });
       
       expect(selectScriptLanguage).toHaveBeenCalled();
-      expect(process.exit).toHaveBeenCalledWith(1);
+      expect(updatePromptOnly).toHaveBeenCalled();
     });
 
     it('should handle cancel update', async () => {
@@ -108,11 +104,9 @@ describe('update command', () => {
       const { readZcfConfig } = await import('../../../src/utils/zcf-config');
       const { selectScriptLanguage } = await import('../../../src/utils/prompts');
       const { updatePromptOnly } = await import('../../../src/utils/config-operations');
-      const { existsSync } = await import('node:fs');
       
       vi.mocked(selectScriptLanguage).mockResolvedValue('zh-CN');
       vi.mocked(readZcfConfig).mockReturnValue({ preferredLang: 'zh-CN' } as any);
-      vi.mocked(existsSync).mockReturnValue(true);
       vi.mocked(inquirer.prompt).mockResolvedValue({});
       
       await update({ skipBanner: true });
@@ -125,11 +119,9 @@ describe('update command', () => {
       const { readZcfConfig, updateZcfConfig } = await import('../../../src/utils/zcf-config');
       const { selectScriptLanguage, resolveAiOutputLanguage } = await import('../../../src/utils/prompts');
       const { updatePromptOnly } = await import('../../../src/utils/config-operations');
-      const { existsSync } = await import('node:fs');
       
       vi.mocked(selectScriptLanguage).mockResolvedValue('zh-CN');
       vi.mocked(readZcfConfig).mockReturnValue({ preferredLang: 'zh-CN' } as any);
-      vi.mocked(existsSync).mockReturnValue(true);
       vi.mocked(resolveAiOutputLanguage).mockResolvedValue('chinese-simplified');
       vi.mocked(updatePromptOnly).mockResolvedValue(undefined);
       vi.mocked(updateZcfConfig).mockResolvedValue(undefined);

@@ -1,9 +1,8 @@
 import inquirer from 'inquirer';
 import ansis from 'ansis';
-import { existsSync } from 'node:fs';
 import { version } from '../../package.json';
 import type { AiOutputLanguage, SupportedLang } from '../constants';
-import { I18N, LANG_LABELS, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants';
+import { I18N, LANG_LABELS, SUPPORTED_LANGS } from '../constants';
 import { displayBanner } from '../utils/banner';
 import { updatePromptOnly } from '../utils/config-operations';
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
@@ -29,12 +28,6 @@ export async function update(options: UpdateOptions = {}) {
 
     // Now use the selected script language for all messages
     const i18n = I18N[scriptLang];
-
-    // Check if config exists
-    if (!existsSync(SETTINGS_FILE)) {
-      console.log(ansis.yellow(i18n.noExistingConfig));
-      process.exit(1);
-    }
 
     // Select config language if not provided
     let configLang = options.configLang as SupportedLang;
