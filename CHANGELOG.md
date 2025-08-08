@@ -1,5 +1,47 @@
 # Changelog
 
+## 2.5.1
+
+### Patch Changes
+
+- ## 新功能
+
+  - 将 Exa MCP 服务改为本地环境变量配置方式，提升安全性
+  - 支持通过环境变量传递 API 密钥，避免在命令行参数中暴露
+
+  ## New Features
+
+  - Switch Exa MCP service to local environment-based configuration for better security
+  - Support passing API keys through environment variables to avoid exposure in command arguments
+
+  ## 优化
+
+  - 增强 buildMcpServerConfig 函数以支持环境变量配置
+  - 改进 MCP 服务配置的测试覆盖率
+
+  ## Optimization
+
+  - Enhance buildMcpServerConfig function to support environment variable configuration
+  - Improve test coverage for MCP service configuration
+
+  ## 文档
+
+  - 更新 README 中的项目名称引用
+  - 添加 DeepWiki 徽章到中英文文档
+
+  ## Documentation
+
+  - Update project name references in README
+  - Add DeepWiki badge to both English and Chinese documentation
+
+  ## 其他
+
+  - 升级 GitHub Actions 中的 Codecov action 到 v5
+
+  ## Others
+
+  - Upgrade Codecov action to v5 in GitHub Actions
+
 ## 2.5.0
 
 ### Minor Changes
