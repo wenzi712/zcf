@@ -322,7 +322,7 @@ export async function init(options: InitOptions = {}) {
               }
 
               if (apiKey) {
-                config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder);
+                config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder, service.apiKeyEnvVar);
               } else {
                 // Skip this service if no API key provided
                 continue;

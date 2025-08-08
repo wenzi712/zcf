@@ -207,7 +207,7 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
         });
 
         if (apiKey) {
-          config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder);
+          config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder, service.apiKeyEnvVar);
         } else {
           continue;
         }

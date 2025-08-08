@@ -50,7 +50,8 @@ function applyPlatformCommand(config: McpServerConfig): void {
 export function buildMcpServerConfig(
   baseConfig: McpServerConfig,
   apiKey?: string,
-  placeholder: string = 'YOUR_EXA_API_KEY'
+  placeholder: string = 'YOUR_EXA_API_KEY',
+  envVarName?: string
 ): McpServerConfig {
   // Deep clone the config to avoid mutation
   const config = deepClone(baseConfig);
@@ -62,12 +63,17 @@ export function buildMcpServerConfig(
     return config;
   }
 
-  // Replace API key placeholder in args if exists
+  // New approach: If environment variable name is specified, set it directly
+  if (envVarName && config.env) {
+    config.env[envVarName] = apiKey;
+    return config; // Return early for env-based configuration
+  }
+
+  // Legacy approach: Replace placeholder in args and URL
   if (config.args) {
     config.args = config.args.map((arg: string) => arg.replace(placeholder, apiKey));
   }
 
-  // Replace in URL if exists
   if (config.url) {
     config.url = config.url.replace(placeholder, apiKey);
   }

@@ -467,12 +467,14 @@ export const MCP_SERVICES: McpService[] = [
       'zh-CN': '请输入 Exa API Key',
       en: 'Enter Exa API Key',
     },
-    apiKeyPlaceholder: 'YOUR_EXA_API_KEY',
+    apiKeyEnvVar: 'EXA_API_KEY',
     config: {
       type: 'stdio',
       command: 'npx',
-      args: ['-y', 'mcp-remote', 'https://mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY'],
-      env: {},
+      args: ['-y', 'exa-mcp-server'],
+      env: {
+        EXA_API_KEY: 'YOUR_EXA_API_KEY',
+      },
     },
   },
 ];

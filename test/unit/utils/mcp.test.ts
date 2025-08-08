@@ -11,7 +11,7 @@ import {
 import * as jsonConfig from '../../../src/utils/json-config';
 import * as platform from '../../../src/utils/platform';
 import * as objectUtils from '../../../src/utils/object-utils';
-import { ClAUDE_CONFIG_FILE, CLAUDE_DIR } from '../../../src/constants';
+import { ClAUDE_CONFIG_FILE, CLAUDE_DIR, MCP_SERVICES } from '../../../src/constants';
 
 vi.mock('../../../src/utils/json-config');
 vi.mock('../../../src/utils/platform');
@@ -185,6 +185,39 @@ describe('mcp utilities', () => {
 
       expect(result.args).toEqual(['--key', 'api-key']);
     });
+
+    it('should set environment variable when envVarName is provided', () => {
+      const baseConfig = { 
+        type: 'stdio' as const,
+        command: 'npx', 
+        args: ['-y', 'exa-mcp-server'],
+        env: { EXA_API_KEY: 'placeholder' }
+      };
+      vi.mocked(objectUtils.deepClone).mockReturnValue({ ...baseConfig });
+      vi.mocked(platform.isWindows).mockReturnValue(false);
+
+      const result = buildMcpServerConfig(baseConfig, 'test-api-key', 'placeholder', 'EXA_API_KEY');
+
+      expect(result.env).toEqual({ EXA_API_KEY: 'test-api-key' });
+    });
+
+    it('should handle environment variable config on Windows', () => {
+      const baseConfig = { 
+        type: 'stdio' as const,
+        command: 'npx', 
+        args: ['-y', 'exa-mcp-server'],
+        env: { EXA_API_KEY: 'placeholder' }
+      };
+      vi.mocked(objectUtils.deepClone).mockReturnValue({ ...baseConfig });
+      vi.mocked(platform.isWindows).mockReturnValue(true);
+      vi.mocked(platform.getMcpCommand).mockReturnValue(['cmd', '/c', 'npx']);
+
+      const result = buildMcpServerConfig(baseConfig, 'test-api-key', 'placeholder', 'EXA_API_KEY');
+
+      expect(result.command).toBe('cmd');
+      expect(result.args).toEqual(['/c', 'npx', '-y', 'exa-mcp-server']);
+      expect(result.env).toEqual({ EXA_API_KEY: 'test-api-key' });
+    });
   });
 
   describe('fixWindowsMcpConfig', () => {
@@ -224,5 +257,52 @@ describe('mcp utilities', () => {
     });
   });
 
-  // Extended Tests
+  describe('Exa MCP Service Integration', () => {
+    beforeEach(() => {
+      // Mock deepClone to return a proper copy
+      vi.mocked(objectUtils.deepClone).mockImplementation(obj => JSON.parse(JSON.stringify(obj)));
+    });
+
+    it('should have exa service configured with environment variable', () => {
+      const exaService = MCP_SERVICES.find(s => s.id === 'exa');
+      
+      expect(exaService).toBeDefined();
+      expect(exaService!.config.command).toBe('npx');
+      expect(exaService!.config.args).toContain('exa-mcp-server');
+      expect(exaService!.config.env).toHaveProperty('EXA_API_KEY');
+      expect(exaService!.apiKeyEnvVar).toBe('EXA_API_KEY');
+    });
+
+    it('should build exa service config with API key in environment', () => {
+      const exaService = MCP_SERVICES.find(s => s.id === 'exa');
+      vi.mocked(platform.isWindows).mockReturnValue(false);
+
+      const config = buildMcpServerConfig(
+        exaService!.config,
+        'test-exa-key-123',
+        undefined,
+        exaService!.apiKeyEnvVar
+      );
+
+      expect(config.env).toEqual({ EXA_API_KEY: 'test-exa-key-123' });
+      expect(config.args).toEqual(['-y', 'exa-mcp-server']);
+    });
+
+    it('should handle exa service on Windows platform', () => {
+      const exaService = MCP_SERVICES.find(s => s.id === 'exa');
+      vi.mocked(platform.isWindows).mockReturnValue(true);
+      vi.mocked(platform.getMcpCommand).mockReturnValue(['cmd', '/c', 'npx']);
+
+      const config = buildMcpServerConfig(
+        exaService!.config,
+        'test-key',
+        undefined,
+        exaService!.apiKeyEnvVar
+      );
+
+      expect(config.command).toBe('cmd');
+      expect(config.args).toEqual(['/c', 'npx', '-y', 'exa-mcp-server']);
+      expect(config.env).toEqual({ EXA_API_KEY: 'test-key' });
+    });
+  });
 });

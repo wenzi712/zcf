@@ -9,6 +9,7 @@ ZCF (Zero-Config Claude-Code Flow) is a CLI tool that automatically configures C
 ## Development Guidelines
 
 - **Documentation Language**: Except for README_zh, all code comments and documentation should be written in English
+- When writing tests, first verify if relevant test files already exist to avoid unnecessary duplication
 
 ## Development Commands
 

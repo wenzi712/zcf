@@ -5,6 +5,7 @@ export interface McpService {
   requiresApiKey: boolean
   apiKeyPrompt?: { en: string; 'zh-CN': string }
   apiKeyPlaceholder?: string
+  apiKeyEnvVar?: string
   config: McpServerConfig
 }
 
