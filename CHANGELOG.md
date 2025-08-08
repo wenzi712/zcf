@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.5.2
+
+### Patch Changes
+
+- ## 修复
+
+  - 移除配置文件不存在时的强制退出判断，支持无权限环境下的优雅降级
+  - 为 zcf 配置读写添加静默错误处理，提升兼容性
+
+  ## Fixes
+
+  - Remove forced exit when config file doesn't exist, support graceful degradation in permission-restricted environments
+  - Add silent error handling for zcf config read/write operations, improving compatibility
+
 ## 2.5.1
 
 ### Patch Changes
