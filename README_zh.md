@@ -272,7 +272,7 @@ npx zcf u -c en            # 使用缩写
 ## 📁 项目结构
 
 ```
-claude-code-config/
+zcf/
 ├── README.md              # 说明文档
 ├── package.json           # npm 包配置
 ├── bin/
@@ -412,4 +412,4 @@ MIT 许可证
 
 如果这个项目对你有帮助，请给我一个 ⭐️ Star！
 
-[![Star History Chart](https://api.star-history.com/svg?repos=UfoMiao/claude-code-config&type=Date)](https://star-history.com/#UfoMiao/claude-code-config&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=UfoMiao/zcf&type=Date)](https://star-history.com/#UfoMiao/zcf&Date)

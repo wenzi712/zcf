@@ -272,7 +272,7 @@ npx zcf u -c en            # Using short option
 ## 📁 Project Structure
 
 ```
-claude-code-config/
+zcf/
 ├── README.md              # Documentation
 ├── package.json           # npm package configuration
 ├── bin/
@@ -412,4 +412,4 @@ MIT License
 
 If this project helps you, please give me a ⭐️ Star!
 
-[![Star History Chart](https://api.star-history.com/svg?repos=UfoMiao/claude-code-config&type=Date)](https://star-history.com/#UfoMiao/claude-code-config&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=UfoMiao/zcf&type=Date)](https://star-history.com/#UfoMiao/zcf&Date)
