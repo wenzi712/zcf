@@ -1,5 +1,43 @@
 # Changelog
 
+## 2.7.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 新增 `ccu` 命令用于检查和更新 Claude Code
+  - 实现 Claude CLI 和扩展的版本管理工具
+  - 菜单界面新增 CCU (Claude Code Update) 选项
+  - 完善工具更新消息的多语言支持
+
+  ## New Features
+
+  - Add `ccu` command to check and update Claude Code
+  - Implement tools utility for managing Claude CLI and extensions
+  - Add CCU (Claude Code Update) option to menu interface
+  - Add multilingual support for tools update messages
+
+  ## 测试
+
+  - 为 ccu 命令添加全面的单元测试
+  - 为工具管理模块添加边界测试覆盖
+
+  ## Testing
+
+  - Add comprehensive unit tests for ccu command
+  - Add edge case test coverage for tools utility module
+
+  ## 文档
+
+  - 更新 README 添加 ccu 命令说明
+  - 更新项目计划文档
+
+  ## Documentation
+
+  - Update README with ccu command documentation
+  - Update project planning documentation
+
 ## 2.6.1
 
 ### Patch Changes
