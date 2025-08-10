@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.6.1
+
+### Patch Changes
+
+- ## 文档
+
+  - 更新 zcf-release 命令文档，强调不手动创建标签的重要性
+  - 改进发布流程说明，明确 GitHub Actions 自动化处理
+
+  ## Documentation
+
+  - Update zcf-release command documentation to emphasize no manual tag creation
+  - Improve release workflow documentation, clarify GitHub Actions automation
+
 ## 2.6.0
 
 ### Minor Changes
