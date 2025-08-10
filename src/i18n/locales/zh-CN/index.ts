@@ -9,6 +9,7 @@ import { workflow } from './workflow';
 import { cli } from './cli';
 import { bmad } from './bmad';
 import { errors } from './errors';
+import { tools } from './tools';
 import type { TranslationKeys, McpServicesTranslations } from '../../types';
 
 export const zhCN: TranslationKeys = {
@@ -23,6 +24,7 @@ export const zhCN: TranslationKeys = {
   ...cli,
   ...bmad,
   ...errors,
+  ...tools,
 };
 
 export const zhCNMcpServices: McpServicesTranslations = mcpServices;

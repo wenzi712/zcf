@@ -14,6 +14,9 @@ export interface TranslationKeys {
   spaceToSelectReturn: string;
   enterChoice: string;
   invalidChoice: string;
+  goodbye: string;
+  returnToMenu: string;
+  back: string;
   
   // Language selection
   selectScriptLang: string;
@@ -117,8 +120,9 @@ export interface TranslationKeys {
   
   // Menu
   selectFunction: string;
-  returnToMenu: string;
-  goodbye: string;
+  menuSections: {
+    otherTools: string;
+  };
   menuOptions: {
     fullInit: string;
     importWorkflow: string;
@@ -127,6 +131,7 @@ export interface TranslationKeys {
     configureModel: string;
     configureAiMemory: string;
     configureEnvPermission: string;
+    ccusage: string;
     installBmad: string;
     clearCache: string;
     changeLanguage: string;
@@ -140,6 +145,7 @@ export interface TranslationKeys {
     configureModel: string;
     configureAiMemory: string;
     configureEnvPermission: string;
+    ccusage: string;
     installBmad: string;
     clearCache: string;
     changeLanguage: string;
@@ -171,6 +177,23 @@ export interface TranslationKeys {
   confirmClearCache: string;
   cacheCleared: string;
   noCacheFound: string;
+  
+  // Tools - CCUsage
+  runningCcusage: string;
+  ccusageDescription: string;
+  selectAnalysisMode: string;
+  ccusageModes: {
+    daily: string;
+    monthly: string;
+    session: string;
+    blocks: string;
+    custom: string;
+  };
+  enterCustomArgs: string;
+  pressEnterToContinue: string;
+  ccusageFailed: string;
+  checkNetworkConnection: string;
+  errorDetails: string;
   
   // Environment and permissions
   selectEnvPermissionOption: string;

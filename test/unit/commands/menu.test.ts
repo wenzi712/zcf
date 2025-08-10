@@ -40,6 +40,10 @@ vi.mock('../../../src/utils/features', () => ({
   configureEnvPermissionFeature: vi.fn()
 }));
 
+vi.mock('../../../src/utils/tools', () => ({
+  runCcusageFeature: vi.fn()
+}));
+
 vi.mock('../../../src/utils/error-handler', () => ({
   handleExitPromptError: vi.fn().mockReturnValue(false),
   handleGeneralError: vi.fn()
@@ -139,6 +143,38 @@ describe('menu command', () => {
       await showMainMenu();
       
       expect(changeScriptLanguageFeature).toHaveBeenCalled();
+    });
+
+    it('should handle CCU usage analysis option', async () => {
+      const { showMainMenu } = await import('../../../src/commands/menu');
+      const { runCcusageFeature } = await import('../../../src/utils/tools');
+      const { readZcfConfigAsync } = await import('../../../src/utils/zcf-config');
+      
+      vi.mocked(readZcfConfigAsync).mockResolvedValue({ preferredLang: 'zh-CN' } as any);
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ choice: 'u' })
+        .mockResolvedValueOnce({ continue: false });
+      vi.mocked(runCcusageFeature).mockResolvedValue(undefined);
+      
+      await showMainMenu();
+      
+      expect(runCcusageFeature).toHaveBeenCalledWith('zh-CN');
+    });
+
+    it('should handle CCU usage analysis option in English', async () => {
+      const { showMainMenu } = await import('../../../src/commands/menu');
+      const { runCcusageFeature } = await import('../../../src/utils/tools');
+      const { readZcfConfigAsync } = await import('../../../src/utils/zcf-config');
+      
+      vi.mocked(readZcfConfigAsync).mockResolvedValue({ preferredLang: 'en' } as any);
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ choice: 'u' })
+        .mockResolvedValueOnce({ continue: false });
+      vi.mocked(runCcusageFeature).mockResolvedValue(undefined);
+      
+      await showMainMenu();
+      
+      expect(runCcusageFeature).toHaveBeenCalledWith('en');
     });
 
     it('should handle errors gracefully', async () => {

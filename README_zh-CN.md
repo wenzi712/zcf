@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/UfoMiao/zcf/graph/badge.svg?token=HZI6K4Y7D7)](https://codecov.io/gh/UfoMiao/zcf)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/UfoMiao/zcf)
 
-**中文** | [English](README.md)
+**中文** | [English](README.md) | [更新日志](CHANGELOG.md)
 
 > 零配置，一键搞定 Claude Code 环境设置 - 支持中英文双语配置、智能代理系统和个性化 AI 助手
 
@@ -245,6 +245,7 @@ Enter your choice: _
 | `zcf`        | -       | 显示交互式菜单（v2.0 默认命令） |
 | `zcf init`   | `zcf i` | 初始化 Claude Code 配置         |
 | `zcf update` | `zcf u` | 更新 Prompt 文档并备份旧配置    |
+| `zcf ccu`    | -       | 运行 Claude Code 用量分析工具   |
 
 #### 常用选项
 
@@ -291,6 +292,9 @@ npx zcf i -c zh-CN -f      # 使用缩写
 # 更新到英文版 Prompt（降低 token 消耗）
 npx zcf u --config-lang en
 npx zcf u -c en            # 使用缩写
+
+# 运行 Claude Code 用量分析工具（由 ccusage 提供支持）
+npx zcf ccu               # 每日用量（默认），或使用: monthly, session, blocks
 ```
 
 ## 📁 项目结构

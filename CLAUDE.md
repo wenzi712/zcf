@@ -10,6 +10,10 @@ ZCF (Zero-Config Claude-Code Flow) is a CLI tool that automatically configures C
 
 - **Documentation Language**: Except for README_zh, all code comments and documentation should be written in English
 - When writing tests, first verify if relevant test files already exist to avoid unnecessary duplication
+- **Internationalization (i18n) Guidelines**:
+  - All prompts, logs, and error messages must support i18n
+  - Use project-wide i18n approach instead of single-file language detection
+  - Implement translations consistently across the entire project
 
 ## Development Commands
 
@@ -196,4 +200,3 @@ The project uses strict TypeScript with:
 - Check `~/.claude/` for generated configurations
 - Review `~/.claude/backup/` for configuration history
 - Test cross-platform behavior with platform detection mocks
-```

@@ -14,4 +14,5 @@ export const common = {
   invalidChoice: 'Invalid choice. Please enter a valid option.',
   goodbye: '👋 Thanks for using ZCF! Goodbye!',
   returnToMenu: 'Return to main menu?',
+  back: 'Back',
 };

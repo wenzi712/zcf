@@ -4,6 +4,7 @@ import { version } from '../package.json';
 import { init } from './commands/init';
 import { showMainMenu } from './commands/menu';
 import { update } from './commands/update';
+import { executeCcusage } from './commands/ccu';
 
 export interface CliOptions {
   init?: boolean;
@@ -43,6 +44,14 @@ export function setupCommands(cli: CAC) {
     .option('--config-lang, -c <lang>', 'Configuration language (zh-CN, en)')
     .action(async (options) => {
       await handleUpdateCommand(options);
+    });
+
+  // CCU command - Claude Code usage analysis
+  cli
+    .command('ccu [...args]', 'Run Claude Code usage analysis tool')
+    .allowUnknownOptions()
+    .action(async (args) => {
+      await executeCcusage(args);
     });
 
   // Custom help
@@ -93,6 +102,7 @@ export function customizeHelp(sections: any[]) {
         'i'
       )}     Initialize Claude Code configuration / 初始化 Claude Code 配置`,
       `  ${ansis.cyan('zcf update')} | ${ansis.cyan('u')}   Update workflow-related md files / 仅更新工作流相关md`,
+      `  ${ansis.cyan('zcf ccu')} [args]   Run Claude Code usage analysis / 运行 Claude Code 用量分析`,
       '',
       ansis.gray('  Shortcuts / 快捷方式:'),
       `  ${ansis.cyan('zcf i')}            Quick init / 快速初始化`,
@@ -126,6 +136,10 @@ export function customizeHelp(sections: any[]) {
       '',
       ansis.gray('  # Update workflow-related md files only / 仅更新工作流相关md文件'),
       `  ${ansis.cyan('npx zcf u')}`,
+      '',
+      ansis.gray('  # Run Claude Code usage analysis / 运行 Claude Code 用量分析'),
+      `  ${ansis.cyan('npx zcf ccu')}               ${ansis.gray('# Daily usage (default)')}`,
+      `  ${ansis.cyan('npx zcf ccu monthly --json')}`,
       '',
       ansis.gray('  # Force overwrite with Chinese config / 强制使用中文配置覆盖'),
       `  ${ansis.cyan('npx zcf --init -c zh-CN -f')}`,

@@ -1,5 +1,8 @@
 export const menu = {
   selectFunction: '请选择功能',
+  menuSections: {
+    otherTools: '其他工具',
+  },
   menuOptions: {
     fullInit: '完整初始化',
     importWorkflow: '导入工作流',
@@ -8,6 +11,7 @@ export const menu = {
     configureModel: '配置默认模型',
     configureAiMemory: '配置 Claude 全局记忆',
     configureEnvPermission: '导入推荐环境变量和权限配置',
+    ccusage: 'ccusage',
     installBmad: '安装 BMad Method',
     clearCache: '清除偏好缓存',
     changeLanguage: '更改显示语言 / Select display language',
@@ -21,6 +25,7 @@ export const menu = {
     configureModel: '设置默认模型（opus/sonnet）',
     configureAiMemory: '配置 AI 输出语言和角色风格',
     configureEnvPermission: '导入隐私保护环境变量和系统权限配置',
+    ccusage: 'Claude Code 用量分析',
     installBmad: 'AI 驱动的开发方法论框架',
     clearCache: '清除偏好语言等缓存',
     changeLanguage: '更改 ZCF 界面语言',

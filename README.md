@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/UfoMiao/zcf/graph/badge.svg?token=HZI6K4Y7D7)](https://codecov.io/gh/UfoMiao/zcf)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/UfoMiao/zcf)
 
-[中文](README_zh-CN.md) | **English**
+[中文](README_zh-CN.md) | **English** | [Changelog](CHANGELOG.md)
 
 > Zero-config, one-click setup for Claude Code with bilingual support, intelligent agent system and personalized AI assistant
 
@@ -48,6 +48,7 @@ npx zcf → select 2  # Execute workflow update via menu
 #### 🎯 BMad Workflow (New Feature)
 
 BMad (Business-Minded Agile Development) is an enterprise-grade workflow system that provides:
+
 - Complete team of specialized AI agents (PO, PM, Architect, Dev, QA, etc.)
 - Structured development process with quality gates
 - Automatic documentation generation
@@ -245,6 +246,7 @@ Enter your choice: _
 | `zcf`        | -       | Show interactive menu (v2.0 default command) |
 | `zcf init`   | `zcf i` | Initialize Claude Code configuration         |
 | `zcf update` | `zcf u` | Update workflow-related md files with backup |
+| `zcf ccu`    | -       | Run Claude Code usage analysis tool         |
 
 #### Common Options
 
@@ -291,6 +293,9 @@ npx zcf i -c zh-CN -f      # Using short options
 # Update to English prompts (lower token consumption)
 npx zcf u --config-lang en
 npx zcf u -c en            # Using short option
+
+# Run Claude Code usage analysis tool (powered by ccusage)
+npx zcf ccu               # Daily usage (default), or use: monthly, session, blocks
 ```
 
 ## 📁 Project Structure
