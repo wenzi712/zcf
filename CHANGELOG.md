@@ -1,5 +1,55 @@
 # Changelog
 
+## 2.6.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 新增 BMad (Business-Minded Agile Development) 企业级工作流系统
+  - 支持模块化工作流安装，可选择安装六步工作流、功能规划或 BMad 工作流
+  - 添加完整的 BMad 代理团队（PO、PM、架构师、开发、QA、SM、分析师、UX 专家）
+  - 新增工作流依赖管理和自动清理旧版本文件功能
+  - 国际化架构重构，提取所有字符串到独立的 i18n 模块
+  - 添加多选提示的共享常量，改善用户交互体验
+
+  ## New Features
+
+  - Add BMad (Business-Minded Agile Development) enterprise workflow system
+  - Support modular workflow installation with selectable workflows (Six Steps, Feature Planning, BMad)
+  - Add complete BMad agent team (PO, PM, Architect, Dev, QA, SM, Analyst, UX Expert)
+  - Add workflow dependency management and automatic cleanup of old version files
+  - Refactor i18n architecture with all strings extracted to separate modules
+  - Add shared constant for multiselect hints to improve user interaction
+
+  ## 优化
+
+  - 重构模板目录结构，按功能分类组织（memory、workflow）
+  - 改进工作流配置系统，支持类别、顺序和自动安装代理
+  - 优化配置操作测试覆盖率达到 100%
+  - 增强工作流安装器测试，覆盖率达到 86.57%
+
+  ## Optimization
+
+  - Restructure template directory by function categories (memory, workflow)
+  - Improve workflow configuration system with categories, ordering, and auto-install agents
+  - Optimize config operations test coverage to 100%
+  - Enhance workflow installer tests with 86.57% coverage
+
+  ## 文档
+
+  - 更新 README 文档，添加 BMad 工作流说明和使用指南
+  - 更新 CLAUDE.md，添加工作流系统架构说明
+  - 修正交互式菜单描述，与实际实现保持一致
+  - 添加 cspell 配置文件，支持代码拼写检查
+
+  ## Documentation
+
+  - Update README with BMad workflow descriptions and usage guide
+  - Update CLAUDE.md with workflow system architecture
+  - Fix interactive menu descriptions to match implementation
+  - Add cspell configuration for code spell checking
+
 ## 2.5.2
 
 ### Patch Changes
