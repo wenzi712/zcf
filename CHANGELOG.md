@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.7.1
+
+### Patch Changes
+
+- ## 修复
+
+  - 改进用户提示信息，在 Exa API Key 输入提示中添加获取链接
+  - 在选项输入提示中添加不区分大小写的说明
+  - 优化中英文翻译的一致性
+
+  ## Fixes
+
+  - Improve user prompts by adding URL to Exa API key input prompt
+  - Add case-insensitive note to choice input prompt
+  - Optimize consistency of Chinese and English translations
+
+  ## 文档
+
+  - 更新 CHANGELOG 中 ccu 命令的描述
+
+  ## Documentation
+
+  - Update ccu command description in CHANGELOG
+
 ## 2.7.0
 
 ### Minor Changes
