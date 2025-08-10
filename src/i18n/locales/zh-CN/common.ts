@@ -10,7 +10,7 @@ export const common = {
   none: '无',
   notConfigured: '未配置',
   spaceToSelectReturn: '- 空格选择，回车提交',
-  enterChoice: '请输入选项，回车确认',
+  enterChoice: '请输入选项，回车确认（不区分大小写）',
   invalidChoice: '无效选择。请输入有效选项。',
   goodbye: '👋 感谢使用 ZCF！再见！',
   returnToMenu: '返回主菜单？',

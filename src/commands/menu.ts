@@ -69,11 +69,9 @@ export async function showMainMenu() {
         )}`
       );
       console.log('');
-      console.log(`  ---------- ${i18n.menuSections.otherTools} ----------`);
+      console.log(`  --------- ${i18n.menuSections.otherTools} ----------`);
       console.log(
-        `  ${ansis.cyan('u.')} ${i18n.menuOptions.ccusage} ${ansis.gray(
-          '- ' + i18n.menuDescriptions.ccusage
-        )}`
+        `  ${ansis.cyan('U.')} ${i18n.menuOptions.ccusage} ${ansis.gray('- ' + i18n.menuDescriptions.ccusage)}`
       );
       console.log('');
       console.log('  ------------ ZCF ------------');
@@ -85,7 +83,7 @@ export async function showMainMenu() {
       console.log(
         `  ${ansis.cyan('-.')} ${i18n.menuOptions.clearCache} ${ansis.gray('- ' + i18n.menuDescriptions.clearCache)}`
       );
-      console.log(`  ${ansis.red('q.')} ${ansis.red(i18n.menuOptions.exit)}`);
+      console.log(`  ${ansis.red('Q.')} ${ansis.red(i18n.menuOptions.exit)}`);
       console.log('');
 
       // Get user input

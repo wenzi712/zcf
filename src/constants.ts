@@ -87,8 +87,8 @@ export const MCP_SERVICES: McpService[] = [
     },
     requiresApiKey: true,
     apiKeyPrompt: {
-      'zh-CN': '请输入 Exa API Key',
-      en: 'Enter Exa API Key',
+      'zh-CN': '请输入 Exa API Key（可从 https://dashboard.exa.ai/api-keys 获取）',
+      en: 'Enter Exa API Key (get from https://dashboard.exa.ai/api-keys)',
     },
     apiKeyEnvVar: 'EXA_API_KEY',
     config: {

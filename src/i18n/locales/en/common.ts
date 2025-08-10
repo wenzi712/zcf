@@ -10,7 +10,7 @@ export const common = {
   none: 'None',
   notConfigured: 'Not configured',
   spaceToSelectReturn: '- Space to select. Return to submit',
-  enterChoice: 'Enter your choice, and press enter',
+  enterChoice: 'Enter your choice and press enter (case-insensitive)',
   invalidChoice: 'Invalid choice. Please enter a valid option.',
   goodbye: '👋 Thanks for using ZCF! Goodbye!',
   returnToMenu: 'Return to main menu?',
