@@ -6,27 +6,27 @@
 
 - ## 新功能
 
-  - 新增 `ccu` 命令用于检查和更新 Claude Code
-  - 实现 Claude CLI 和扩展的版本管理工具
-  - 菜单界面新增 CCU (Claude Code Update) 选项
-  - 完善工具更新消息的多语言支持
+  - 新增 `ccu` 命令用于 Claude Code 用量分析
+  - 实现 Claude Code 使用情况统计和分析工具
+  - 菜单界面新增 CCU (Claude Code Usage) 选项
+  - 完善用量统计消息的多语言支持
 
   ## New Features
 
-  - Add `ccu` command to check and update Claude Code
-  - Implement tools utility for managing Claude CLI and extensions
-  - Add CCU (Claude Code Update) option to menu interface
-  - Add multilingual support for tools update messages
+  - Add `ccu` command for Claude Code usage analysis
+  - Implement Claude Code usage statistics and analysis tools
+  - Add CCU (Claude Code Usage) option to menu interface
+  - Add multilingual support for usage statistics messages
 
   ## 测试
 
   - 为 ccu 命令添加全面的单元测试
-  - 为工具管理模块添加边界测试覆盖
+  - 为用量分析模块添加边界测试覆盖
 
   ## Testing
 
   - Add comprehensive unit tests for ccu command
-  - Add edge case test coverage for tools utility module
+  - Add edge case test coverage for usage analysis module
 
   ## 文档
 
