@@ -1,5 +1,55 @@
 # Changelog
 
+## 2.8.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 添加 CCR (Claude Code Runner) 代理配置支持，帮助企业用户配置 Claude Code 代理
+  - 实现 CCR 交互式管理菜单，支持预设配置和自定义代理设置
+  - 为所有 inquirer 列表提示添加序号，改善用户体验
+  - CCR 支持跳过选项，允许用户手动配置
+
+  ## New Features
+
+  - Add CCR (Claude Code Runner) proxy configuration support for enterprise users
+  - Implement interactive CCR management menu with preset configurations and custom proxy settings
+  - Add sequential numbers to all inquirer list prompts for better user experience
+  - Support skip option in CCR for manual configuration
+
+  ## 优化
+
+  - 重构 i18n 系统为模块化结构，提升代码组织性和可维护性
+  - 改进配置合并逻辑，更好地处理复杂配置场景
+  - 优化初始化流程中的功能显示和选择
+
+  ## Optimization
+
+  - Refactor i18n system to modular structure for better code organization and maintainability
+  - Improve configuration merge logic for better handling of complex scenarios
+  - Optimize feature display and selection in initialization flow
+
+  ## 测试
+
+  - 为 CCR 功能添加全面的单元测试和边缘测试
+  - 新增 prompt-helpers 工具函数的测试覆盖
+
+  ## Testing
+
+  - Add comprehensive unit tests and edge tests for CCR features
+  - Add test coverage for prompt-helpers utility functions
+
+  ## 文档
+
+  - 更新 README 文件，添加 CCR 功能的详细文档
+  - 完善命令行参数说明和使用示例
+
+  ## Documentation
+
+  - Update README files with detailed CCR feature documentation
+  - Improve command-line parameter descriptions and usage examples
+
 ## 2.7.1
 
 ### Patch Changes
