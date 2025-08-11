@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.8.2
+
+### Patch Changes
+
+- ## 修复
+
+  - 改进 CCR start 命令的错误处理机制
+  - 优化 CCR 安装程序逻辑和测试覆盖
+
+  ## 文档
+
+  - 增强 MCP 服务使用指南，添加详细的使用场景和示例
+  - 完善技术执行指南，新增 AI 助手行为准则
+  - 改进文档结构和格式，提升可读性
+  - 更新中英文版本的内存模板
+
+  ## Fixes
+
+  - Improve error handling for CCR start command
+  - Optimize CCR installer logic and test coverage
+
+  ## Documentation
+
+  - Enhance MCP service usage guide with detailed use cases and examples
+  - Improve technical execution guidelines with AI assistant behavior principles
+  - Refine documentation structure and formatting for better readability
+  - Update memory templates for both Chinese and English versions
+
 ## 2.8.1
 
 ### Patch Changes
