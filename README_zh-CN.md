@@ -24,8 +24,9 @@ npx zcf          # 打开交互式菜单，根据你的需求选择操作
 
 - `1` 完整初始化（等同于 `zcf i`）
 - `2` 导入工作流（等同于 `zcf u`）
-- `3-7` 配置管理（API/CCR、MCP、模型、AI 个性等）
-- `R` Claude Code Router 管理（新功能）
+- `3-7` 配置管理（API/CCR、MCP、模型设置、AI 个性等）
+- `R` Claude Code Router 管理（v2.8.1 增强）
+- `U` ccusage - Claude Code 用量分析
 - 更多功能选项...
 
 ### 或者，直接使用命令：
@@ -63,7 +64,7 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 
 安装后，使用 `/bmad-init` 在项目中初始化 BMad 工作流。
 
-#### 🚀 CCR (Claude Code Router) 支持（v2.8 新功能）
+#### 🚀 CCR (Claude Code Router) 支持（v2.8+ 增强版）
 
 [CCR](https://github.com/musistudio/claude-code-router/blob/main/README_zh.md) 是一个强大的代理路由器，可以实现：
 
@@ -71,6 +72,7 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 - **自定义路由**：根据规则将不同类型的请求路由到不同的模型
 - **成本优化**：通过为不同任务使用合适的模型，显著降低 API 成本
 - **便捷管理**：提供交互式菜单进行 CCR 配置和服务控制
+- **自动更新**：CCR 和 Claude Code 的自动版本检查和更新（v2.8.1+）
 
 访问 CCR 功能：
 
@@ -78,6 +80,12 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 npx zcf ccr      # 打开 CCR 管理菜单
 # 或
 npx zcf → 选择 R
+```
+
+检查更新（v2.8.1+）：
+
+```bash
+npx zcf check-updates  # 检查并更新 Claude Code 和 CCR 到最新版本
 ```
 
 CCR 菜单选项：

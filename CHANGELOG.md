@@ -1,5 +1,41 @@
 # Changelog
 
+## 2.8.1
+
+### Patch Changes
+
+- ## 新功能
+
+  - 添加版本检查和自动更新功能，支持 CCR 和 Claude Code 的版本检查与更新
+  - 新增默认模型配置选项，改进语言配置提示体验
+  - 新增 `check-updates` 命令，用于检查和更新工具到最新版本
+
+  ## New Features
+
+  - Add version check and auto-update functionality for CCR and Claude Code
+  - Add default model configuration option and improve language configuration prompts
+  - Add `check-updates` command to check and update tools to latest versions
+
+  ## 优化
+
+  - 改进测试覆盖率，添加边缘测试用例
+  - 增强 CCR 功能文档，添加自动更新说明
+
+  ## Optimization
+
+  - Improve test coverage with edge case tests
+  - Enhance CCR feature documentation with auto-update instructions
+
+  ## 文档
+
+  - 更新 README 文件，添加新功能说明
+  - 完善赞助信息，添加支付二维码
+
+  ## Documentation
+
+  - Update README files with new feature descriptions
+  - Add sponsor information with payment QR codes
+
 ## 2.8.0
 
 ### Minor Changes

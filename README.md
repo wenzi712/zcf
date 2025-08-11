@@ -24,8 +24,9 @@ Menu options include:
 
 - `1` Full initialization (equivalent to `zcf i`)
 - `2` Import workflows (equivalent to `zcf u`)
-- `3-7` Configuration management (API/CCR, MCP, Model, AI personality, etc.)
-- `R` Claude Code Router management (new feature)
+- `3-7` Configuration management (API/CCR, MCP, Model settings, AI personality, etc.)
+- `R` Claude Code Router management (enhanced in v2.8.1)
+- `U` ccusage - Claude Code usage analysis
 - More features...
 
 ### Or, use direct commands:
@@ -63,7 +64,7 @@ npx zcf → select 2  # Execute workflow update via menu
 
 After installation, use `/bmad-init` to initialize the BMad workflow in your project.
 
-#### 🚀 CCR (Claude Code Router) Support (v2.8 New Feature)
+#### 🚀 CCR (Claude Code Router) Support (v2.8+ Enhanced)
 
 [CCR](https://github.com/musistudio/claude-code-router/blob/main/README.md) is a powerful proxy router that enables:
 
@@ -71,6 +72,7 @@ After installation, use `/bmad-init` to initialize the BMad workflow in your pro
 - **Custom Routing**: Route different types of requests to different models based on your rules
 - **Cost Optimization**: Significantly reduce API costs by using appropriate models for different tasks
 - **Easy Management**: Interactive menu for CCR configuration and service control
+- **Auto Updates**: Automatic version checking and updates for CCR and Claude Code (v2.8.1+)
 
 To access CCR features:
 
@@ -78,6 +80,12 @@ To access CCR features:
 npx zcf ccr      # Open CCR management menu
 # or
 npx zcf → select R
+```
+
+Check for updates (v2.8.1+):
+
+```bash
+npx zcf check-updates  # Check and update Claude Code and CCR to latest versions
 ```
 
 CCR menu options:
