@@ -16,7 +16,8 @@ vi.mock('../../../src/utils/config', () => ({
   applyAiLanguageDirective: vi.fn(),
   configureApi: vi.fn(),
   updateDefaultModel: vi.fn(),
-  getExistingApiConfig: vi.fn()
+  getExistingApiConfig: vi.fn(),
+  getExistingModelConfig: vi.fn()
 }));
 
 vi.mock('../../../src/utils/config-operations', () => ({
@@ -44,7 +45,8 @@ vi.mock('../../../src/utils/simple-config', () => ({
 }));
 
 vi.mock('../../../src/utils/prompts', () => ({
-  resolveAiOutputLanguage: vi.fn()
+  resolveAiOutputLanguage: vi.fn(),
+  selectAiOutputLanguage: vi.fn()
 }));
 
 vi.mock('../../../src/utils/zcf-config', () => ({
@@ -145,39 +147,177 @@ describe('features utilities', () => {
   });
 
   describe('configureDefaultModelFeature', () => {
-    it('should update default model', async () => {
+    it('should update default model when no existing config', async () => {
       const { configureDefaultModelFeature } = await import('../../../src/utils/features');
-      const { updateDefaultModel } = await import('../../../src/utils/config');
+      const { updateDefaultModel, getExistingModelConfig } = await import('../../../src/utils/config');
       
+      vi.mocked(getExistingModelConfig).mockReturnValue(null);
       vi.mocked(inquirer.prompt).mockResolvedValue({ model: 'opus' });
       vi.mocked(updateDefaultModel).mockResolvedValue(undefined);
       
       await configureDefaultModelFeature('zh-CN');
       
+      expect(getExistingModelConfig).toHaveBeenCalled();
       expect(updateDefaultModel).toHaveBeenCalledWith('opus');
+    });
+
+    it('should show existing config and ask for modification', async () => {
+      const { configureDefaultModelFeature } = await import('../../../src/utils/features');
+      const { updateDefaultModel, getExistingModelConfig } = await import('../../../src/utils/config');
+      
+      vi.mocked(getExistingModelConfig).mockReturnValue('sonnet');
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ modify: true })
+        .mockResolvedValueOnce({ model: 'opus' });
+      vi.mocked(updateDefaultModel).mockResolvedValue(undefined);
+      
+      await configureDefaultModelFeature('zh-CN');
+      
+      expect(getExistingModelConfig).toHaveBeenCalled();
+      expect(inquirer.prompt).toHaveBeenCalledTimes(2);
+      expect(updateDefaultModel).toHaveBeenCalledWith('opus');
+    });
+
+    it('should keep existing config when user declines modification', async () => {
+      const { configureDefaultModelFeature } = await import('../../../src/utils/features');
+      const { updateDefaultModel, getExistingModelConfig } = await import('../../../src/utils/config');
+      
+      vi.mocked(getExistingModelConfig).mockReturnValue('opus');
+      vi.mocked(inquirer.prompt).mockResolvedValue({ modify: false });
+      
+      await configureDefaultModelFeature('en');
+      
+      expect(getExistingModelConfig).toHaveBeenCalled();
+      expect(inquirer.prompt).toHaveBeenCalledTimes(1);
+      expect(updateDefaultModel).not.toHaveBeenCalled();
+    });
+
+    it('should handle default model option selection', async () => {
+      const { configureDefaultModelFeature } = await import('../../../src/utils/features');
+      const { updateDefaultModel, getExistingModelConfig } = await import('../../../src/utils/config');
+      
+      vi.mocked(getExistingModelConfig).mockReturnValue(null);
+      vi.mocked(inquirer.prompt).mockResolvedValue({ model: 'default' });
+      vi.mocked(updateDefaultModel).mockResolvedValue(undefined);
+      
+      await configureDefaultModelFeature('zh-CN');
+      
+      expect(updateDefaultModel).toHaveBeenCalledWith('default');
+    });
+
+    it('should handle user cancellation', async () => {
+      const { configureDefaultModelFeature } = await import('../../../src/utils/features');
+      const { updateDefaultModel, getExistingModelConfig } = await import('../../../src/utils/config');
+      
+      vi.mocked(getExistingModelConfig).mockReturnValue(null);
+      vi.mocked(inquirer.prompt).mockResolvedValue({ model: undefined });
+      
+      await configureDefaultModelFeature('zh-CN');
+      
+      expect(updateDefaultModel).not.toHaveBeenCalled();
+    });
+
+    it('should set correct default choice based on existing config', async () => {
+      const { configureDefaultModelFeature } = await import('../../../src/utils/features');
+      const { getExistingModelConfig } = await import('../../../src/utils/config');
+      
+      vi.mocked(getExistingModelConfig).mockReturnValue('opus');
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ modify: true })
+        .mockResolvedValueOnce({ model: 'sonnet' });
+      
+      await configureDefaultModelFeature('zh-CN');
+      
+      const secondCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as any;
+      expect(secondCall.default).toBe(0); // 'opus' is at index 0 in ['opus', 'sonnet', 'default']
     });
   });
 
   describe('configureAiMemoryFeature', () => {
-    it('should configure AI memory', async () => {
+    it('should configure AI language when no existing config', async () => {
       const { configureAiMemoryFeature } = await import('../../../src/utils/features');
       const { applyAiLanguageDirective } = await import('../../../src/utils/config');
       const { configureAiPersonality } = await import('../../../src/utils/ai-personality');
-      const { resolveAiOutputLanguage } = await import('../../../src/utils/prompts');
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
       const { readZcfConfig, updateZcfConfig } = await import('../../../src/utils/zcf-config');
       
       vi.mocked(readZcfConfig).mockReturnValue({} as any);
       vi.mocked(inquirer.prompt).mockResolvedValue({ 
         option: 'language'
       });
-      vi.mocked(resolveAiOutputLanguage).mockResolvedValue('chinese-simplified');
+      vi.mocked(selectAiOutputLanguage).mockResolvedValue('chinese-simplified');
       vi.mocked(applyAiLanguageDirective).mockResolvedValue(undefined);
       vi.mocked(updateZcfConfig).mockResolvedValue(undefined);
       
       await configureAiMemoryFeature('zh-CN');
       
+      expect(selectAiOutputLanguage).toHaveBeenCalledWith('zh-CN', 'zh-CN');
       expect(applyAiLanguageDirective).toHaveBeenCalledWith('chinese-simplified');
       expect(updateZcfConfig).toHaveBeenCalledWith({ aiOutputLang: 'chinese-simplified' });
+    });
+
+    it('should show existing language config and ask for modification', async () => {
+      const { configureAiMemoryFeature } = await import('../../../src/utils/features');
+      const { applyAiLanguageDirective } = await import('../../../src/utils/config');
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
+      const { readZcfConfig, updateZcfConfig } = await import('../../../src/utils/zcf-config');
+      
+      vi.mocked(readZcfConfig).mockReturnValue({ aiOutputLang: 'en' } as any);
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ option: 'language' })
+        .mockResolvedValueOnce({ modify: true });
+      vi.mocked(selectAiOutputLanguage).mockResolvedValue('zh-CN');
+      vi.mocked(applyAiLanguageDirective).mockResolvedValue(undefined);
+      vi.mocked(updateZcfConfig).mockResolvedValue(undefined);
+      
+      await configureAiMemoryFeature('zh-CN');
+      
+      expect(inquirer.prompt).toHaveBeenCalledTimes(2);
+      expect(selectAiOutputLanguage).toHaveBeenCalled();
+      expect(applyAiLanguageDirective).toHaveBeenCalledWith('zh-CN');
+    });
+
+    it('should keep existing language config when user declines modification', async () => {
+      const { configureAiMemoryFeature } = await import('../../../src/utils/features');
+      const { applyAiLanguageDirective } = await import('../../../src/utils/config');
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
+      const { readZcfConfig, updateZcfConfig } = await import('../../../src/utils/zcf-config');
+      
+      vi.mocked(readZcfConfig).mockReturnValue({ aiOutputLang: 'chinese-simplified' } as any);
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ option: 'language' })
+        .mockResolvedValueOnce({ modify: false });
+      
+      await configureAiMemoryFeature('en');
+      
+      expect(selectAiOutputLanguage).not.toHaveBeenCalled();
+      expect(applyAiLanguageDirective).not.toHaveBeenCalled();
+      expect(updateZcfConfig).not.toHaveBeenCalled();
+    });
+
+    it('should configure AI personality when personality option selected', async () => {
+      const { configureAiMemoryFeature } = await import('../../../src/utils/features');
+      const { configureAiPersonality } = await import('../../../src/utils/ai-personality');
+      
+      vi.mocked(inquirer.prompt).mockResolvedValue({ option: 'personality' });
+      vi.mocked(configureAiPersonality).mockResolvedValue(undefined);
+      
+      await configureAiMemoryFeature('zh-CN');
+      
+      expect(configureAiPersonality).toHaveBeenCalledWith('zh-CN');
+    });
+
+    it('should handle user cancellation', async () => {
+      const { configureAiMemoryFeature } = await import('../../../src/utils/features');
+      const { applyAiLanguageDirective } = await import('../../../src/utils/config');
+      const { configureAiPersonality } = await import('../../../src/utils/ai-personality');
+      
+      vi.mocked(inquirer.prompt).mockResolvedValue({ option: undefined });
+      
+      await configureAiMemoryFeature('zh-CN');
+      
+      expect(applyAiLanguageDirective).not.toHaveBeenCalled();
+      expect(configureAiPersonality).not.toHaveBeenCalled();
     });
   });
 

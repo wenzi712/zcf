@@ -118,7 +118,96 @@ else
 fi
 ```
 
-### 4. Generate CHANGELOG Content
+### 4. Check and Update README Files
+
+Analyze changes and update README files if necessary:
+
+```bash
+echo -e "\n📚 Checking if README files need updates..."
+
+# Analyze changed files to determine if feature documentation needs updating
+CHANGED_FILES=$(git diff $LAST_TAG..HEAD --name-only 2>/dev/null || git diff --name-only)
+
+# Check if there are significant code changes
+if echo "$CHANGED_FILES" | grep -qE "(src/|lib/|commands/|utils/|templates/)"; then
+  echo "🔍 Detected code changes, analyzing features..."
+
+  # Prepare update summary based on commits
+  echo -e "\n📝 Feature changes summary:"
+
+  # Analyze key feature changes
+  FEATURE_CHANGES=""
+
+  # Check for new commands
+  if echo "$CHANGED_FILES" | grep -q "commands/"; then
+    echo "  - New or modified commands detected"
+    FEATURE_CHANGES="commands"
+  fi
+
+  # Check for new workflows
+  if echo "$CHANGED_FILES" | grep -q "workflow"; then
+    echo "  - Workflow system changes detected"
+    FEATURE_CHANGES="$FEATURE_CHANGES workflows"
+  fi
+
+  # Check for MCP service updates
+  if echo "$CHANGED_FILES" | grep -q "mcp"; then
+    echo "  - MCP service updates detected"
+    FEATURE_CHANGES="$FEATURE_CHANGES mcp"
+  fi
+
+  # Check for API configuration changes
+  if echo "$CHANGED_FILES" | grep -q "api\|config"; then
+    echo "  - Configuration system changes detected"
+    FEATURE_CHANGES="$FEATURE_CHANGES config"
+  fi
+
+  if [ -n "$FEATURE_CHANGES" ]; then
+    echo -e "\n📋 README files that may need updates:"
+    echo "  - README.md (English version)"
+    echo "  - README_zh-CN.md (Chinese version)"
+
+    echo -e "\n🤖 I will now update README files based on the changes..."
+    # The actual README update will be done by analyzing the code changes
+    # and updating the relevant sections (Features, Usage, Configuration, etc.)
+  else
+    echo "✅ No significant feature changes detected, README update not required"
+  fi
+else
+  echo "✅ No code changes detected, README update not required"
+fi
+```
+
+**README Update Guidelines**:
+
+When updating README files, follow these principles:
+
+1. **Feature Section Updates**:
+
+   - Add new features to the feature list
+   - Update command descriptions if modified
+   - Keep bilingual consistency (README.md and README_zh-CN.md)
+
+2. **Version Compatibility**:
+
+   - Update version requirements if needed
+   - Add migration notes for breaking changes
+
+3. **Documentation Structure**:
+
+   - Maintain consistent formatting
+   - Update table of contents if sections added
+   - Keep examples up-to-date
+
+4. **Common Update Areas**:
+   - Features list
+   - Installation instructions
+   - Configuration options
+   - Command usage examples
+   - Workflow descriptions
+   - MCP service list
+
+### 5. Generate CHANGELOG Content
 
 Based on code change analysis, I will generate CHANGELOG following these standards:
 
@@ -163,7 +252,7 @@ Based on code change analysis, I will generate CHANGELOG following these standar
 - Fix Windows path backslash escaping issue
 ```
 
-### 5. Create Changeset
+### 6. Create Changeset
 
 Create changeset file based on analysis:
 
@@ -185,7 +274,7 @@ EOF
 echo "✅ Changeset file created: $CHANGESET_FILE"
 ```
 
-### 6. Update Version Number
+### 7. Update Version Number
 
 Use changeset to update version number and CHANGELOG:
 
@@ -193,17 +282,49 @@ Use changeset to update version number and CHANGELOG:
 echo "🔄 Updating version number and CHANGELOG..."
 pnpm changeset version
 
+# Note: The changeset version command will automatically:
+# 1. Update package.json version
+# 2. Generate/update CHANGELOG.md
+# 3. DELETE the temporary changeset file in .changeset/ directory
+# No manual cleanup needed!
+
 # Get new version number
 NEW_VERSION=$(node -p "require('./package.json').version")
 echo "📦 New version: v$NEW_VERSION"
 
 # Show CHANGELOG update
 echo -e "\n📋 CHANGELOG has been updated, please review the content"
+echo "✅ Temporary changeset file has been automatically deleted"
 ```
 
-### 7. Create Release Commit
+### 8. Update README Files if Needed
 
-Commit all changes:
+After version update, actually update README files if features changed:
+
+```bash
+# Execute README updates if feature changes were detected
+if [ -n "$FEATURE_CHANGES" ]; then
+  echo -e "\n📝 Updating README files with new features..."
+  
+  # Note: At this point, Claude Code will analyze the actual code changes
+  # and update the README.md and README_zh-CN.md files accordingly
+  # This includes:
+  # - Adding new features to feature lists
+  # - Updating usage examples
+  # - Modifying configuration documentation
+  # - Ensuring bilingual consistency
+  
+  echo "✅ README files have been updated"
+  
+  # Show the changes for review
+  echo -e "\n📊 README changes summary:"
+  git diff --stat README.md README_zh-CN.md
+fi
+```
+
+### 9. Create Release Commit
+
+Commit all changes (including README updates if any):
 
 ````bash
 echo "💾 Committing release changes..."
@@ -211,14 +332,25 @@ echo "💾 Committing release changes..."
 # Add all changes
 git add .
 
-# Create release commit
-git commit -m "chore: release v$NEW_VERSION
+# Prepare commit message
+COMMIT_MSG="chore: release v$NEW_VERSION
 
 - Update version to $NEW_VERSION
-- Update CHANGELOG.md
+- Update CHANGELOG.md"
+
+# Add README update note if applicable
+if [ -n "$FEATURE_CHANGES" ]; then
+  COMMIT_MSG="$COMMIT_MSG
+- Update README files with new features"
+fi
+
+COMMIT_MSG="$COMMIT_MSG
 - Generated by /zcf-release command"
 
-### 8. Push to Remote Repository (NO TAGS!)
+# Create release commit
+git commit -m "$COMMIT_MSG"
+
+### 10. Push to Remote Repository (NO TAGS!)
 
 ```bash
 echo "🚀 Pushing to remote repository..."
@@ -240,13 +372,15 @@ echo "👀 View release status: https://github.com/UfoMiao/zcf/actions"
 
 1. **Preparation Phase**: Check parameters, working directory status
 2. **Analysis Phase**: Analyze commit history and file changes
-3. **Generation Phase**: Create bilingual CHANGELOG
-4. **Execution Phase**: Update version, commit, push (NO TAGS!)
-5. **Release Phase**: GitHub Actions auto publish with automatic tagging
+3. **README Check Phase**: Check if README files need updates based on changes
+4. **Generation Phase**: Create bilingual CHANGELOG
+5. **Execution Phase**: Update version, update README if needed, commit, push (NO TAGS!)
+6. **Release Phase**: GitHub Actions auto publish with automatic tagging
 
 ## Important Notes
 
 ⚠️ **CRITICAL**: **NEVER create or push Git tags manually!** GitHub Actions will automatically:
+
 - Create the version tag after successful build
 - Generate GitHub Release
 - Publish to npm registry
@@ -254,10 +388,13 @@ echo "👀 View release status: https://github.com/UfoMiao/zcf/actions"
 Manual tags will cause conflicts with the automated release process!
 
 Other notes:
+
 - Ensure all code has been tested
 - CHANGELOG must follow bilingual format standards
 - Choose the correct version type
 - Carefully review CHANGELOG content before release
+- **No manual cleanup needed**: `changeset version` automatically deletes temporary changeset files
+- The `.changeset/` directory should only contain config files, not temporary release files
 
 ---
 

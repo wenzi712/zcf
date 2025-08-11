@@ -11,6 +11,7 @@ import {
   mergeSettingsFile,
   getExistingApiConfig,
   applyAiLanguageDirective,
+  getExistingModelConfig,
 } from '../../../src/utils/config';
 import * as fsOps from '../../../src/utils/fs-operations';
 import * as jsonConfig from '../../../src/utils/json-config';
@@ -330,6 +331,49 @@ describe('config utilities', () => {
     it("should handle existing directory check", async () => {
       // This is a placeholder test - the actual extended tests were minimal
       expect(true).toBe(true);
+    });
+  });
+
+  describe('getExistingModelConfig', () => {
+    it('should return null when settings file does not exist', () => {
+      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue(null);
+      
+      const result = getExistingModelConfig();
+      
+      expect(result).toBe(null);
+      expect(jsonConfig.readJsonConfig).toHaveBeenCalledWith(SETTINGS_FILE);
+    });
+
+    it('should return "default" when model field is not set', () => {
+      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue({});
+      
+      const result = getExistingModelConfig();
+      
+      expect(result).toBe('default');
+    });
+
+    it('should return "opus" when model is set to opus', () => {
+      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue({ model: 'opus' });
+      
+      const result = getExistingModelConfig();
+      
+      expect(result).toBe('opus');
+    });
+
+    it('should return "sonnet" when model is set to sonnet', () => {
+      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue({ model: 'sonnet' });
+      
+      const result = getExistingModelConfig();
+      
+      expect(result).toBe('sonnet');
+    });
+
+    it('should return "default" when model is explicitly set to default', () => {
+      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue({ model: 'default' });
+      
+      const result = getExistingModelConfig();
+      
+      expect(result).toBe('default');
     });
   });
 });

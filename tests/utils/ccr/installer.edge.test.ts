@@ -40,6 +40,16 @@ describe('CCR installer - edge cases', () => {
         ccrInstallFailed: 'Failed to install CCR',
         failedToStartCcrService: 'Failed to start CCR service',
         errorStartingCcrService: 'Error starting CCR service'
+      },
+      updater: {
+        checkingVersion: 'Checking version...',
+        ccrNotInstalled: 'CCR is not installed',
+        ccrUpToDate: 'CCR is up to date (version: {version})',
+        ccrNeedsUpdate: 'CCR needs update',
+        updateConfirm: 'Do you want to update?',
+        updating: 'Updating...',
+        updateSuccess: 'Update successful',
+        updateFailed: 'Update failed'
       }
     } as any);
   });

@@ -234,4 +234,62 @@ describe('prompts utilities', () => {
       expect(call.default).toBe('zh-CN');
     });
   });
+
+  describe('selectAiOutputLanguage', () => {
+    it('should prompt user to select AI output language', async () => {
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
+      vi.mocked(inquirer.prompt).mockResolvedValue({ lang: 'en' });
+
+      const result = await selectAiOutputLanguage('zh-CN');
+
+      expect(result).toBe('en');
+      expect(inquirer.prompt).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'list',
+          name: 'lang',
+          message: expect.any(String),
+          default: 'zh-CN' // default based on script language
+        })
+      );
+    });
+
+    it('should use provided default language', async () => {
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
+      vi.mocked(inquirer.prompt).mockResolvedValue({ lang: 'es' });
+
+      const result = await selectAiOutputLanguage('en', 'es');
+
+      expect(result).toBe('es');
+      const call = vi.mocked(inquirer.prompt).mock.calls[0][0] as any;
+      expect(call.default).toBe('es');
+    });
+
+    it('should default to en for non-Chinese script language', async () => {
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
+      vi.mocked(inquirer.prompt).mockResolvedValue({ lang: 'en' });
+
+      await selectAiOutputLanguage('en');
+
+      const call = vi.mocked(inquirer.prompt).mock.calls[0][0] as any;
+      expect(call.default).toBe('en');
+    });
+
+    it('should handle user selecting Chinese Simplified', async () => {
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
+      vi.mocked(inquirer.prompt).mockResolvedValue({ lang: 'chinese-simplified' });
+
+      const result = await selectAiOutputLanguage('zh-CN');
+
+      expect(result).toBe('chinese-simplified');
+    });
+
+    it('should handle custom language input', async () => {
+      const { selectAiOutputLanguage } = await import('../../../src/utils/prompts');
+      vi.mocked(inquirer.prompt).mockResolvedValue({ lang: 'custom-lang' });
+
+      const result = await selectAiOutputLanguage('en');
+
+      expect(result).toBe('custom-lang');
+    });
+  });
 });
