@@ -12,12 +12,22 @@ export const configuration = {
   // Model configuration
   selectDefaultModel: '选择默认模型',
   modelConfigSuccess: '默认模型已配置',
+  existingModelConfig: '检测到已有模型配置',
+  currentModel: '当前模型',
+  modifyModel: '是否修改模型配置？',
+  keepModel: '保持当前模型配置',
+  defaultModelOption: '默认（让 Claude Code 自动选择）',
+  modelConfigured: '默认模型已配置',
 
   // AI memory configuration
   selectMemoryOption: '选择配置选项',
   configureAiLanguage: '配置 AI 输出语言',
   configureAiPersonality: '配置 AI 个性风格',
   aiLanguageConfigured: 'AI 输出语言已配置',
+  existingLanguageConfig: '检测到已有 AI 输出语言配置',
+  currentLanguage: '当前语言',
+  modifyLanguage: '是否修改 AI 输出语言？',
+  keepLanguage: '保持当前语言配置',
 
   // AI personality
   selectAiPersonality: '选择 AI 个性风格',

@@ -12,12 +12,22 @@ export const configuration = {
   // Model configuration
   selectDefaultModel: 'Select default model',
   modelConfigSuccess: 'Default model configured',
+  existingModelConfig: 'Existing model configuration detected',
+  currentModel: 'Current model',
+  modifyModel: 'Modify model configuration?',
+  keepModel: 'Keeping existing model configuration',
+  defaultModelOption: 'Default (Let Claude Code choose)',
+  modelConfigured: 'Default model configured',
 
   // AI memory configuration
   selectMemoryOption: 'Select configuration option',
   configureAiLanguage: 'Configure AI output language',
   configureAiPersonality: 'Configure AI personality',
   aiLanguageConfigured: 'AI output language configured',
+  existingLanguageConfig: 'Existing AI output language configuration detected',
+  currentLanguage: 'Current language',
+  modifyLanguage: 'Modify AI output language?',
+  keepLanguage: 'Keeping existing language configuration',
 
   // AI personality
   selectAiPersonality: 'Select AI personality',

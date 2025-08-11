@@ -183,7 +183,7 @@ export function mergeConfigs(sourceFile: string, targetFile: string) {
   writeJsonConfig(targetFile, merged);
 }
 
-export function updateDefaultModel(model: 'opus' | 'sonnet') {
+export function updateDefaultModel(model: 'opus' | 'sonnet' | 'default') {
   let settings = getDefaultSettings();
   
   const existingSettings = readJsonConfig<ClaudeSettings>(SETTINGS_FILE);
@@ -192,7 +192,12 @@ export function updateDefaultModel(model: 'opus' | 'sonnet') {
   }
   
   // Update model in settings
-  settings.model = model;
+  if (model === 'default') {
+    // Remove model field to let Claude Code auto-select
+    delete settings.model;
+  } else {
+    settings.model = model;
+  }
   
   writeJsonConfig(SETTINGS_FILE, settings);
 }
@@ -262,6 +267,24 @@ export function mergeSettingsFile(templatePath: string, targetPath: string): voi
       copyFile(templatePath, targetPath);
     }
   }
+}
+
+/**
+ * Get existing model configuration from settings.json
+ */
+export function getExistingModelConfig(): 'opus' | 'sonnet' | 'default' | null {
+  const settings = readJsonConfig<ClaudeSettings>(SETTINGS_FILE);
+  
+  if (!settings) {
+    return null;
+  }
+  
+  // If model field doesn't exist, it means using default
+  if (!settings.model) {
+    return 'default';
+  }
+  
+  return settings.model;
 }
 
 /**
