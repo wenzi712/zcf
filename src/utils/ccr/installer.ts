@@ -36,7 +36,7 @@ export async function getCcrVersion(): Promise<string | null> {
 
 export async function installCcr(scriptLang: SupportedLang): Promise<void> {
   const i18n = getTranslation(scriptLang);
-  
+
   // First check if already installed
   const installed = await isCcrInstalled();
   if (installed) {
@@ -45,12 +45,12 @@ export async function installCcr(scriptLang: SupportedLang): Promise<void> {
     await updateCcr(scriptLang);
     return;
   }
-  
+
   console.log(ansis.cyan(`📦 ${i18n.ccr.installingCcr}`));
-  
+
   try {
     await execAsync('npm install -g claude-code-router --force');
-    
+
     console.log(ansis.green(`✔ ${i18n.ccr.ccrInstallSuccess}`));
   } catch (error: any) {
     // Check if it's an EEXIST error
@@ -68,7 +68,7 @@ export async function installCcr(scriptLang: SupportedLang): Promise<void> {
 export async function startCcrService(scriptLang?: SupportedLang): Promise<void> {
   const lang = scriptLang || 'zh-CN';
   const i18n = getTranslation(lang);
-  
+
   try {
     // Start CCR service in background
     exec('ccr', (error) => {
@@ -76,9 +76,9 @@ export async function startCcrService(scriptLang?: SupportedLang): Promise<void>
         console.error(ansis.red(`${i18n.ccr.failedToStartCcrService}:`), error);
       }
     });
-    
+
     // Give it a moment to start
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   } catch (error) {
     console.error(ansis.red(`${i18n.ccr.errorStartingCcrService}:`), error);
   }

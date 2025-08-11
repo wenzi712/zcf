@@ -68,9 +68,19 @@ export async function runCcrStart(scriptLang: SupportedLang): Promise<void> {
     if (stdout) console.log(stdout);
     if (stderr) console.error(ansis.yellow(stderr));
     console.log(ansis.green(`✔ ${i18n.ccr.ccrStarted}`));
-  } catch (error) {
-    console.error(ansis.red(`✖ ${i18n.ccr.ccrCommandFailed}: ${error instanceof Error ? error.message : String(error)}`));
-    throw error;
+  } catch (error: any) {
+    // CCR start command may return exit code 1 even when successful
+    // Check if it's the expected output format (IP address and config loaded message)
+    if (error.stdout && error.stdout.includes('Loaded JSON config from:')) {
+      // This is normal CCR start behavior - show output and consider it successful
+      console.log(error.stdout);
+      if (error.stderr) console.error(ansis.yellow(error.stderr));
+      console.log(ansis.green(`✔ ${i18n.ccr.ccrStarted}`));
+    } else {
+      // This is a real error
+      console.error(ansis.red(`✖ ${i18n.ccr.ccrCommandFailed}: ${error instanceof Error ? error.message : String(error)}`));
+      throw error;
+    }
   }
 }
 

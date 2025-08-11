@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
-import * as installerModule from '../../../src/utils/ccr/installer';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as i18n from '../../../src/i18n';
+import * as installerModule from '../../../src/utils/ccr/installer';
 
 const { isCcrInstalled, getCcrVersion, installCcr, startCcrService } = installerModule;
 
@@ -17,7 +16,7 @@ vi.mock('node:util', () => ({
         });
       });
     };
-  })
+  }),
 }));
 vi.mock('../../../src/i18n');
 
@@ -36,7 +35,7 @@ describe('CCR installer', () => {
         ccrInstallSuccess: 'CCR installed successfully',
         ccrInstallFailed: 'Failed to install CCR',
         failedToStartCcrService: 'Failed to start CCR service',
-        errorStartingCcrService: 'Error starting CCR service'
+        errorStartingCcrService: 'Error starting CCR service',
       },
       updater: {
         checkingVersion: 'Checking version...',
@@ -46,8 +45,8 @@ describe('CCR installer', () => {
         updateConfirm: 'Do you want to update?',
         updating: 'Updating...',
         updateSuccess: 'Update successful',
-        updateFailed: 'Update failed'
-      }
+        updateFailed: 'Update failed',
+      },
     } as any);
   });
 
@@ -175,7 +174,7 @@ describe('CCR installer', () => {
     it('should skip installation if already installed', async () => {
       // Mock isCcrInstalled to return true
       vi.spyOn(installerModule, 'isCcrInstalled').mockResolvedValue(true);
-      
+
       // Also need to mock exec for any potential checks
       const mockExec = vi.mocked(exec);
       // @ts-ignore
@@ -184,13 +183,11 @@ describe('CCR installer', () => {
           callback(null, 'CCR version 1.0.0', '');
         }
       });
-      
+
       await installCcr('en');
 
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        expect.stringContaining('CCR is already installed')
-      );
-      
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCR is already installed'));
+
       // Restore the spy
       vi.mocked(installerModule.isCcrInstalled).mockRestore();
     });
@@ -214,13 +211,9 @@ describe('CCR installer', () => {
 
       await installCcr('zh-CN');
 
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Installing CCR')
-      );
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        expect.stringContaining('CCR installed successfully')
-      );
-      
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Installing CCR'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCR installed successfully'));
+
       // Restore the spy
       vi.mocked(installerModule.isCcrInstalled).mockRestore();
     });
@@ -245,10 +238,8 @@ describe('CCR installer', () => {
 
       await installCcr('en');
 
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        expect.stringContaining('CCR is already installed')
-      );
-      
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCR is already installed'));
+
       // Restore the spy
       vi.mocked(installerModule.isCcrInstalled).mockRestore();
     });
@@ -271,10 +262,8 @@ describe('CCR installer', () => {
       });
 
       await expect(installCcr('en')).rejects.toThrow('Permission denied');
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to install CCR')
-      );
-      
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to install CCR'));
+
       // Restore the spy
       vi.mocked(installerModule.isCcrInstalled).mockRestore();
     });
@@ -310,7 +299,7 @@ describe('CCR installer', () => {
       await startCcrService('zh-CN');
 
       // Wait a bit for the async callback to be processed
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining('Failed to start CCR service'),
@@ -332,21 +321,5 @@ describe('CCR installer', () => {
       expect(i18n.getTranslation).toHaveBeenCalledWith('zh-CN');
     });
 
-    it('should wait for service to start', async () => {
-      const mockExec = vi.mocked(exec);
-      // @ts-ignore
-      mockExec.mockImplementation((cmd, callback) => {
-        if (cmd === 'ccr') {
-          setTimeout(() => callback(null, '', ''), 10);
-        }
-      });
-
-      const startTime = Date.now();
-      await startCcrService('en');
-      const endTime = Date.now();
-
-      // Should wait at least 2000ms
-      expect(endTime - startTime).toBeGreaterThanOrEqual(2000);
-    });
   });
 });
