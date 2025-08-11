@@ -54,7 +54,7 @@ npx zcf → select 2  # Execute workflow update via menu
 
 #### 🎯 BMad Workflow (v2.7 New Feature)
 
-BMad (Business-Minded Agile Development) is an enterprise-grade workflow system that provides:
+[BMad](https://github.com/bmad-code-org/BMAD-METHOD) (BMad-Method: Universal AI Agent Framework) is an enterprise-grade workflow system that provides:
 
 - Complete team of specialized AI agents (PO, PM, Architect, Dev, QA, etc.)
 - Structured development process with quality gates
@@ -65,7 +65,7 @@ After installation, use `/bmad-init` to initialize the BMad workflow in your pro
 
 #### 🚀 CCR (Claude Code Router) Support (v2.8 New Feature)
 
-CCR is a powerful proxy router that enables:
+[CCR](https://github.com/musistudio/claude-code-router/blob/main/README.md) is a powerful proxy router that enables:
 
 - **Free Model Access**: Use free AI models (like Gemini, DeepSeek) through Claude Code interface
 - **Custom Routing**: Route different types of requests to different models based on your rules
@@ -76,6 +76,8 @@ To access CCR features:
 
 ```bash
 npx zcf ccr      # Open CCR management menu
+# or
+npx zcf → select R
 ```
 
 CCR menu options:
@@ -163,7 +165,7 @@ After configuration:
 ```bash
 $ npx zcf
 
- ZCF - Zero-Config Claude-Code Flow v2.3.0
+ ZCF - Zero-Config Claude-Code Flow
 
 ? Select ZCF display language / 选择ZCF显示语言:
   ❯ 简体中文
@@ -179,10 +181,14 @@ Select function:
   6. Configure Claude global memory - Configure AI output language and personality
   7. Import recommended environment variables and permissions - Import privacy protection environment variables and system permissions
 
+  --------- Other Tools ----------
+  R. CCR Management - Claude Code Router management
+  U. CCUsage - Claude Code usage analysis tool
+
   ------------ ZCF ------------
   0. Select display language / 更改显示语言 - Change ZCF interface language
   -. Clear preference cache - Clear preference language and other caches
-  q. Exit
+  Q. Exit
 
 Enter your choice: _
 ```
@@ -268,13 +274,13 @@ Enter your choice: _
 
 #### Commands Quick Reference
 
-| Command      | Alias   | Description                                   |
-| ------------ | ------- | --------------------------------------------- |
-| `zcf`        | -       | Show interactive menu (v2.0 default command)  |
-| `zcf init`   | `zcf i` | Initialize Claude Code configuration          |
-| `zcf update` | `zcf u` | Update workflow-related md files with backup  |
-| `zcf ccu`    | -       | Run Claude Code usage analysis tool           |
-| `zcf ccr`    | -       | Open CCR (Claude Code Router) management menu |
+| Command      | Alias   | Description                                                                           |
+| ------------ | ------- | ------------------------------------------------------------------------------------- |
+| `zcf`        | -       | Show interactive menu (v2.0 default command)                                          |
+| `zcf init`   | `zcf i` | Initialize Claude Code configuration                                                  |
+| `zcf update` | `zcf u` | Update workflow-related md files with backup                                          |
+| `zcf ccu`    | -       | Run Claude Code usage analysis tool - [ccusage](https://github.com/ryoppippi/ccusage) |
+| `zcf ccr`    | -       | Open CCR (Claude Code Router) management menu                                         |
 
 #### Common Options
 
@@ -466,13 +472,27 @@ To protect user data security, the following operations require explicit confirm
 
 ## 🙏 Acknowledgments
 
-Some prompts in this project are inspired by the following excellent works:
+This project is inspired by and incorporates the following open source projects:
 
-- [Linux.do - Share a universal Prompt for AI to generate only necessary code, welcome to optimize together~](https://linux.do/t/topic/830802)
-- [Linux.do - Don't worry about claude code degradation, using agent and command combination to break down tasks in detail may help you](https://linux.do/t/topic/815230)
-- [Linux.do - cursor rapid development rules](https://linux.do/t/topic/697566)
+- [LINUX DO - The New Ideal Community](https://linux.do)
+- [CCR](https://github.com/musistudio/claude-code-router)
+- [ccusage](https://github.com/ryoppippi/ccusage)
+- [BMad Method](https://github.com/bmad-code-org/BMAD-METHOD)
 
 Thanks to these community contributors for sharing!
+
+## ❤️ Support & Sponsorship
+
+If you find this project helpful, please consider sponsoring its development. Your support is greatly appreciated!
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/UfoMiao)
+
+<table>
+  <tr>
+    <td><img src="/src/assets/alipay.webp" width="200" alt="Alipay" /></td>
+    <td><img src="/src/assets/wechat.webp" width="200" alt="WeChat Pay" /></td>
+  </tr>
+</table>
 
 ## 📄 License
 

@@ -54,7 +54,7 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 
 #### 🎯 BMad 工作流（v2.7 新功能）
 
-BMad（Business-Minded Agile Development）是企业级的工作流系统，提供：
+[BMad](https://github.com/bmad-code-org/BMAD-METHOD)（BMad-Method: Universal AI Agent Framework）是企业级的工作流系统，提供：
 
 - 完整的专业 AI 代理团队（PO、PM、架构师、开发、QA 等）
 - 结构化的开发流程与质量关卡
@@ -65,7 +65,7 @@ BMad（Business-Minded Agile Development）是企业级的工作流系统，提�
 
 #### 🚀 CCR (Claude Code Router) 支持（v2.8 新功能）
 
-CCR 是一个强大的代理路由器，可以实现：
+[CCR](https://github.com/musistudio/claude-code-router/blob/main/README_zh.md) 是一个强大的代理路由器，可以实现：
 
 - **免费模型接入**：通过 Claude Code 界面使用免费 AI 模型（如 Gemini、DeepSeek）
 - **自定义路由**：根据规则将不同类型的请求路由到不同的模型
@@ -76,6 +76,8 @@ CCR 是一个强大的代理路由器，可以实现：
 
 ```bash
 npx zcf ccr      # 打开 CCR 管理菜单
+# 或
+npx zcf → 选择 R
 ```
 
 CCR 菜单选项：
@@ -163,7 +165,7 @@ CCR 设置完成后，ZCF 会自动配置 Claude Code 使用 CCR 作为 API 代�
 ```bash
 $ npx zcf
 
- ZCF - Zero-Config Claude-Code Flow v2.3.0
+ ZCF - Zero-Config Claude-Code Flow
 
 ? Select ZCF display language / 选择ZCF显示语言:
   ❯ 简体中文
@@ -179,12 +181,16 @@ $ npx zcf
   6. 配置 Claude 全局记忆 - 配置 AI 输出语言和角色风格
   7. 导入推荐环境变量和权限配置 - 导入隐私保护环境变量和系统权限配置
 
+  --------- 其他工具 ----------
+  R. CCR 管理 - Claude Code Router 管理
+  U. CCUsage - Claude Code 用量分析工具
+
   ------------ ZCF ------------
   0. 更改显示语言 / Select display language - 更改 ZCF 界面语言
   -. 清除偏好缓存 - 清除偏好语言等缓存
-  q. 退出
+  Q. 退出
 
-Enter your choice: _
+请输入选项，回车确认（不区分大小写）: _
 ```
 
 ### 完整初始化流程（选择 1 或使用 `zcf i`）
@@ -268,13 +274,13 @@ Enter your choice: _
 
 #### 命令速查表
 
-| 命令         | 缩写    | 说明                                   |
-| ------------ | ------- | -------------------------------------- |
-| `zcf`        | -       | 显示交互式菜单（v2.0 默认命令）        |
-| `zcf init`   | `zcf i` | 初始化 Claude Code 配置                |
-| `zcf update` | `zcf u` | 更新 Prompt 文档并备份旧配置           |
-| `zcf ccu`    | -       | 运行 Claude Code 用量分析工具          |
-| `zcf ccr`    | -       | 打开 CCR (Claude Code Router) 管理菜单 |
+| 命令         | 缩写    | 说明                                                                            |
+| ------------ | ------- | ------------------------------------------------------------------------------- |
+| `zcf`        | -       | 显示交互式菜单（v2.0 默认命令）                                                 |
+| `zcf init`   | `zcf i` | 初始化 Claude Code 配置                                                         |
+| `zcf update` | `zcf u` | 更新 Prompt 文档并备份旧配置                                                    |
+| `zcf ccu`    | -       | 运行 Claude Code 用量分析工具 - [ccusage](https://github.com/ryoppippi/ccusage) |
+| `zcf ccr`    | -       | 打开 CCR (Claude Code Router) 管理菜单                                          |
 
 #### 常用选项
 
@@ -466,13 +472,27 @@ ZCF 现已支持在 Android Termux 环境中运行：
 
 ## 🙏 鸣谢
 
-本项目的部分 Prompt 参考了以下优秀作品：
+本项目的灵感来源和引入的开源项目：
 
-- [Linux.do - 分享一个让 AI 只生成必要的代码的通用 Prompt，欢迎一起调优~](https://linux.do/t/topic/830802)
-- [Linux.do - claude code 降智不怕，使用 agent 与 command 结合将任务做详细的拆分大概可以帮助到你](https://linux.do/t/topic/815230)
-- [Linux.do - cursor 快速开发规则](https://linux.do/t/topic/697566)
+- [LINUX DO - 新的理想型社区](https://linux.do)
+- [CCR](https://github.com/musistudio/claude-code-router)
+- [ccusage](https://github.com/ryoppippi/ccusage)
+- [BMad Method](https://github.com/bmad-code-org/BMAD-METHOD)
 
-感谢这些社区贡献者的分享！
+  感谢这些社区贡献者的分享！
+
+## ❤️ 支持与赞助
+
+如果您觉得这个项目有帮助，请考虑赞助它的开发。非常感谢您的支持！
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/UfoMiao)
+
+<table>
+  <tr>
+    <td><img src="/src/assets/alipay.webp" width="200" alt="Alipay" /></td>
+    <td><img src="/src/assets/wechat.webp" width="200" alt="WeChat Pay" /></td>
+  </tr>
+</table>
 
 ## 📄 许可证
 
