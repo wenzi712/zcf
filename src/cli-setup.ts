@@ -6,6 +6,7 @@ import { showMainMenu } from './commands/menu';
 import { update } from './commands/update';
 import { executeCcusage } from './commands/ccu';
 import { ccr } from './commands/ccr';
+import { checkUpdates } from './commands/check-updates';
 
 export interface CliOptions {
   init?: boolean;
@@ -61,6 +62,15 @@ export function setupCommands(cli: CAC) {
     .allowUnknownOptions()
     .action(async (args) => {
       await executeCcusage(args);
+    });
+
+  // Check updates command
+  cli
+    .command('check-updates', 'Check and update Claude Code and CCR to latest versions')
+    .alias('check')
+    .option('--lang, -l <lang>', 'Display language (zh-CN, en)')
+    .action(async (options) => {
+      await checkUpdates({ lang: options.lang });
     });
 
   // Custom help

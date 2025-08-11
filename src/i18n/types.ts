@@ -164,6 +164,7 @@ export interface TranslationStructure {
   errors: any;
   tools: any;
   ccr: any;
+  updater: any;
 }
 
 // For backward compatibility during migration
@@ -176,6 +177,25 @@ export interface TranslationKeys extends
   WorkflowTranslations {
   // All flattened keys for backward compatibility
   [key: string]: any;
+}
+
+// Updater translations
+export interface UpdaterTranslations {
+  checkingVersion: string;
+  checkingTools: string;
+  ccrNotInstalled: string;
+  ccrUpToDate: string;
+  claudeCodeNotInstalled: string;
+  claudeCodeUpToDate: string;
+  cannotCheckVersion: string;
+  currentVersion: string;
+  latestVersion: string;
+  confirmUpdate: string;
+  updateSkipped: string;
+  updating: string;
+  updateSuccess: string;
+  updateFailed: string;
+  checkFailed: string;
 }
 
 // MCP Services translations (keep separate)

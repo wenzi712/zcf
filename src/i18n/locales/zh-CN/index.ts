@@ -11,6 +11,7 @@ import { bmad } from './bmad';
 import { errors } from './errors';
 import { tools } from './tools';
 import { ccrMessages } from './ccr';
+import { updater } from './updater';
 import type { TranslationStructure, McpServicesTranslations } from '../../types';
 
 // New structure with namespaces
@@ -28,6 +29,7 @@ export const zhCN: TranslationStructure = {
   errors,
   tools,
   ccr: ccrMessages,
+  updater,
 };
 
 export const zhCNMcpServices: McpServicesTranslations = mcpServices;

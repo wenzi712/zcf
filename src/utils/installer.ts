@@ -3,6 +3,7 @@ import ansis from 'ansis'
 import { commandExists, isTermux, getTermuxPrefix } from './platform'
 import type { SupportedLang } from '../constants'
 import { getTranslation } from '../i18n'
+import { updateClaudeCode } from './auto-updater'
 
 export async function isClaudeCodeInstalled(): Promise<boolean> {
   return await commandExists('claude')
@@ -10,6 +11,15 @@ export async function isClaudeCodeInstalled(): Promise<boolean> {
 
 export async function installClaudeCode(lang: SupportedLang): Promise<void> {
   const i18n = getTranslation(lang)
+  
+  // Check if already installed
+  const installed = await isClaudeCodeInstalled()
+  if (installed) {
+    console.log(ansis.green(`✔ ${i18n.installation.alreadyInstalled}`))
+    // Check for updates after confirming installation
+    await updateClaudeCode(lang)
+    return
+  }
   
   // Check if running in Termux
   if (isTermux()) {

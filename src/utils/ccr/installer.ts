@@ -3,6 +3,7 @@ import { promisify } from 'node:util';
 import ansis from 'ansis';
 import type { SupportedLang } from '../../constants';
 import { getTranslation } from '../../i18n';
+import { updateCcr } from '../auto-updater';
 
 const execAsync = promisify(exec);
 
@@ -40,6 +41,8 @@ export async function installCcr(scriptLang: SupportedLang): Promise<void> {
   const installed = await isCcrInstalled();
   if (installed) {
     console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));
+    // Check for updates after confirming installation
+    await updateCcr(scriptLang);
     return;
   }
   
@@ -53,6 +56,8 @@ export async function installCcr(scriptLang: SupportedLang): Promise<void> {
     // Check if it's an EEXIST error
     if (error.message?.includes('EEXIST')) {
       console.log(ansis.yellow(`⚠ ${i18n.ccr.ccrAlreadyInstalled}`));
+      // Check for updates even if EEXIST error
+      await updateCcr(scriptLang);
       return;
     }
     console.error(ansis.red(`✖ ${i18n.ccr.ccrInstallFailed}`));

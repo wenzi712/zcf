@@ -22,7 +22,6 @@ import {
   writeMcpConfig,
 } from './mcp';
 import { isWindows } from './platform';
-import { resolveAiOutputLanguage } from './prompts';
 import { readZcfConfig, updateZcfConfig } from './zcf-config';
 import { validateApiKey, formatApiKeyDisplay } from './validator';
 import { configureAiPersonality } from './ai-personality';
