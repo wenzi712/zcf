@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.9.2
+
+### Patch Changes
+
+- ## 修复
+
+  - 修正 CCR 包名引用，统一使用 @musistudio/claude-code-router
+  - 移除版本检查和自动更新中的错误包名回退逻辑
+  - 更新测试文件中的包名引用
+
+  ## Fixes
+
+  - Correct CCR package name references to use @musistudio/claude-code-router consistently
+  - Remove incorrect package name fallback logic in version checking and auto-update
+  - Update package name references in test files
+
 ## 2.9.1
 
 ### Patch Changes
