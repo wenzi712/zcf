@@ -1,5 +1,51 @@
 # Changelog
 
+## 2.9.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 新增 Git 工作流命令套件，包含智能提交、安全回滚、分支清理功能
+  - 添加 /zcf-update-docs 命令，自动检查并同步文档与代码实现
+  - Git 命令支持自动暂存、智能生成提交信息、批量分支清理
+
+  ## New Features
+
+  - Add Git workflow command suite with smart commit, safe rollback, and branch cleanup
+  - Add /zcf-update-docs command for automatic documentation synchronization
+  - Git commands support auto-staging, intelligent commit message generation, and batch branch cleanup
+
+  ## 优化
+
+  - 完善工作流安装系统，支持模块化命令安装
+  - 更新界面截图，展示最新的用户界面
+
+  ## Optimization
+
+  - Improve workflow installation system with modular command installation support
+  - Update screenshots to show the latest user interface
+
+  ## 测试
+
+  - 为 Git 工作流添加全面的单元测试和边缘测试
+  - 增加工作流配置和安装器的测试覆盖率
+
+  ## Testing
+
+  - Add comprehensive unit tests and edge tests for Git workflow
+  - Increase test coverage for workflow configuration and installer
+
+  ## 文档
+
+  - 更新 README 文档，添加 Git 命令的详细说明
+  - 同步中英文文档，保持内容一致性
+
+  ## Documentation
+
+  - Update README documentation with detailed Git command descriptions
+  - Synchronize Chinese and English documentation for consistency
+
 ## 2.8.2
 
 ### Patch Changes
