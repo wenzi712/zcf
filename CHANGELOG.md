@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.9.3
+
+### Patch Changes
+
+- ## 修复
+
+  - 修正 CCR 包名从 `claude-code-router` 到 `@musistudio/claude-code-router`
+  - 更新所有相关引用和测试用例
+  - 在 README 中添加 v2.9.1 版本用户的重要提示
+
+  ## Fixes
+
+  - Correct CCR package name from `claude-code-router` to `@musistudio/claude-code-router`
+  - Update all related references and test cases
+  - Add important note for v2.9.1 users in README
+
 ## 2.9.2
 
 ### Patch Changes
