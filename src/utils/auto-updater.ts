@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import ansis from 'ansis';
 import ora from 'ora';
-import prompts from 'prompts';
+import inquirer from 'inquirer';
 import type { SupportedLang } from '../constants';
 import { getTranslation } from '../i18n';
 import { format } from './i18n';
@@ -38,11 +38,11 @@ export async function updateCcr(scriptLang: SupportedLang, force = false): Promi
     console.log(ansis.cyan(format(i18n.updater.latestVersion, { version: latestVersion })));
     
     // Ask for confirmation
-    const { confirm } = await prompts({
+    const { confirm } = await inquirer.prompt<{ confirm: boolean }>({
       type: 'confirm',
       name: 'confirm',
       message: format(i18n.updater.confirmUpdate, { tool: 'CCR' }),
-      initial: true
+      default: true
     });
     
     if (!confirm) {
@@ -102,11 +102,11 @@ export async function updateClaudeCode(scriptLang: SupportedLang, force = false)
     console.log(ansis.cyan(format(i18n.updater.latestVersion, { version: latestVersion })));
     
     // Ask for confirmation
-    const { confirm } = await prompts({
+    const { confirm } = await inquirer.prompt<{ confirm: boolean }>({
       type: 'confirm',
       name: 'confirm',
       message: format(i18n.updater.confirmUpdate, { tool: 'Claude Code' }),
-      initial: true
+      default: true
     });
     
     if (!confirm) {

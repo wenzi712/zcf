@@ -4,12 +4,13 @@ export const workflow = {
     featPlanUx: 'Feature Planning and UX Design (feat + planner + ui-ux-designer)',
     sixStepsWorkflow: 'Six Steps Workflow (workflow)',
     bmadWorkflow: 'BMAD-Method Extension Installer (Agile Development Workflow)',
+    gitWorkflow: 'Git Commands (commit + rollback + cleanBranches)',
   },
-  
+
   // BMAD workflow
   bmadInitPrompt: '✨ Please run /bmad-init command in your project to initialize or update BMAD-Method extension',
   bmadInstallSuccess: 'Successfully installed BMAD-Method installer',
-  
+
   // General workflow installation
   installingWorkflow: 'Installing workflow',
   installedCommand: 'Installed command',

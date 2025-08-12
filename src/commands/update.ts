@@ -54,8 +54,8 @@ export async function update(options: UpdateOptions = {}) {
 
     // Select AI output language
     const aiOutputLang = await resolveAiOutputLanguage(scriptLang, options.aiOutputLang, zcfConfig);
-
-    console.log(ansis.cyan(`\n${i18n.workflow.updatingPrompts}\n`));
+    
+    console.log(ansis.cyan(`\n${i18n.configuration.updatingPrompts}\n`));
 
     // Execute prompt-only update with AI language
     await updatePromptOnly(configLang, scriptLang, aiOutputLang);

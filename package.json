@@ -36,7 +36,6 @@
     "release": "pnpm build && changeset publish"
   },
   "dependencies": {
-    "@types/prompts": "^2.4.9",
     "@types/semver": "^7.7.0",
     "ansis": "^3.17.0",
     "cac": "^6.7.14",
@@ -45,7 +44,6 @@
     "inquirer": "^12.9.0",
     "ora": "^8.2.0",
     "pathe": "^2.0.3",
-    "prompts": "^2.4.2",
     "semver": "^7.7.2",
     "tinyexec": "^1.0.1"
   },

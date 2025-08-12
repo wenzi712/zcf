@@ -66,6 +66,18 @@ describe('workflow-installer utilities', () => {
           { filename: 'architect.md', required: true },
         ],
       },
+      {
+        id: 'gitWorkflow',
+        nameKey: 'workflowOption.gitWorkflow',
+        descriptionKey: 'workflowDescription.gitWorkflow',
+        category: 'git',
+        defaultSelected: true,
+        autoInstallAgents: false,
+        commands: ['git-commit.md', 'git-rollback.md', 'git-cleanBranches.md'],
+        agents: [],
+        order: 4,
+        outputDir: 'git',
+      },
     ] as WorkflowConfig[];
 
     beforeEach(() => {
@@ -170,6 +182,69 @@ describe('workflow-installer utilities', () => {
       );
       // Should continue with installation despite cleanup error
       expect(copyFile).toHaveBeenCalled();
+    });
+
+    it('should install gitWorkflow successfully', async () => {
+      vi.mocked(inquirer.prompt).mockResolvedValue({
+        selectedWorkflows: ['gitWorkflow'],
+      });
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(copyFile).mockResolvedValue(undefined);
+      vi.mocked(mkdir).mockResolvedValue(undefined);
+
+      await selectAndInstallWorkflows('zh-CN', 'zh-CN');
+
+      expect(workflowConfig.getWorkflowConfig).toHaveBeenCalledWith('gitWorkflow');
+      // Should copy all git command files
+      expect(copyFile).toHaveBeenCalledTimes(3);
+      expect(copyFile).toHaveBeenCalledWith(
+        expect.stringContaining('git-commit.md'),
+        expect.stringContaining('git-commit.md')
+      );
+      expect(copyFile).toHaveBeenCalledWith(
+        expect.stringContaining('git-rollback.md'),
+        expect.stringContaining('git-rollback.md')
+      );
+      expect(copyFile).toHaveBeenCalledWith(
+        expect.stringContaining('git-cleanBranches.md'),
+        expect.stringContaining('git-cleanBranches.md')
+      );
+    });
+
+    it('should handle gitWorkflow with no agents correctly', async () => {
+      vi.mocked(inquirer.prompt).mockResolvedValue({
+        selectedWorkflows: ['gitWorkflow'],
+      });
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(copyFile).mockResolvedValue(undefined);
+      vi.mocked(mkdir).mockResolvedValue(undefined);
+
+      await selectAndInstallWorkflows('en', 'en');
+
+      // Should copy command files but not create agents
+      expect(copyFile).toHaveBeenCalled();
+      // Verify no agent-related mkdir calls
+      const mkdirCalls = vi.mocked(mkdir).mock.calls;
+      const hasAgentDir = mkdirCalls.some(call => 
+        call[0].includes('agents')
+      );
+      expect(hasAgentDir).toBe(false);
+    });
+
+    it('should install multiple workflows including gitWorkflow', async () => {
+      vi.mocked(inquirer.prompt).mockResolvedValue({
+        selectedWorkflows: ['workflow', 'gitWorkflow'],
+      });
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(copyFile).mockResolvedValue(undefined);
+      vi.mocked(mkdir).mockResolvedValue(undefined);
+
+      await selectAndInstallWorkflows('zh-CN', 'zh-CN');
+
+      expect(workflowConfig.getWorkflowConfig).toHaveBeenCalledWith('workflow');
+      expect(workflowConfig.getWorkflowConfig).toHaveBeenCalledWith('gitWorkflow');
+      // Should copy files for both workflows (1 + 3 = 4)
+      expect(copyFile).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -334,8 +409,86 @@ describe('workflow-installer utilities', () => {
         );
 
         expect(console.log).toHaveBeenCalledWith(
-          expect.stringContaining(I18N['zh-CN'].bmadInitPrompt)
+          expect.stringContaining(getTranslation('zh-CN').workflow.bmadInitPrompt)
         );
+      }
+    });
+
+    it('should install gitWorkflow commands correctly', async () => {
+      const gitWorkflowConfig: WorkflowConfig = {
+        id: 'gitWorkflow',
+        nameKey: 'workflowOption.gitWorkflow',
+        descriptionKey: 'workflowDescription.gitWorkflow',
+        category: 'git',
+        defaultSelected: true,
+        autoInstallAgents: false,
+        commands: ['git-commit.md', 'git-rollback.md', 'git-cleanBranches.md'],
+        agents: [],
+        order: 4,
+        outputDir: 'git',
+      };
+
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(copyFile).mockResolvedValue(undefined);
+      vi.mocked(mkdir).mockResolvedValue(undefined);
+      vi.mocked(fileURLToPath).mockReturnValue('/project/dist/utils/workflow-installer.js');
+
+      const module = await import('../../../src/utils/workflow-installer');
+      const installWorkflowWithDependencies = (module as any).installWorkflowWithDependencies;
+
+      if (installWorkflowWithDependencies) {
+        const result = await installWorkflowWithDependencies(
+          gitWorkflowConfig,
+          'zh-CN',
+          'zh-CN'
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.workflow).toBe('gitWorkflow');
+        expect(result.installedCommands).toEqual([
+          'git-commit.md',
+          'git-rollback.md',
+          'git-cleanBranches.md'
+        ]);
+        expect(result.installedAgents).toEqual([]);
+        expect(copyFile).toHaveBeenCalledTimes(3);
+      }
+    });
+
+    it('should handle gitWorkflow installation failure', async () => {
+      const gitWorkflowConfig: WorkflowConfig = {
+        id: 'gitWorkflow',
+        nameKey: 'workflowOption.gitWorkflow',
+        descriptionKey: 'workflowDescription.gitWorkflow',
+        category: 'git',
+        defaultSelected: true,
+        autoInstallAgents: false,
+        commands: ['git-commit.md', 'git-rollback.md', 'git-cleanBranches.md'],
+        agents: [],
+        order: 4,
+        outputDir: 'git',
+      };
+
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(copyFile)
+        .mockResolvedValueOnce(undefined) // First file succeeds
+        .mockRejectedValueOnce(new Error('Copy failed')); // Second file fails
+      vi.mocked(mkdir).mockResolvedValue(undefined);
+      vi.mocked(fileURLToPath).mockReturnValue('/project/dist/utils/workflow-installer.js');
+
+      const module = await import('../../../src/utils/workflow-installer');
+      const installWorkflowWithDependencies = (module as any).installWorkflowWithDependencies;
+
+      if (installWorkflowWithDependencies) {
+        const result = await installWorkflowWithDependencies(
+          gitWorkflowConfig,
+          'en',
+          'en'
+        );
+
+        expect(result.success).toBe(false);
+        expect(result.errors).toContain(expect.stringContaining('Copy failed'));
+        expect(result.installedCommands).toContain('git-commit.md');
       }
     });
 

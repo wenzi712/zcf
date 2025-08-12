@@ -136,7 +136,7 @@ async function installWorkflowWithDependencies(
     
     // Show special prompt for BMAD workflow
     if (config.id === 'bmadWorkflow') {
-      console.log(ansis.cyan(`\n${i18n.bmad.bmadInitPrompt}`));
+      console.log(ansis.cyan(`\n${i18n.workflow.bmadInitPrompt}`));
     }
   } else {
     console.log(ansis.red(`✗ ${workflowName} ${i18n.workflow.workflowInstallError}`));
