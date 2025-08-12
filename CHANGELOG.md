@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.9.1
+
+### Patch Changes
+
+- ## 修复
+
+  - 移除工具描述中重复的 ccusage GitHub 链接
+
+  ## Fixes
+
+  - Remove duplicate ccusage GitHub link from tools description
+
+  ## 文档
+
+  - 更新帮助命令，补充新功能说明
+  - 优化 ccr 和 ccu 命令描述
+  - 添加 check-updates 命令文档
+  - 增加 check 快捷方式说明
+
+  ## Documentation
+
+  - Update help command with new features documentation
+  - Optimize ccr and ccu command descriptions
+  - Add check-updates command documentation
+  - Add check shortcut alias documentation
+
 ## 2.9.0
 
 ### Minor Changes
