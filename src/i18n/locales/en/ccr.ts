@@ -4,6 +4,9 @@ export const ccrMessages = {
   ccrInstallSuccess: 'Claude Code Router installed successfully',
   ccrInstallFailed: 'Failed to install Claude Code Router',
   ccrAlreadyInstalled: 'Claude Code Router is already installed',
+  detectedIncorrectPackage: 'Detected incorrect package claude-code-router, uninstalling...',
+  uninstalledIncorrectPackage: 'Successfully uninstalled incorrect package',
+  failedToUninstallIncorrectPackage: 'Failed to uninstall incorrect package, continuing with installation',
   
   // Configuration
   configureCcr: 'Configure Model Proxy (CCR)',

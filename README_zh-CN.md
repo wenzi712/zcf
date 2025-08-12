@@ -97,6 +97,8 @@ CCR 菜单选项：
 
 CCR 设置完成后，ZCF 会自动配置 Claude Code 使用 CCR 作为 API 代理。
 
+> **v2.9.1 版本用户重要提示**：如果您之前使用过 ZCF v2.9.1 版本初始化 CCR，请重新执行 CCR 初始化流程，以确保安装正确的 `@musistudio/claude-code-router` 包。v2.9.1 版本中存在包名错误问题，该问题已在后续版本中修复。
+
 ### 初始化流程
 
 完整初始化（`npx zcf`）会自动：

@@ -4,6 +4,9 @@ export const ccrMessages = {
   ccrInstallSuccess: 'Claude Code Router 安装成功',
   ccrInstallFailed: '安装 Claude Code Router 失败',
   ccrAlreadyInstalled: 'Claude Code Router 已安装',
+  detectedIncorrectPackage: '检测到错误的包 claude-code-router，正在卸载...',
+  uninstalledIncorrectPackage: '成功卸载错误的包',
+  failedToUninstallIncorrectPackage: '卸载错误的包失败，继续安装',
   
   // Configuration
   configureCcr: '配置模型代理 (CCR)',

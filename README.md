@@ -97,6 +97,8 @@ CCR menu options:
 
 After CCR setup, ZCF automatically configures Claude Code to use CCR as the API proxy.
 
+> **Important Note for v2.9.1 Users**: If you have previously used ZCF v2.9.1 to initialize CCR, please re-run the CCR initialization process to ensure the correct `@musistudio/claude-code-router` package is installed. Version 2.9.1 had an incorrect package name that has been fixed in later versions.
+
 ### Setup Process
 
 Full initialization (`npx zcf`) will automatically:

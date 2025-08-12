@@ -36,6 +36,9 @@ describe('CCR installer', () => {
         ccrInstallFailed: 'Failed to install CCR',
         failedToStartCcrService: 'Failed to start CCR service',
         errorStartingCcrService: 'Error starting CCR service',
+        detectedIncorrectPackage: 'Detected incorrect package claude-code-router, uninstalling...',
+        uninstalledIncorrectPackage: 'Successfully uninstalled incorrect package',
+        failedToUninstallIncorrectPackage: 'Failed to uninstall incorrect package, continuing with installation',
       },
       updater: {
         checkingVersion: 'Checking version...',
@@ -201,6 +204,8 @@ describe('CCR installer', () => {
         if (typeof callback === 'function') {
           if (cmd === 'ccr version' || cmd === 'which ccr') {
             callback(new Error('not found'), '', '');
+          } else if (cmd === 'npm list -g claude-code-router') {
+            callback(new Error('not found'), '', '');
           } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
             callback(null, 'added 1 package', '');
           } else {
@@ -218,6 +223,70 @@ describe('CCR installer', () => {
       vi.mocked(installerModule.isCcrInstalled).mockRestore();
     });
 
+    it('should uninstall incorrect package before installing correct one', async () => {
+      // Mock isCcrInstalled to return false
+      vi.spyOn(installerModule, 'isCcrInstalled').mockResolvedValue(false);
+      const mockExec = vi.mocked(exec);
+      // @ts-ignore
+      mockExec.mockImplementation((cmd, callback) => {
+        if (typeof callback === 'function') {
+          if (cmd === 'ccr version' || cmd === 'which ccr') {
+            callback(new Error('not found'), '', '');
+          } else if (cmd === 'npm list -g claude-code-router') {
+            // Incorrect package is installed
+            callback(null, 'claude-code-router@1.0.0', '');
+          } else if (cmd === 'npm uninstall -g claude-code-router') {
+            callback(null, 'removed 1 package', '');
+          } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
+            callback(null, 'added 1 package', '');
+          } else {
+            callback(new Error('command not found'), '', '');
+          }
+        }
+      });
+
+      await installCcr('en');
+
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Detected incorrect package'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Successfully uninstalled'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCR installed successfully'));
+
+      // Restore the spy
+      vi.mocked(installerModule.isCcrInstalled).mockRestore();
+    });
+
+    it('should continue installation even if uninstall fails', async () => {
+      // Mock isCcrInstalled to return false
+      vi.spyOn(installerModule, 'isCcrInstalled').mockResolvedValue(false);
+      const mockExec = vi.mocked(exec);
+      // @ts-ignore
+      mockExec.mockImplementation((cmd, callback) => {
+        if (typeof callback === 'function') {
+          if (cmd === 'ccr version' || cmd === 'which ccr') {
+            callback(new Error('not found'), '', '');
+          } else if (cmd === 'npm list -g claude-code-router') {
+            // Incorrect package is installed
+            callback(null, 'claude-code-router@1.0.0', '');
+          } else if (cmd === 'npm uninstall -g claude-code-router') {
+            // Uninstall fails
+            callback(new Error('Permission denied'), '', '');
+          } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
+            callback(null, 'added 1 package', '');
+          } else {
+            callback(new Error('command not found'), '', '');
+          }
+        }
+      });
+
+      await installCcr('en');
+
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to uninstall'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCR installed successfully'));
+
+      // Restore the spy
+      vi.mocked(installerModule.isCcrInstalled).mockRestore();
+    });
+
     it('should handle EEXIST error gracefully', async () => {
       // Mock isCcrInstalled to return false
       vi.spyOn(installerModule, 'isCcrInstalled').mockResolvedValue(false);
@@ -226,6 +295,8 @@ describe('CCR installer', () => {
       mockExec.mockImplementation((cmd, callback) => {
         if (typeof callback === 'function') {
           if (cmd === 'ccr version' || cmd === 'which ccr') {
+            callback(new Error('not found'), '', '');
+          } else if (cmd === 'npm list -g claude-code-router') {
             callback(new Error('not found'), '', '');
           } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
             const error = new Error('EEXIST: file already exists');
@@ -252,6 +323,8 @@ describe('CCR installer', () => {
       mockExec.mockImplementation((cmd, callback) => {
         if (typeof callback === 'function') {
           if (cmd === 'ccr version' || cmd === 'which ccr') {
+            callback(new Error('not found'), '', '');
+          } else if (cmd === 'npm list -g claude-code-router') {
             callback(new Error('not found'), '', '');
           } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
             callback(new Error('Permission denied'), '', '');

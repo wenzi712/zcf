@@ -48,6 +48,20 @@ export async function installCcr(scriptLang: SupportedLang): Promise<void> {
 
   console.log(ansis.cyan(`📦 ${i18n.ccr.installingCcr}`));
 
+  // Check and uninstall the incorrect package if it exists
+  try {
+    await execAsync('npm list -g claude-code-router');
+    console.log(ansis.yellow(`⚠ ${i18n.ccr.detectedIncorrectPackage}`));
+    try {
+      await execAsync('npm uninstall -g claude-code-router');
+      console.log(ansis.green(`✔ ${i18n.ccr.uninstalledIncorrectPackage}`));
+    } catch (uninstallError) {
+      console.log(ansis.yellow(`⚠ ${i18n.ccr.failedToUninstallIncorrectPackage}`));
+    }
+  } catch {
+    // Package not found, which is good
+  }
+
   try {
     await execAsync('npm install -g @musistudio/claude-code-router --force');
 
