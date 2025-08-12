@@ -22,7 +22,7 @@ export async function runCcusageFeature(scriptLang: 'zh-CN' | 'en'): Promise<voi
   
   console.log('');
   console.log(ansis.cyan(i18n.menu.menuOptions.ccusage));
-  console.log(ansis.gray(`${i18n.tools.ccusageDescription} - https://github.com/ryoppippi/ccusage`));
+  console.log(ansis.gray(`${i18n.tools.ccusageDescription}`));
   console.log('');
   
   const choices = [
