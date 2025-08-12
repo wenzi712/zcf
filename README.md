@@ -250,6 +250,7 @@ Enter your choice: _
 ? Select workflows to install (space to select, enter to confirm)
   ❯ ◉ Six Steps Workflow (workflow) - Complete 6-phase development process
     ◉ Feature Planning and UX Design (feat + planner + ui-ux-designer) - Structured feature development
+    ◉ Git Commands (commit + rollback + cleanBranches) - Streamlined Git operations
     ◉ BMAD-Method Extension Installer - Enterprise agile development workflow
 
 ✔ Installing workflows...
@@ -257,6 +258,9 @@ Enter your choice: _
   ✔ Installed command: zcf/feat.md
   ✔ Installed agent: zcf/plan/planner.md
   ✔ Installed agent: zcf/plan/ui-ux-designer.md
+  ✔ Installed command: zcf/git/git-commit.md
+  ✔ Installed command: zcf/git/git-rollback.md
+  ✔ Installed command: zcf/git/git-cleanBranches.md
   ✔ Installed command: zcf/bmad-init.md
 ✔ Workflow installation successful
 
@@ -388,6 +392,10 @@ zcf/
 
 - **Feature Development** (`/feat`): Structured new feature development
 - **Workflow** (`/workflow`): Complete six-phase development workflow
+- **Git Commands**: Streamlined Git operations
+  - `/git-commit`: Smart commit with automatic staging and message generation
+  - `/git-rollback`: Safely rollback to previous commits with backup
+  - `/git-cleanBranches`: Clean up merged branches and maintain repository hygiene
 - **BMad Workflow** (`/bmad-init`): Initialize BMad workflow for enterprise development
   - Supports both greenfield (new projects) and brownfield (existing projects)
   - Provides comprehensive templates for PRDs, architecture docs, and user stories
