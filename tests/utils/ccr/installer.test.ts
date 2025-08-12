@@ -201,7 +201,7 @@ describe('CCR installer', () => {
         if (typeof callback === 'function') {
           if (cmd === 'ccr version' || cmd === 'which ccr') {
             callback(new Error('not found'), '', '');
-          } else if (cmd === 'npm install -g claude-code-router --force') {
+          } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
             callback(null, 'added 1 package', '');
           } else {
             callback(new Error('command not found'), '', '');
@@ -227,7 +227,7 @@ describe('CCR installer', () => {
         if (typeof callback === 'function') {
           if (cmd === 'ccr version' || cmd === 'which ccr') {
             callback(new Error('not found'), '', '');
-          } else if (cmd === 'npm install -g claude-code-router --force') {
+          } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
             const error = new Error('EEXIST: file already exists');
             callback(error, '', '');
           } else {
@@ -253,7 +253,7 @@ describe('CCR installer', () => {
         if (typeof callback === 'function') {
           if (cmd === 'ccr version' || cmd === 'which ccr') {
             callback(new Error('not found'), '', '');
-          } else if (cmd === 'npm install -g claude-code-router --force') {
+          } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
             callback(new Error('Permission denied'), '', '');
           } else {
             callback(new Error('command not found'), '', '');

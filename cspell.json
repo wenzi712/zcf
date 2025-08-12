@@ -3,6 +3,23 @@
   "version": "0.2",
   "language": "en,en-US",
   "allowCompoundWords": true,
-  "words": ["zcf", "bmad", "webp", "pathe", "vitest", "rollup", "npmjs", "miaoda"],
-  "ignorePaths": ["**/node_modules/**", "**/dist/**", "**/*-dist/**", "**/icons/**", "pnpm-lock.yaml", "**/*.log"]
+  "words": [
+    "bmad",
+    "miaoda",
+    "musistudio",
+    "npmjs",
+    "pathe",
+    "rollup",
+    "vitest",
+    "webp",
+    "zcf"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*-dist/**",
+    "**/icons/**",
+    "pnpm-lock.yaml",
+    "**/*.log"
+  ]
 }

@@ -110,11 +110,8 @@ export async function checkCcrVersion(): Promise<{
   needsUpdate: boolean;
 }> {
   const currentVersion = await getInstalledVersion('ccr');
-  // Try both package names
-  let latestVersion = await getLatestVersion('@musistudio/claude-code-router');
-  if (!latestVersion) {
-    latestVersion = await getLatestVersion('claude-code-router');
-  }
+  // Get the latest version from npm
+  const latestVersion = await getLatestVersion('@musistudio/claude-code-router');
   
   return {
     installed: currentVersion !== null,

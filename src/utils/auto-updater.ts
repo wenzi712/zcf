@@ -54,12 +54,8 @@ export async function updateCcr(scriptLang: SupportedLang, force = false): Promi
     const updateSpinner = ora(format(i18n.updater.updating, { tool: 'CCR' })).start();
     
     try {
-      // Try both package names
-      try {
-        await execAsync('npm update -g @musistudio/claude-code-router');
-      } catch {
-        await execAsync('npm update -g claude-code-router');
-      }
+      // Update the package
+      await execAsync('npm update -g @musistudio/claude-code-router');
       updateSpinner.succeed(format(i18n.updater.updateSuccess, { tool: 'CCR' }));
       return true;
     } catch (error) {

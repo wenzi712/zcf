@@ -49,7 +49,7 @@ export async function installCcr(scriptLang: SupportedLang): Promise<void> {
   console.log(ansis.cyan(`📦 ${i18n.ccr.installingCcr}`));
 
   try {
-    await execAsync('npm install -g claude-code-router --force');
+    await execAsync('npm install -g @musistudio/claude-code-router --force');
 
     console.log(ansis.green(`✔ ${i18n.ccr.ccrInstallSuccess}`));
   } catch (error: any) {
