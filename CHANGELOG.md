@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.9.4
+
+### Patch Changes
+
+- ## 修复
+
+  - 改进 CCR 包检测和替换逻辑
+  - 即使 ccr 命令存在也会检查是否安装了错误的包
+  - 在安装正确的包之前自动卸载 claude-code-router
+  - 确保始终安装正确的 @musistudio/claude-code-router 包
+
+  ## Fixes
+
+  - Improve CCR package detection and replacement logic
+  - Check for incorrect package even when ccr command exists
+  - Automatically uninstall claude-code-router before installing the correct package
+  - Ensure @musistudio/claude-code-router is always correctly installed
+
 ## 2.9.3
 
 ### Patch Changes
