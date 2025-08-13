@@ -131,7 +131,7 @@ describe('CCR installer', () => {
       mockExec.mockImplementation((cmd, callback) => {
         if (typeof callback === 'function') {
           if (cmd === 'ccr version') {
-            callback(null, 'Claude Code Router v2.0.1-beta', '');
+            callback(null, 'claude-code-router version: 1.0.36', '');
           } else {
             callback(new Error('command not found'), '', '');
           }
@@ -139,7 +139,7 @@ describe('CCR installer', () => {
       });
 
       const version = await getCcrVersion();
-      expect(version).toBe('2.0.1');
+      expect(version).toBe('1.0.36');
     });
 
     it('should return null when version pattern not found', async () => {
@@ -174,7 +174,7 @@ describe('CCR installer', () => {
   });
 
   describe('installCcr', () => {
-    it('should skip installation if already installed', async () => {
+    it('should skip installation if already installed and no incorrect package', async () => {
       // Mock isCcrInstalled to return true
       vi.spyOn(installerModule, 'isCcrInstalled').mockResolvedValue(true);
 
@@ -183,13 +183,50 @@ describe('CCR installer', () => {
       // @ts-ignore
       mockExec.mockImplementation((cmd, callback) => {
         if (typeof callback === 'function') {
-          callback(null, 'CCR version 1.0.0', '');
+          if (cmd === 'npm list -g claude-code-router') {
+            // No incorrect package
+            callback(new Error('not found'), '', '');
+          } else {
+            callback(null, 'CCR version 1.0.0', '');
+          }
         }
       });
 
       await installCcr('en');
 
       expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCR is already installed'));
+
+      // Restore the spy
+      vi.mocked(installerModule.isCcrInstalled).mockRestore();
+    });
+
+    it('should reinstall if incorrect package is detected even if ccr command exists', async () => {
+      // Mock isCcrInstalled to return true (ccr command exists)
+      vi.spyOn(installerModule, 'isCcrInstalled').mockResolvedValue(true);
+
+      const mockExec = vi.mocked(exec);
+      // @ts-ignore
+      mockExec.mockImplementation((cmd, callback) => {
+        if (typeof callback === 'function') {
+          if (cmd === 'npm list -g claude-code-router') {
+            // Incorrect package is installed
+            callback(null, 'claude-code-router@1.0.0', '');
+          } else if (cmd === 'npm uninstall -g claude-code-router') {
+            callback(null, 'removed 1 package', '');
+          } else if (cmd === 'npm install -g @musistudio/claude-code-router --force') {
+            callback(null, 'added 1 package', '');
+          } else {
+            callback(null, 'CCR version 1.0.0', '');
+          }
+        }
+      });
+
+      await installCcr('en');
+
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Detected incorrect package'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Successfully uninstalled'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Installing CCR'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCR installed successfully'));
 
       // Restore the spy
       vi.mocked(installerModule.isCcrInstalled).mockRestore();
@@ -393,6 +430,5 @@ describe('CCR installer', () => {
 
       expect(i18n.getTranslation).toHaveBeenCalledWith('zh-CN');
     });
-
   });
 });
