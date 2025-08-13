@@ -208,9 +208,8 @@ export async function init(options: InitOptions = {}) {
           apiConfig = await configureApiCompletely(i18n, scriptLang);
         } else if (apiAction === 'use-ccr') {
           // Handle CCR proxy configuration
-          const ccrInstalled = await isCcrInstalled();
-          if (!ccrInstalled) {
-            console.log(ansis.yellow(`${i18n.ccr.installingCcr}`));
+          const ccrStatus = await isCcrInstalled();
+          if (!ccrStatus.hasCorrectPackage) {
             await installCcr(scriptLang);
           } else {
             console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));
@@ -261,8 +260,8 @@ export async function init(options: InitOptions = {}) {
 
         if (apiChoice === 'ccr_proxy') {
           // Handle CCR proxy configuration
-          const ccrInstalled = await isCcrInstalled();
-          if (!ccrInstalled) {
+          const ccrStatus = await isCcrInstalled();
+          if (!ccrStatus.hasCorrectPackage) {
             await installCcr(scriptLang);
           } else {
             console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));

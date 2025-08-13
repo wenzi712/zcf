@@ -7,20 +7,44 @@ import { updateCcr } from '../auto-updater';
 
 const execAsync = promisify(exec);
 
-export async function isCcrInstalled(): Promise<boolean> {
+export interface CcrInstallStatus {
+  isInstalled: boolean;
+  hasCorrectPackage: boolean;
+}
+
+export async function isCcrInstalled(): Promise<CcrInstallStatus> {
+  // First check if ccr command exists
+  let commandExists = false;
   try {
     // Try to run ccr version to check if it's installed
     await execAsync('ccr version');
-    return true;
+    commandExists = true;
   } catch {
     // If ccr command not found, try which command
     try {
       await execAsync('which ccr');
-      return true;
+      commandExists = true;
     } catch {
-      return false;
+      commandExists = false;
     }
   }
+
+  // Check if the correct package is installed
+  let hasCorrectPackage = false;
+  try {
+    await execAsync('npm list -g @musistudio/claude-code-router');
+    hasCorrectPackage = true;
+  } catch {
+    // Correct package not found
+    hasCorrectPackage = false;
+  }
+
+  // If command exists but correct package is not installed,
+  // it means the incorrect package is installed
+  return {
+    isInstalled: commandExists,
+    hasCorrectPackage: hasCorrectPackage
+  };
 }
 
 export async function getCcrVersion(): Promise<string | null> {
@@ -37,39 +61,40 @@ export async function getCcrVersion(): Promise<string | null> {
 export async function installCcr(scriptLang: SupportedLang): Promise<void> {
   const i18n = getTranslation(scriptLang);
 
-  // Check and uninstall the incorrect package if it exists
-  let hasIncorrectPackage = false;
-  try {
-    await execAsync('npm list -g claude-code-router');
-    hasIncorrectPackage = true;
-    console.log(ansis.yellow(`⚠ ${i18n.ccr.detectedIncorrectPackage}`));
-    try {
-      await execAsync('npm uninstall -g claude-code-router');
-      console.log(ansis.green(`✔ ${i18n.ccr.uninstalledIncorrectPackage}`));
-    } catch (uninstallError) {
-      console.log(ansis.yellow(`⚠ ${i18n.ccr.failedToUninstallIncorrectPackage}`));
-    }
-  } catch {
-    // Package not found, which is good
-  }
+  // Check CCR installation status
+  const { isInstalled, hasCorrectPackage } = await isCcrInstalled();
 
-  // Check if CCR is already installed (after potentially uninstalling incorrect package)
-  const installed = await isCcrInstalled();
-  
-  // If installed and no incorrect package was found, just check for updates
-  if (installed && !hasIncorrectPackage) {
+  // If correct package is already installed, just check for updates
+  if (hasCorrectPackage) {
     console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));
-    // Check for updates after confirming installation
     await updateCcr(scriptLang);
     return;
   }
 
-  // If not installed or had incorrect package, install the correct one
+  // If ccr command exists but correct package is not installed,
+  // it means the incorrect package is installed
+  if (isInstalled && !hasCorrectPackage) {
+    // Try to uninstall the incorrect package
+    try {
+      await execAsync('npm list -g claude-code-router');
+      console.log(ansis.yellow(`⚠ ${i18n.ccr.detectedIncorrectPackage}`));
+      try {
+        await execAsync('npm uninstall -g claude-code-router');
+        console.log(ansis.green(`✔ ${i18n.ccr.uninstalledIncorrectPackage}`));
+      } catch (uninstallError) {
+        console.log(ansis.yellow(`⚠ ${i18n.ccr.failedToUninstallIncorrectPackage}`));
+      }
+    } catch {
+      // Incorrect package not found, but ccr command exists
+      // This could be a different installation method
+    }
+  }
+
+  // Install the correct package
   console.log(ansis.cyan(`📦 ${i18n.ccr.installingCcr}`));
 
   try {
     await execAsync('npm install -g @musistudio/claude-code-router --force');
-
     console.log(ansis.green(`✔ ${i18n.ccr.ccrInstallSuccess}`));
   } catch (error: any) {
     // Check if it's an EEXIST error

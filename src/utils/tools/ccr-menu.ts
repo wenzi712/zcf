@@ -62,9 +62,8 @@ export async function showCcrMenu(scriptLang: SupportedLang): Promise<boolean> {
     switch (choice) {
       case '1':
         // Initialize CCR
-        const ccrInstalled = await isCcrInstalled();
-        if (!ccrInstalled) {
-          console.log(ansis.yellow(`${i18n.ccr.installingCcr}`));
+        const ccrStatus = await isCcrInstalled();
+        if (!ccrStatus.hasCorrectPackage) {
           await installCcr(scriptLang);
         } else {
           console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));

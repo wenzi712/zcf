@@ -60,7 +60,7 @@ describe('CCR Menu', () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ choice: '1' })
       .mockResolvedValueOnce({ continueInCcr: false });
-    vi.mocked(ccrInstaller.isCcrInstalled).mockResolvedValue(false);
+    vi.mocked(ccrInstaller.isCcrInstalled).mockResolvedValue({ isInstalled: false, hasCorrectPackage: false });
     vi.mocked(ccrInstaller.installCcr).mockResolvedValue();
     vi.mocked(ccrConfig.configureCcrFeature).mockResolvedValue();
 
@@ -75,7 +75,7 @@ describe('CCR Menu', () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ choice: '1' })
       .mockResolvedValueOnce({ continueInCcr: false });
-    vi.mocked(ccrInstaller.isCcrInstalled).mockResolvedValue(true);
+    vi.mocked(ccrInstaller.isCcrInstalled).mockResolvedValue({ isInstalled: true, hasCorrectPackage: true });
     vi.mocked(ccrConfig.configureCcrFeature).mockResolvedValue();
 
     await showCcrMenu('en');
