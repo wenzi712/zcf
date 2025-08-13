@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.9.5
+
+### Patch Changes
+
+- ## 修复
+
+  - 改进 CCR 包检测和替换逻辑，确保正确安装 @musistudio/claude-code-router 包
+  - 修复当旧的错误包存在时的安装流程问题
+  - 移除导致 CI 测试失败的时间相关断言
+
+  ## 优化
+
+  - 增强包检测机制，同时验证命令存在性和正确包的安装状态
+  - 优化 CCR 安装状态结构，提供更详细的安装信息
+
+  ## Fixes
+
+  - Improve CCR package detection and replacement logic to ensure correct @musistudio/claude-code-router package installation
+  - Fix installation flow issues when old incorrect package exists
+  - Remove flaky time-based test assertions causing CI failures
+
+  ## Optimization
+
+  - Enhance package detection mechanism to verify both command existence and correct package installation status
+  - Optimize CCR installation status structure for more detailed installation information
+
 ## 2.9.4
 
 ### Patch Changes
