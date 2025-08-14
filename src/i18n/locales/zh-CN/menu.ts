@@ -17,6 +17,7 @@ export const menu = {
     ccusage: 'ccusage',
     installBmad: '安装 BMad Method',
     clearCache: '清除偏好缓存',
+    checkUpdates: '检查更新',
     changeLanguage: '更改显示语言 / Select display language',
     exit: '退出',
   },
@@ -34,6 +35,7 @@ export const menu = {
     ccusage: 'Claude Code 用量分析',
     installBmad: 'AI 驱动的开发方法论框架',
     clearCache: '清除偏好语言等缓存',
+    checkUpdates: '检查并更新 Claude Code 和 CCR 的版本',
     changeLanguage: '更改 ZCF 界面语言',
   },
 };

@@ -14,6 +14,7 @@ import {
 import { runCcusageFeature, runCcrMenuFeature } from '../utils/tools';
 import { init } from './init';
 import { update } from './update';
+import { checkUpdates } from './check-updates';
 import { selectScriptLanguage } from '../utils/prompts';
 import { readZcfConfigAsync } from '../utils/zcf-config';
 import { handleExitPromptError, handleGeneralError } from '../utils/error-handler';
@@ -86,6 +87,9 @@ export async function showMainMenu() {
       console.log(
         `  ${ansis.cyan('-.')} ${i18n.menu.menuOptions.clearCache} ${ansis.gray('- ' + i18n.menu.menuDescriptions.clearCache)}`
       );
+      console.log(
+        `  ${ansis.cyan('+.')} ${i18n.menu.menuOptions.checkUpdates} ${ansis.gray('- ' + i18n.menu.menuDescriptions.checkUpdates)}`
+      );
       console.log(`  ${ansis.red('Q.')} ${ansis.red(i18n.menu.menuOptions.exit)}`);
       console.log('');
 
@@ -95,7 +99,7 @@ export async function showMainMenu() {
         name: 'choice',
         message: i18n.common.enterChoice,
         validate: (value) => {
-          const valid = ['1', '2', '3', '4', '5', '6', '7', 'r', 'R', 'u', 'U', '0', '-', 'q', 'Q'];
+          const valid = ['1', '2', '3', '4', '5', '6', '7', 'r', 'R', 'u', 'U', '0', '-', '+', 'q', 'Q'];
           return valid.includes(value) || i18n.common.invalidChoice;
         },
       });
@@ -146,6 +150,9 @@ export async function showMainMenu() {
         case '-':
           await clearZcfCacheFeature(scriptLang);
           break;
+        case '+':
+          await checkUpdates({ lang: scriptLang });
+          break;
         case 'q':
           exitMenu = true;
           console.log(ansis.cyan(i18n.common.goodbye));
@@ -154,8 +161,8 @@ export async function showMainMenu() {
 
       // Add spacing between operations
       if (!exitMenu && choice.toLowerCase() !== 'q') {
-        // Skip confirmation for ZCF configuration options (0, -, u, r)
-        if (choice === '0' || choice === '-' || choice.toLowerCase() === 'u' || choice.toLowerCase() === 'r') {
+        // Skip confirmation for ZCF configuration options (0, -, +, u, r)
+        if (choice === '0' || choice === '-' || choice === '+' || choice.toLowerCase() === 'u' || choice.toLowerCase() === 'r') {
           console.log('\n' + ansis.dim('─'.repeat(50)) + '\n');
           continue; // Directly return to menu
         }

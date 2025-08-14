@@ -41,7 +41,12 @@ vi.mock('../../../src/utils/features', () => ({
 }));
 
 vi.mock('../../../src/utils/tools', () => ({
-  runCcusageFeature: vi.fn()
+  runCcusageFeature: vi.fn(),
+  runCcrMenuFeature: vi.fn()
+}));
+
+vi.mock('../../../src/commands/check-updates', () => ({
+  checkUpdates: vi.fn()
 }));
 
 vi.mock('../../../src/utils/error-handler', () => ({
@@ -175,6 +180,38 @@ describe('menu command', () => {
       await showMainMenu();
       
       expect(runCcusageFeature).toHaveBeenCalledWith('en');
+    });
+
+    it('should handle check updates option', async () => {
+      const { showMainMenu } = await import('../../../src/commands/menu');
+      const { checkUpdates } = await import('../../../src/commands/check-updates');
+      const { readZcfConfigAsync } = await import('../../../src/utils/zcf-config');
+      
+      vi.mocked(readZcfConfigAsync).mockResolvedValue({ preferredLang: 'zh-CN' } as any);
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ choice: '+' })
+        .mockResolvedValueOnce({ choice: 'q' });
+      vi.mocked(checkUpdates).mockResolvedValue(undefined);
+      
+      await showMainMenu();
+      
+      expect(checkUpdates).toHaveBeenCalledWith({ lang: 'zh-CN' });
+    });
+
+    it('should handle check updates option in English', async () => {
+      const { showMainMenu } = await import('../../../src/commands/menu');
+      const { checkUpdates } = await import('../../../src/commands/check-updates');
+      const { readZcfConfigAsync } = await import('../../../src/utils/zcf-config');
+      
+      vi.mocked(readZcfConfigAsync).mockResolvedValue({ preferredLang: 'en' } as any);
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ choice: '+' })
+        .mockResolvedValueOnce({ choice: 'q' });
+      vi.mocked(checkUpdates).mockResolvedValue(undefined);
+      
+      await showMainMenu();
+      
+      expect(checkUpdates).toHaveBeenCalledWith({ lang: 'en' });
     });
 
     it('should handle errors gracefully', async () => {

@@ -27,6 +27,7 @@ npx zcf          # 打开交互式菜单，根据你的需求选择操作
 - `3-7` 配置管理（API/CCR、MCP、模型设置、AI 个性等）
 - `R` Claude Code Router 管理（v2.8.1 增强）
 - `U` ccusage - Claude Code 用量分析
+- `+` 检查更新 - 检查并更新 Claude Code 和 CCR 的版本
 - 更多功能选项...
 
 ### 或者，直接使用命令：
@@ -86,6 +87,8 @@ npx zcf → 选择 R
 
 ```bash
 npx zcf check-updates  # 检查并更新 Claude Code 和 CCR 到最新版本
+# 或
+npx zcf → 选择 +
 ```
 
 CCR 菜单选项：

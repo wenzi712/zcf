@@ -17,6 +17,7 @@ export const menu = {
     ccusage: 'ccusage',
     installBmad: 'Install BMad Method',
     clearCache: 'Clear preference cache',
+    checkUpdates: 'Check updates',
     changeLanguage: 'Select display language / 更改显示语言',
     exit: 'Exit',
   },
@@ -34,6 +35,7 @@ export const menu = {
     ccusage: 'Claude Code usage analysis',
     installBmad: 'AI-driven development methodology framework',
     clearCache: 'Clear preference language and other caches',
+    checkUpdates: 'Check and update Claude Code and CCR versions',
     changeLanguage: 'Change ZCF interface language',
   },
 };

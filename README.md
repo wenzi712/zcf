@@ -27,6 +27,7 @@ Menu options include:
 - `3-7` Configuration management (API/CCR, MCP, Model settings, AI personality, etc.)
 - `R` Claude Code Router management (enhanced in v2.8.1)
 - `U` ccusage - Claude Code usage analysis
+- `+` Check updates - Check and update Claude Code and CCR versions
 - More features...
 
 ### Or, use direct commands:
@@ -86,6 +87,8 @@ Check for updates (v2.8.1+):
 
 ```bash
 npx zcf check-updates  # Check and update Claude Code and CCR to latest versions
+# or
+npx zcf → select +
 ```
 
 CCR menu options:
