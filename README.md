@@ -515,6 +515,13 @@ If you find this project helpful, please consider sponsoring its development. Yo
   </tr>
 </table>
 
+### Our Sponsors
+
+A huge thank you to all our sponsors for their generous support!
+
+- Tc (first sponsor)
+- 16°C 咖啡 (My best friend🤪, offered Claude Code max $200 package)
+
 ## 📄 License
 
 MIT License
