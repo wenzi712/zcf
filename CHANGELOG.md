@@ -1,5 +1,39 @@
 # Changelog
 
+## 2.9.6
+
+### Patch Changes
+
+- ## 新功能
+
+  - 在 ZCF 菜单中添加检查更新选项 (+)，支持一键检查并更新 Claude Code 和 CCR 版本
+  - 支持通过菜单直接访问检查更新功能，提升用户体验
+
+  ## New Features
+
+  - Add check updates option (+) to ZCF menu for one-click checking and updating Claude Code and CCR versions
+  - Support direct access to check updates feature via menu, improving user experience
+
+  ## 文档
+
+  - 更新中英文 README 文档，说明新的菜单选项使用方法
+  - 同步菜单功能描述与实际代码实现
+
+  ## Documentation
+
+  - Update bilingual README documentation with new menu option usage
+  - Synchronize menu feature descriptions with actual code implementation
+
+  ## 测试
+
+  - 添加完整的 TDD 测试用例覆盖新功能
+  - 确保菜单选项验证和处理逻辑的正确性
+
+  ## Testing
+
+  - Add comprehensive TDD test coverage for new functionality
+  - Ensure correctness of menu option validation and handling logic
+
 ## 2.9.5
 
 ### Patch Changes
