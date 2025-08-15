@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.9.8
+
+### Patch Changes
+
+- ## 新功能
+
+  - 添加 git-worktree 命令，支持在 .zcf/ 目录下管理多个工作树
+  - 支持 worktree 的创建、列表、删除和迁移操作
+  - 自动配置 git 忽略规则，避免 worktree 目录被意外提交
+  - 支持 IDE 快速打开 worktree (VS Code, Cursor, WebStorm)
+  - 支持跨 worktree 内容迁移，包括未提交更改和 stash 内容
+
+  ## New Features
+
+  - Add git-worktree command for managing multiple working trees in .zcf/ directory
+  - Support worktree add, list, remove, and migrate operations
+  - Automatically configure git ignore rules to prevent worktree directories from being committed
+  - Support quick IDE opening for worktrees (VS Code, Cursor, WebStorm)
+  - Support content migration across worktrees, including uncommitted changes and stash content
+
 ## 2.9.7
 
 ### Patch Changes
