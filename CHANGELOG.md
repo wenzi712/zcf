@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.9.7
+
+### Patch Changes
+
+- ## 优化
+
+  - 移除版本检查缓存机制，实现实时版本检查
+  - 简化 getLatestVersion 函数逻辑，直接查询 npm registry
+  - 避免缓存过期导致的版本检测延迟问题
+
+  ## Optimization
+
+  - Remove version cache mechanism for real-time version checking
+  - Simplify getLatestVersion function logic to directly query npm registry
+  - Avoid version detection delays caused by cache expiry
+
+  ## 文档
+
+  - 添加赞助者信息到 README 文件
+
+  ## Documentation
+
+  - Add sponsors section to README files
+
 ## 2.9.6
 
 ### Patch Changes
