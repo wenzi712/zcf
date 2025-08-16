@@ -75,30 +75,12 @@ After installation, use `/bmad-init` to initialize the BMad workflow in your pro
 - **Easy Management**: Interactive menu for CCR configuration and service control
 - **Auto Updates**: Automatic version checking and updates for CCR and Claude Code (v2.8.1+)
 
-#### 📊 CCometixLine Support (Status Bar Tool) (v2.9.9+ New)
-
-[CCometixLine](https://github.com/Haleclipse/CCometixLine) is a high-performance Rust-based statusline tool that provides:
-
-- **Real-time Usage Tracking**: Monitor Claude Code API usage in real-time
-- **Git Integration**: Display Git status and branch information
-- **Status Line Display**: Native integration with your terminal statusline
-- **Performance Optimized**: Built with Rust for minimal resource usage
-- **Auto Updates**: Included in ZCF's update checking system
-
 To access CCR features:
 
 ```bash
 npx zcf ccr      # Open CCR management menu
 # or
 npx zcf → select R
-```
-
-Check for updates (v2.8.1+, CCometixLine support v2.9.9+):
-
-```bash
-npx zcf check-updates  # Check and update Claude Code, CCR and CCometixLine to latest versions
-# or
-npx zcf → select +
 ```
 
 CCR menu options:
@@ -111,6 +93,24 @@ CCR menu options:
 After CCR setup, ZCF automatically configures Claude Code to use CCR as the API proxy.
 
 > **Important Note for v2.9.1 Users**: If you have previously used ZCF v2.9.1 to initialize CCR, please re-run the CCR initialization process to ensure the correct `@musistudio/claude-code-router` package is installed. Version 2.9.1 had an incorrect package name that has been fixed in later versions.
+
+#### 📊 CCometixLine Support (Status Bar Tool) (v2.9.9+ New)
+
+[CCometixLine](https://github.com/Haleclipse/CCometixLine) is a high-performance Rust-based statusline tool that provides:
+
+- **Real-time Usage Tracking**: Monitor Claude Code API usage in real-time
+- **Git Integration**: Display Git status and branch information
+- **Status Line Display**: Native integration with your terminal statusline
+- **Performance Optimized**: Built with Rust for minimal resource usage
+- **Auto Updates**: Included in ZCF's update checking system
+
+Check for updates (v2.8.1+, CCometixLine support v2.9.9+):
+
+```bash
+npx zcf check-updates  # Check and update Claude Code, CCR and CCometixLine to latest versions
+# or
+npx zcf → select +
+```
 
 ### Setup Process
 

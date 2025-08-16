@@ -75,30 +75,12 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 - **便捷管理**：提供交互式菜单进行 CCR 配置和服务控制
 - **自动更新**：CCR 和 Claude Code 的自动版本检查和更新（v2.8.1+）
 
-#### 📊 CCometixLine 支持（状态栏工具）（v2.9.9+ 新增）
-
-[CCometixLine](https://github.com/Haleclipse/CCometixLine) 是一个基于 Rust 的高性能状态栏工具，提供：
-
-- **实时用量追踪**：实时监控 Claude Code API 使用情况
-- **Git 集成**：显示 Git 状态和分支信息
-- **状态栏显示**：与终端状态栏原生集成
-- **性能优化**：使用 Rust 构建，资源消耗极低
-- **自动更新**：已集成到 ZCF 的更新检查系统
-
 访问 CCR 功能：
 
 ```bash
 npx zcf ccr      # 打开 CCR 管理菜单
 # 或
 npx zcf → 选择 R
-```
-
-检查更新（v2.8.1+，CCometixLine 支持 v2.9.9+）：
-
-```bash
-npx zcf check-updates  # 检查并更新 Claude Code、CCR 和 CCometixLine 到最新版本
-# 或
-npx zcf → 选择 +
 ```
 
 CCR 菜单选项：
@@ -111,6 +93,24 @@ CCR 菜单选项：
 CCR 设置完成后，ZCF 会自动配置 Claude Code 使用 CCR 作为 API 代理。
 
 > **v2.9.1 版本用户重要提示**：如果您之前使用过 ZCF v2.9.1 版本初始化 CCR，请重新执行 CCR 初始化流程，以确保安装正确的 `@musistudio/claude-code-router` 包。v2.9.1 版本中存在包名错误问题，该问题已在后续版本中修复。
+
+#### 📊 CCometixLine 支持（状态栏工具）（v2.9.9+ 新增）
+
+[CCometixLine](https://github.com/Haleclipse/CCometixLine) 是一个基于 Rust 的高性能状态栏工具，提供：
+
+- **实时用量追踪**：实时监控 Claude Code API 使用情况
+- **Git 集成**：显示 Git 状态和分支信息
+- **状态栏显示**：与终端状态栏原生集成
+- **性能优化**：使用 Rust 构建，资源消耗极低
+- **自动更新**：已集成到 ZCF 的更新检查系统
+
+检查更新（v2.8.1+，CCometixLine 支持 v2.9.9+）：
+
+```bash
+npx zcf check-updates  # 检查并更新 Claude Code、CCR 和 CCometixLine 到最新版本
+# 或
+npx zcf → 选择 +
+```
 
 ### 初始化流程
 
