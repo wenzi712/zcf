@@ -6,14 +6,14 @@
 
 - ## 新功能
 
-  - 添加 Cometix 集成支持，提供 AI 代码助手功能
+  - 添加 Cometix 集成支持 - 基于 Rust 的高性能 Claude Code 状态栏工具，集成 Git 信息和实时使用量跟踪
   - 新增 Cometix 命令管理和安装器
   - 实现完整的 Cometix 菜单系统和用户交互
   - 支持 Cometix 错误处理和状态管理
 
   ## New Features
 
-  - Add Cometix integration support with AI code assistant functionality
+  - Add Cometix integration support - High-performance Rust-based Claude Code statusline tool with Git integration and real-time usage tracking
   - Implement Cometix command management and installer
   - Provide complete Cometix menu system and user interaction
   - Support Cometix error handling and state management

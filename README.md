@@ -27,7 +27,7 @@ Menu options include:
 - `3-7` Configuration management (API/CCR, MCP, Model settings, AI personality, etc.)
 - `R` Claude Code Router management (enhanced in v2.8.1)
 - `U` ccusage - Claude Code usage analysis
-- `+` Check updates - Check and update Claude Code, CCR and CCometixLine versions (v2.10.0+ enhanced)
+- `+` Check updates - Check and update Claude Code, CCR and CCometixLine versions (v2.9.9+ enhanced)
 - More features...
 
 ### Or, use direct commands:
@@ -75,7 +75,7 @@ After installation, use `/bmad-init` to initialize the BMad workflow in your pro
 - **Easy Management**: Interactive menu for CCR configuration and service control
 - **Auto Updates**: Automatic version checking and updates for CCR and Claude Code (v2.8.1+)
 
-#### 📊 CCometixLine Support (Status Bar Tool) (v2.10.0+ New)
+#### 📊 CCometixLine Support (Status Bar Tool) (v2.9.9+ New)
 
 [CCometixLine](https://github.com/Haleclipse/CCometixLine) is a high-performance Rust-based statusline tool that provides:
 
@@ -93,7 +93,7 @@ npx zcf ccr      # Open CCR management menu
 npx zcf → select R
 ```
 
-Check for updates (v2.8.1+, CCometixLine support v2.10.0+):
+Check for updates (v2.8.1+, CCometixLine support v2.9.9+):
 
 ```bash
 npx zcf check-updates  # Check and update Claude Code, CCR and CCometixLine to latest versions
@@ -207,7 +207,7 @@ Select function:
   --------- Other Tools ----------
   R. CCR Management - Claude Code Router management
   U. CCUsage - Claude Code usage analysis tool
-  L. CCometixLine - High-performance statusline tool with Git integration and real-time usage tracking (v2.10.0+ new)
+  L. CCometixLine - High-performance statusline tool with Git integration and real-time usage tracking (v2.9.9+ new)
 
   ------------ ZCF ------------
   0. Select display language / 更改显示语言 - Change ZCF interface language
