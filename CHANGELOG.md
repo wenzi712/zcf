@@ -1,5 +1,45 @@
 # Changelog
 
+## 2.9.9
+
+### Patch Changes
+
+- ## 新功能
+
+  - 添加 Cometix 集成支持，提供 AI 代码助手功能
+  - 新增 Cometix 命令管理和安装器
+  - 实现完整的 Cometix 菜单系统和用户交互
+  - 支持 Cometix 错误处理和状态管理
+
+  ## New Features
+
+  - Add Cometix integration support with AI code assistant functionality
+  - Implement Cometix command management and installer
+  - Provide complete Cometix menu system and user interaction
+  - Support Cometix error handling and state management
+
+  ## 优化
+
+  - 重构工具模块结构，改进代码组织
+  - 增强国际化支持，新增 Cometix 相关翻译
+  - 完善菜单系统的多语言支持
+
+  ## Optimization
+
+  - Refactor tool module structure for better code organization
+  - Enhanced internationalization with Cometix-related translations
+  - Improve menu system multilingual support
+
+  ## 测试
+
+  - 新增 Cometix 功能的全面测试覆盖
+  - 添加命令管理、安装器和菜单的单元测试
+
+  ## Testing
+
+  - Add comprehensive test coverage for Cometix functionality
+  - Implement unit tests for command management, installer and menu features
+
 ## 2.9.8
 
 ### Patch Changes
