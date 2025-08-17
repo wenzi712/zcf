@@ -1,5 +1,51 @@
 # Changelog
 
+## 2.10.0
+
+### Minor Changes
+
+- ## 新功能
+
+  - 添加 `--skip-prompt` 非交互模式选项，支持自动化脚本集成
+  - 新增快捷参数映射，简化命令行使用体验
+
+  ## New Features
+
+  - Add `--skip-prompt` non-interactive mode option for automation script integration
+  - Add shortcut parameter mapping for simplified command-line experience
+
+  ## 优化
+
+  - 优化 init 命令测试套件性能，提升开发体验
+  - 完善工作流安装器错误处理机制
+
+  ## Optimization
+
+  - Optimize init command test suite performance for better development experience
+  - Improve workflow installer error handling mechanism
+
+  ## 文档
+
+  - 更新 README 双语文档，新增非交互模式使用说明
+  - 完善功能特性说明和使用示例
+
+  ## Documentation
+
+  - Update bilingual README documentation with non-interactive mode usage
+  - Improve feature descriptions and usage examples
+
+  ## 测试
+
+  - 新增 582 行 `--skip-prompt` 功能专项测试
+  - 增强 CLI 设置相关测试覆盖率
+  - 优化现有测试用例的稳定性
+
+  ## Testing
+
+  - Add 582 lines of specialized tests for `--skip-prompt` functionality
+  - Enhance CLI setup test coverage
+  - Improve stability of existing test cases
+
 ## 2.9.11
 
 ### Patch Changes
