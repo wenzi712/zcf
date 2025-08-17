@@ -104,14 +104,14 @@ export async function selectCcrPreset(scriptLang: SupportedLang): Promise<Provid
   // Let user select a preset
   try {
     const choices = [
-      ...presets.map((p, index) => ({
-        name: `${index + 1}. ${p.name}`,
-        value: p,
-      })),
       {
-        name: `${presets.length + 1}. ${i18n.ccr.skipOption}`,
+        name: `1. ${i18n.ccr.skipOption}`,
         value: 'skip' as const,
       },
+      ...presets.map((p, index) => ({
+        name: `${index + 2}. ${p.name}`,
+        value: p,
+      })),
     ];
 
     const { preset } = await inquirer.prompt<{ preset: ProviderPreset | 'skip' }>({
