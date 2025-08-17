@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.10.1
+
+### Patch Changes
+
+- ## 新功能
+
+  - 实现 CCR 代理配置跳过提示模式，支持非交互式部署
+  - 扩展 `--skip-prompt` 选项对 CCR 代理配置的支持
+
+  ## New Features
+
+  - Implement skip-prompt mode for CCR proxy configuration with non-interactive deployment support
+  - Extend `--skip-prompt` option support for CCR proxy configuration
+
+  ## 修复
+
+  - 修复版本检查器中 ccline 包名和作用域配置问题
+
+  ## Fixes
+
+  - Fix package name and scope configuration in version checker for ccline
+
 ## 2.10.0
 
 ### Minor Changes
