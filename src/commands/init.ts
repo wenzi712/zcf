@@ -8,7 +8,7 @@ import { CLAUDE_DIR, I18N, LANG_LABELS, MCP_SERVICES, SETTINGS_FILE, SUPPORTED_L
 import type { McpServerConfig } from '../types';
 import { configureAiPersonality } from '../utils/ai-personality';
 import { displayBannerWithInfo } from '../utils/banner';
-import { setupCcrConfiguration } from '../utils/ccr/config';
+import { setupCcrConfiguration, backupCcrConfig, configureCcrProxy, readCcrConfig, writeCcrConfig, createDefaultCcrConfig } from '../utils/ccr/config';
 import { installCcr, isCcrInstalled } from '../utils/ccr/installer';
 import { installCometixLine, isCometixLineInstalled } from '../utils/cometix/installer';
 import {
@@ -302,7 +302,7 @@ export async function init(options: InitOptions = {}) {
     // Step 6: Configure API (skip if only updating docs)
     let apiConfig = null;
     const isNewInstall = !existsSync(SETTINGS_FILE);
-    if (action !== 'docs-only' && (isNewInstall || ['backup', 'merge'].includes(action))) {
+    if (action !== 'docs-only' && (isNewInstall || ['backup', 'merge', 'new'].includes(action))) {
       // In skip-prompt mode, handle API configuration directly
       if (options.skipPrompt) {
         if (options.apiType === 'auth_token' && options.apiKey) {
@@ -318,16 +318,42 @@ export async function init(options: InitOptions = {}) {
             url: options.apiUrl || 'https://api.anthropic.com',
           };
         } else if (options.apiType === 'ccr_proxy') {
-          // Handle CCR proxy configuration
-          const ccrInstalled = await isCcrInstalled();
-          if (!ccrInstalled) {
+          // Handle CCR proxy configuration in skip-prompt mode
+          const ccrStatus = await isCcrInstalled();
+          if (!ccrStatus.hasCorrectPackage) {
             await installCcr(scriptLang);
+          } else {
+            console.log(ansis.green(`✔ ${i18n.ccr?.ccrAlreadyInstalled || 'CCR already installed'}`));
           }
-          const ccrConfigured = await setupCcrConfiguration(scriptLang);
-          if (ccrConfigured) {
-            console.log(ansis.green(`✔ ${i18n.ccr.ccrSetupComplete}`));
-            apiConfig = null; // CCR sets up its own proxy config
+
+          // Backup existing CCR config if exists
+          const existingCcrConfig = readCcrConfig();
+          if (existingCcrConfig) {
+            const backupPath = backupCcrConfig(scriptLang);
+            if (backupPath) {
+              console.log(ansis.gray(`✔ ${i18n.ccr?.ccrBackupSuccess?.replace('{path}', backupPath) || 'CCR configuration backed up'}`));
+            }
           }
+
+          // Create default skip configuration (empty providers - user configures in UI)
+          const defaultCcrConfig = createDefaultCcrConfig();
+
+          // Write CCR config
+          writeCcrConfig(defaultCcrConfig);
+          console.log(ansis.green(`✔ ${i18n.ccr?.ccrConfigSuccess || 'CCR configuration created'}`));
+
+          // Configure proxy in settings.json
+          await configureCcrProxy(defaultCcrConfig);
+          console.log(ansis.green(`✔ ${i18n.ccr?.proxyConfigSuccess || 'Proxy settings configured'}`));
+
+          // Add onboarding flag
+          try {
+            addCompletedOnboarding();
+          } catch (error) {
+            console.error(ansis.red(i18n.configuration?.failedToSetOnboarding || 'Failed to set onboarding flag'), error);
+          }
+
+          apiConfig = null; // CCR sets up its own proxy config
         }
       } else {
         // Check for existing API configuration

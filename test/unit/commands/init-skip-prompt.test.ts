@@ -104,7 +104,23 @@ vi.mock('../../../src/utils/ccr/installer', () => ({
 }));
 
 vi.mock('../../../src/utils/ccr/config', () => ({
-  setupCcrConfiguration: vi.fn()
+  setupCcrConfiguration: vi.fn(),
+  backupCcrConfig: vi.fn(),
+  configureCcrProxy: vi.fn(),
+  readCcrConfig: vi.fn(),
+  writeCcrConfig: vi.fn(),
+  createDefaultCcrConfig: vi.fn(() => ({
+    LOG: false,
+    CLAUDE_PATH: '',
+    HOST: '127.0.0.1',
+    PORT: 3456,
+    APIKEY: 'sk-zcf-x-ccr',
+    API_TIMEOUT_MS: '600000',
+    PROXY_URL: '',
+    transformers: [],
+    Providers: [],
+    Router: {}
+  }))
 }));
 
 vi.mock('../../../src/utils/cometix/installer', () => ({
@@ -577,6 +593,114 @@ describe('init command with simplified parameters', () => {
         'en',
         ['sixStepsWorkflow', 'featPlanUx', 'gitWorkflow', 'bmadWorkflow']
       );
+    });
+  });
+
+  describe('ccr_proxy configuration in skip-prompt mode', () => {
+    it('should handle ccr_proxy without prompting for user interaction', async () => {
+      const { isCcrInstalled, installCcr } = await import('../../../src/utils/ccr/installer');
+      const { backupCcrConfig, configureCcrProxy } = await import('../../../src/utils/ccr/config');
+      const { isClaudeCodeInstalled } = await import('../../../src/utils/installer');
+
+      vi.mocked(existsSync).mockReturnValue(false);
+      vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true);
+      vi.mocked(isCcrInstalled).mockResolvedValue({ hasCorrectPackage: false });
+      vi.mocked(installCcr).mockResolvedValue();
+      
+      // Mock the new functions we'll create
+      vi.mocked(backupCcrConfig).mockReturnValue('/backup/path');
+      vi.mocked(configureCcrProxy).mockResolvedValue();
+
+      const options: InitOptions = {
+        skipPrompt: true,
+        apiType: 'ccr_proxy',
+        skipBanner: true,
+        lang: 'en',
+        configLang: 'en'
+      };
+
+      await init(options);
+
+      // Should install CCR if not present
+      expect(installCcr).toHaveBeenCalledWith('en');
+      
+      // Should NOT call setupCcrConfiguration (which has prompts)
+      // Instead should call our new skip-prompt logic
+    });
+
+    it('should backup existing CCR config when using ccr_proxy in skip-prompt mode', async () => {
+      const { isCcrInstalled } = await import('../../../src/utils/ccr/installer');
+      const { backupCcrConfig, configureCcrProxy, readCcrConfig } = await import('../../../src/utils/ccr/config');
+      const { isClaudeCodeInstalled } = await import('../../../src/utils/installer');
+
+      vi.mocked(existsSync).mockReturnValue(false);
+      vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true);
+      vi.mocked(isCcrInstalled).mockResolvedValue({ hasCorrectPackage: true });
+      
+      // Mock existing CCR config
+      vi.mocked(readCcrConfig).mockReturnValue({
+        LOG: true,
+        CLAUDE_PATH: '',
+        HOST: '127.0.0.1',
+        PORT: 3456,
+        APIKEY: 'old-key',
+        API_TIMEOUT_MS: '600000',
+        PROXY_URL: '',
+        transformers: [],
+        Providers: [],
+        Router: {}
+      });
+      
+      vi.mocked(backupCcrConfig).mockReturnValue('/backup/ccr-config');
+      vi.mocked(configureCcrProxy).mockResolvedValue();
+
+      const options: InitOptions = {
+        skipPrompt: true,
+        apiType: 'ccr_proxy',
+        skipBanner: true
+      };
+
+      await init(options);
+
+      // Should backup existing config
+      expect(backupCcrConfig).toHaveBeenCalledWith('en');
+    });
+
+    it('should create default skip configuration for ccr_proxy in skip-prompt mode', async () => {
+      const { isCcrInstalled } = await import('../../../src/utils/ccr/installer');
+      const { writeCcrConfig, configureCcrProxy, readCcrConfig } = await import('../../../src/utils/ccr/config');
+      const { isClaudeCodeInstalled } = await import('../../../src/utils/installer');
+
+      vi.mocked(existsSync).mockReturnValue(false);
+      vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true);
+      vi.mocked(isCcrInstalled).mockResolvedValue({ hasCorrectPackage: true });
+      vi.mocked(readCcrConfig).mockReturnValue(null); // No existing config
+      vi.mocked(configureCcrProxy).mockResolvedValue();
+
+      const options: InitOptions = {
+        skipPrompt: true,
+        apiType: 'ccr_proxy',
+        skipBanner: true
+      };
+
+      await init(options);
+
+      // Should write default skip configuration
+      expect(writeCcrConfig).toHaveBeenCalledWith({
+        LOG: false,
+        CLAUDE_PATH: '',
+        HOST: '127.0.0.1',
+        PORT: 3456,
+        APIKEY: 'sk-zcf-x-ccr',
+        API_TIMEOUT_MS: '600000',
+        PROXY_URL: '',
+        transformers: [],
+        Providers: [], // Empty providers - user configures in UI
+        Router: {} // Empty router - user configures in UI
+      });
+
+      // Should configure proxy in settings.json
+      expect(configureCcrProxy).toHaveBeenCalled();
     });
   });
 });

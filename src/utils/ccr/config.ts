@@ -256,6 +256,21 @@ export function showConfigurationTips(scriptLang: SupportedLang, apiKey?: string
   console.log(''); // Add empty line for better readability
 }
 
+export function createDefaultCcrConfig(): CcrConfig {
+  return {
+    LOG: false,
+    CLAUDE_PATH: '',
+    HOST: '127.0.0.1',
+    PORT: 3456,
+    APIKEY: 'sk-zcf-x-ccr',
+    API_TIMEOUT_MS: '600000',
+    PROXY_URL: '',
+    transformers: [],
+    Providers: [], // Empty providers array - user configures in UI
+    Router: {} as CcrRouter, // Empty router configuration - user configures in UI
+  };
+}
+
 export async function setupCcrConfiguration(scriptLang: SupportedLang): Promise<boolean> {
   const i18n = getTranslation(scriptLang);
 
@@ -303,21 +318,7 @@ export async function setupCcrConfiguration(scriptLang: SupportedLang): Promise<
     if (preset === 'skip') {
       // User chose to skip, create empty configuration
       console.log(ansis.yellow(`${i18n.ccr.skipConfiguring}`));
-
-      config = {
-        LOG: false,
-        CLAUDE_PATH: '',
-        HOST: '127.0.0.1',
-        PORT: 3456,
-        APIKEY: 'sk-zcf-x-ccr',
-        API_TIMEOUT_MS: '600000',
-        PROXY_URL: '',
-        transformers: [],
-        Providers: [], // Empty providers array
-        Router: {
-          // Empty router configuration - user will configure in CCR UI
-        } as CcrRouter,
-      };
+      config = createDefaultCcrConfig();
     } else {
       // Configure with preset
       config = await configureCcrWithPreset(preset, scriptLang);
