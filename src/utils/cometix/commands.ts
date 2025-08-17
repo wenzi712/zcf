@@ -4,21 +4,7 @@ import ansis from 'ansis';
 import type { SupportedLang } from '../../constants';
 import { getTranslation } from '../../i18n';
 import { COMETIX_COMMANDS, COMETIX_COMMAND_NAME } from './common';
-
 const execAsync = promisify(exec);
-
-export async function runCometixInstallOrUpdate(scriptLang: SupportedLang): Promise<void> {
-  const i18n = getTranslation(scriptLang);
-  
-  try {
-    console.log(ansis.blue(`${i18n.cometix.installingOrUpdating}`));
-    await execAsync(COMETIX_COMMANDS.INSTALL);
-    console.log(ansis.green(`✔ ${i18n.cometix.installUpdateSuccess}`));
-  } catch (error) {
-    console.error(ansis.red(`✗ ${i18n.cometix.installUpdateFailed}: ${error}`));
-    throw error;
-  }
-}
 
 export async function runCometixPrintConfig(scriptLang: SupportedLang): Promise<void> {
   const i18n = getTranslation(scriptLang);

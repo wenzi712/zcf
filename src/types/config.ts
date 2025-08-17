@@ -2,6 +2,15 @@
  * Claude Code settings.json configuration types
  */
 
+/**
+ * StatusLine configuration for Claude Code
+ */
+export interface StatusLineConfig {
+  type: 'command';
+  command: string;
+  padding?: number;
+}
+
 export interface ClaudeSettings {
   model?: 'opus' | 'sonnet';
   env?: {
@@ -19,6 +28,7 @@ export interface ClaudeSettings {
   experimental?: {
     [key: string]: any;
   };
+  statusLine?: StatusLineConfig;
   [key: string]: any;
 }
 

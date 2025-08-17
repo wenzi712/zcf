@@ -4,7 +4,7 @@ import * as i18n from '../../../src/i18n';
 import * as commandsModule from '../../../src/utils/cometix/commands';
 
 // Don't destructure to allow proper mocking
-const { runCometixInstallOrUpdate, runCometixPrintConfig } = commandsModule;
+const { runCometixPrintConfig } = commandsModule;
 
 vi.mock('node:child_process');
 vi.mock('node:util', () => ({
@@ -30,6 +30,15 @@ describe('CCometixLine commands', () => {
     consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.mocked(i18n.getTranslation).mockReturnValue({
+      common: {},
+      language: {},
+      installation: {},
+      api: {},
+      menu: {},
+      workflow: {},
+      bmad: {},
+      errors: {},
+      updater: {},
       cometix: {
         installingOrUpdating: 'Installing/updating CCometixLine...',
         installUpdateSuccess: 'CCometixLine install/update completed',
@@ -39,7 +48,7 @@ describe('CCometixLine commands', () => {
         printConfigFailed: 'Failed to print configuration',
         commandNotFound: 'ccline command not found. Please install CCometixLine first.',
       },
-    });
+    } as any);
   });
 
   afterEach(() => {
@@ -47,46 +56,6 @@ describe('CCometixLine commands', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  describe('runCometixInstallOrUpdate', () => {
-    it('should run install command successfully', async () => {
-      const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((command, callback: any) => {
-        callback(null, 'added 1 package', '');
-      });
-
-      await runCometixInstallOrUpdate('en');
-
-      expect(mockExec).toHaveBeenCalledWith('npm install -g @cometix/ccline', expect.any(Function));
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Installing/updating CCometixLine...'));
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCometixLine install/update completed'));
-    });
-
-    it('should run update command when package exists', async () => {
-      const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((command, callback: any) => {
-        if (command.includes('npm update')) {
-          callback(null, 'updated 1 package', '');
-        } else {
-          callback(null, 'added 1 package', '');
-        }
-      });
-
-      await runCometixInstallOrUpdate('en');
-
-      expect(mockExec).toHaveBeenCalledWith('npm install -g @cometix/ccline', expect.any(Function));
-    });
-
-    it('should handle command execution failure', async () => {
-      const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((command, callback: any) => {
-        const error = new Error('Command failed');
-        callback(error, '', 'npm ERR! Command failed');
-      });
-
-      await expect(runCometixInstallOrUpdate('en')).rejects.toThrow('Command failed');
-      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to install/update CCometixLine'));
-    });
-  });
 
   describe('runCometixPrintConfig', () => {
     it('should print default configuration successfully', async () => {
@@ -100,8 +69,9 @@ describe('CCometixLine commands', () => {
         2
       );
 
-      mockExec.mockImplementation((command, callback: any) => {
+      mockExec.mockImplementation((_command, callback: any) => {
         callback(null, configOutput, '');
+        return {} as any;
       });
 
       await runCometixPrintConfig('en');
@@ -113,9 +83,10 @@ describe('CCometixLine commands', () => {
 
     it('should handle ccline command not found', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((command, callback: any) => {
+      mockExec.mockImplementation((_command, callback: any) => {
         const error = new Error('command not found: ccline');
         callback(error, '', 'command not found: ccline');
+        return {} as any;
       });
 
       await expect(runCometixPrintConfig('en')).rejects.toThrow('command not found: ccline');
@@ -126,9 +97,10 @@ describe('CCometixLine commands', () => {
 
     it('should handle configuration print failure', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((command, callback: any) => {
+      mockExec.mockImplementation((_command, callback: any) => {
         const error = new Error('Config file not found');
         callback(error, '', 'Error: Configuration file not found');
+        return {} as any;
       });
 
       await expect(runCometixPrintConfig('en')).rejects.toThrow('Config file not found');

@@ -27,6 +27,7 @@ npx zcf          # 打开交互式菜单，根据你的需求选择操作
 - `3-7` 配置管理（API/CCR、MCP、模型设置、AI 个性等）
 - `R` Claude Code Router 管理（v2.8.1 增强）
 - `U` ccusage - Claude Code 用量分析
+- `L` CCometixLine - 基于 Rust 的高性能状态栏工具，集成 Git 信息和实时使用量跟踪（v2.9.9+ 新增）
 - `+` 检查更新 - 检查并更新 Claude Code、CCR 和 CCometixLine 的版本（v2.9.9+ 增强）
 - 更多功能选项...
 
@@ -104,7 +105,9 @@ CCR 设置完成后，ZCF 会自动配置 Claude Code 使用 CCR 作为 API 代�
 - **性能优化**：使用 Rust 构建，资源消耗极低
 - **自动更新**：已集成到 ZCF 的更新检查系统
 
-检查更新（v2.8.1+，CCometixLine 支持 v2.9.9+）：
+> **v2.9.9 版本用户重要提示**：如果您之前使用过 ZCF v2.9.9 版本安装 CCometixLine，请重新运行一次安装流程，以确保 CCometixLine 配置被正确添加。运行 `npx zcf`->`选择 L`->`选择 1`，添加 CCometixLine 配置。
+
+#### 🚀 检查更新（v2.8.1+，CCometixLine 支持 v2.9.9+）：
 
 ```bash
 npx zcf check-updates  # 检查并更新 Claude Code、CCR 和 CCometixLine 到最新版本
@@ -205,13 +208,14 @@ $ npx zcf
   7. 导入推荐环境变量和权限配置 - 导入隐私保护环境变量和系统权限配置
 
   --------- 其他工具 ----------
-  R. CCR 管理 - Claude Code Router 管理
-  U. CCUsage - Claude Code 用量分析工具
-  L. CCometixLine - 基于 Rust 的高性能 Claude Code 状态栏工具，集成 Git 信息和实时使用量跟踪（v2.9.9+ 新增）
+  R. CCR - Claude Code Router 管理
+  U. ccusage - Claude Code 用量分析
+  L. CCometixLine - 基于 Rust 的高性能状态栏工具，集成 Git 信息和实时使用量跟踪
 
   ------------ ZCF ------------
   0. 更改显示语言 / Select display language - 更改 ZCF 界面语言
   -. 清除偏好缓存 - 清除偏好语言等缓存
+  +. 检查更新 - 检查并更新 Claude Code、CCR 和 CCometixLine 的版本
   Q. 退出
 
 请输入选项，回车确认（不区分大小写）: _

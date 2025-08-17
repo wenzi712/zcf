@@ -4,6 +4,10 @@ export const cometixMessages = {
   cometixInstallSuccess: 'CCometixLine 安装成功',
   cometixInstallFailed: '安装 CCometixLine 失败',
   cometixAlreadyInstalled: 'CCometixLine 已安装',
+  statusLineConfigured: 'Claude Code 状态栏配置已设置',
+  statusLineConfigFailed: '状态栏配置失败',
+  statusLineManualConfig: '请手动添加状态栏配置到 Claude Code 设置中',
+  statusLineAlreadyConfigured: 'Claude Code 状态栏配置已存在',
   
   // Installation prompt in init
   installCometixPrompt: '是否安装 CCometixLine - 基于 Rust 的高性能 Claude Code 状态栏工具，集成 Git 信息和实时使用量跟踪？',

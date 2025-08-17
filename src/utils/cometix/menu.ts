@@ -2,7 +2,8 @@ import inquirer from 'inquirer';
 import ansis from 'ansis';
 import type { SupportedLang } from '../../constants';
 import { getTranslation } from '../../i18n';
-import { runCometixInstallOrUpdate, runCometixPrintConfig } from './commands';
+import { runCometixPrintConfig } from './commands';
+import { installCometixLine } from './installer';
 import { handleExitPromptError, handleGeneralError } from '../error-handler';
 
 export async function showCometixMenu(scriptLang: SupportedLang): Promise<boolean> {
@@ -34,7 +35,7 @@ export async function showCometixMenu(scriptLang: SupportedLang): Promise<boolea
     // Handle menu selection
     switch (choice) {
       case '1':
-        await runCometixInstallOrUpdate(scriptLang);
+        await installCometixLine(scriptLang);
         break;
         
       case '2':

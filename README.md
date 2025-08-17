@@ -27,6 +27,7 @@ Menu options include:
 - `3-7` Configuration management (API/CCR, MCP, Model settings, AI personality, etc.)
 - `R` Claude Code Router management (enhanced in v2.8.1)
 - `U` ccusage - Claude Code usage analysis
+- `L` CCometixLine - High-performance statusline tool with Git integration and real-time usage tracking (v2.9.9+ new)
 - `+` Check updates - Check and update Claude Code, CCR and CCometixLine versions (v2.9.9+ enhanced)
 - More features...
 
@@ -92,7 +93,7 @@ CCR menu options:
 
 After CCR setup, ZCF automatically configures Claude Code to use CCR as the API proxy.
 
-> **Important Note for v2.9.1 Users**: If you have previously used ZCF v2.9.1 to initialize CCR, please re-run the CCR initialization process to ensure the correct `@musistudio/claude-code-router` package is installed. Version 2.9.1 had an incorrect package name that has been fixed in later versions.
+**Important Notice for v2.9.9 Users**: If you previously installed CCometixLine using ZCF v2.9.9, please rerun the installation process to ensure that the CCometixLine configuration is correctly added. Run `npx zcf` -> `Select L` -> `Select 1` to add the CCometixLine configuration.
 
 #### 📊 CCometixLine Support (Status Bar Tool) (v2.9.9+ New)
 
@@ -104,7 +105,9 @@ After CCR setup, ZCF automatically configures Claude Code to use CCR as the API 
 - **Performance Optimized**: Built with Rust for minimal resource usage
 - **Auto Updates**: Included in ZCF's update checking system
 
-Check for updates (v2.8.1+, CCometixLine support v2.9.9+):
+> **Important Note for v2.9.9 Users**: If you have previously used ZCF v2.9.9 to set up your environment, please re-run the initialization process to ensure CCometixLine configuration is properly added. Run `npx zcf` and select the appropriate setup option to update your configuration with CCometixLine support.
+
+#### 🚀 Check for updates (v2.8.1+, CCometixLine support v2.9.9+):
 
 ```bash
 npx zcf check-updates  # Check and update Claude Code, CCR and CCometixLine to latest versions
@@ -205,13 +208,14 @@ Select function:
   7. Import recommended environment variables and permissions - Import privacy protection environment variables and system permissions
 
   --------- Other Tools ----------
-  R. CCR Management - Claude Code Router management
-  U. CCUsage - Claude Code usage analysis tool
-  L. CCometixLine - High-performance statusline tool with Git integration and real-time usage tracking (v2.9.9+ new)
+  R. CCR - Claude Code Router management
+  U. ccusage - Claude Code usage analysis
+  L. CCometixLine - High-performance statusline tool with Git integration and real-time usage tracking
 
   ------------ ZCF ------------
   0. Select display language / 更改显示语言 - Change ZCF interface language
   -. Clear preference cache - Clear preference language and other caches
+  +. Check updates - Check and update Claude Code, CCR and CCometixLine versions
   Q. Exit
 
 Enter your choice: _

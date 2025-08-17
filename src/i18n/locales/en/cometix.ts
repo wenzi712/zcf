@@ -4,6 +4,10 @@ export const cometixMessages = {
   cometixInstallSuccess: 'CCometixLine installed successfully',
   cometixInstallFailed: 'Failed to install CCometixLine',
   cometixAlreadyInstalled: 'CCometixLine is already installed',
+  statusLineConfigured: 'Claude Code statusLine configured',
+  statusLineConfigFailed: 'Failed to configure statusLine',
+  statusLineManualConfig: 'Please manually add statusLine configuration to Claude Code settings',
+  statusLineAlreadyConfigured: 'Claude Code statusLine already configured',
   
   // Installation prompt in init
   installCometixPrompt: 'Install CCometixLine - High-performance Claude Code statusline tool with Git integration and real-time usage tracking?',

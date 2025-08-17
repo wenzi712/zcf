@@ -4,6 +4,7 @@ import ansis from 'ansis';
 import * as i18n from '../../../src/i18n';
 import * as menuModule from '../../../src/utils/cometix/menu';
 import * as commands from '../../../src/utils/cometix/commands';
+import * as installer from '../../../src/utils/cometix/installer';
 
 // Don't destructure to allow proper mocking
 const { showCometixMenu } = menuModule;
@@ -20,6 +21,7 @@ vi.mock('ansis', () => ({
 }));
 vi.mock('../../../src/i18n');
 vi.mock('../../../src/utils/cometix/commands');
+vi.mock('../../../src/utils/cometix/installer');
 vi.mock('../../../src/utils/error-handler', () => ({
   handleGeneralError: vi.fn(),
   handleExitPromptError: vi.fn(() => false),
@@ -77,11 +79,11 @@ describe('CCometixLine menu', () => {
         .mockResolvedValueOnce({ choice: '1' })
         .mockResolvedValueOnce({ continueInCometix: false });
       
-      vi.mocked(commands.runCometixInstallOrUpdate).mockResolvedValue();
+      vi.mocked(installer.installCometixLine).mockResolvedValue();
 
       const result = await showCometixMenu('en');
 
-      expect(commands.runCometixInstallOrUpdate).toHaveBeenCalledWith('en');
+      expect(installer.installCometixLine).toHaveBeenCalledWith('en');
       expect(result).toBe(false);
     });
 
@@ -136,12 +138,12 @@ describe('CCometixLine menu', () => {
         .mockResolvedValueOnce({ continueInCometix: true })
         .mockResolvedValueOnce({ choice: '0' });
       
-      vi.mocked(commands.runCometixInstallOrUpdate).mockResolvedValue();
+      vi.mocked(installer.installCometixLine).mockResolvedValue();
 
       await showCometixMenu('en');
 
       expect(inquirer.prompt).toHaveBeenCalledTimes(3);
-      expect(commands.runCometixInstallOrUpdate).toHaveBeenCalledTimes(1);
+      expect(installer.installCometixLine).toHaveBeenCalledTimes(1);
     });
 
     it('should handle errors gracefully', async () => {

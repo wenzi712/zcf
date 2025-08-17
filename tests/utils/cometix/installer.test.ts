@@ -115,15 +115,21 @@ describe('CCometixLine installer', () => {
 
     it('should skip installation if already installed', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((command, callback: any) => {
-        // Mock successful check - package is installed
-        callback(null, 'ccline@1.0.0', '');
-      });
+      mockExec
+        .mockImplementationOnce((command, callback: any) => {
+          // First call to check if installed - return success (installed)
+          callback(null, 'ccline@1.0.0', '');
+        })
+        .mockImplementationOnce((command, callback: any) => {
+          // Second call to update
+          callback(null, 'updated 1 package', '');
+        });
 
       await installCometixLine('en');
 
-      expect(mockExec).toHaveBeenCalledTimes(1);
-      expect(mockExec).toHaveBeenCalledWith('npm list -g @cometix/ccline', expect.any(Function));
+      expect(mockExec).toHaveBeenCalledTimes(2);
+      expect(mockExec).toHaveBeenNthCalledWith(1, 'npm list -g @cometix/ccline', expect.any(Function));
+      expect(mockExec).toHaveBeenNthCalledWith(2, 'npm install -g @cometix/ccline', expect.any(Function));
       expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('CCometixLine is already installed'));
     });
   });
