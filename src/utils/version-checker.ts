@@ -89,8 +89,8 @@ export async function checkCometixLineVersion(): Promise<{
   latestVersion: string | null;
   needsUpdate: boolean;
 }> {
-  const currentVersion = await getInstalledVersion('ccometix');
-  const latestVersion = await getLatestVersion('ccometix');
+  const currentVersion = await getInstalledVersion('ccline');
+  const latestVersion = await getLatestVersion('@cometix/ccline');
   
   return {
     installed: currentVersion !== null,
