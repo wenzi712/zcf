@@ -16,7 +16,9 @@ export const configuration = {
   currentModel: 'Current model',
   modifyModel: 'Modify model configuration?',
   keepModel: 'Keeping existing model configuration',
-  defaultModelOption: 'Default (Let Claude Code choose)',
+  defaultModelOption: 'Default - Let Claude Code choose',
+  opusModelOption: 'Opus - Only use opus, high token consumption, use with caution',
+  opusPlanModelOption: 'OpusPlan - Use Opus for planning, write code with sonnet, recommended',
   modelConfigured: 'Default model configured',
 
   // AI memory configuration
@@ -58,7 +60,7 @@ export const configuration = {
   envImportSuccess: 'Environment variables imported',
   permissionsImportSuccess: 'Permissions imported',
   openingSettingsJson: 'Opening settings.json...',
-  
+
   // JSON config related
   invalidConfiguration: 'Invalid configuration',
   failedToParseJson: 'Failed to parse JSON file:',

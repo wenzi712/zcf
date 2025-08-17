@@ -190,6 +190,20 @@ describe('config utilities', () => {
         })
       );
     });
+
+    it('should update model to opusplan', () => {
+      const mockSettings = { model: 'opus' };
+      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue(mockSettings);
+      
+      updateDefaultModel('opusplan');
+      
+      expect(jsonConfig.writeJsonConfig).toHaveBeenCalledWith(
+        SETTINGS_FILE,
+        expect.objectContaining({
+          model: 'opusplan',
+        })
+      );
+    });
   });
 
   describe('getExistingApiConfig', () => {
@@ -366,6 +380,14 @@ describe('config utilities', () => {
       const result = getExistingModelConfig();
       
       expect(result).toBe('sonnet');
+    });
+
+    it('should return "opusplan" when model is set to opusplan', () => {
+      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue({ model: 'opusplan' });
+      
+      const result = getExistingModelConfig();
+      
+      expect(result).toBe('opusplan');
     });
 
     it('should return "default" when model is explicitly set to default', () => {

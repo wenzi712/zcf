@@ -1,19 +1,23 @@
-import inquirer from 'inquirer';
 import ansis from 'ansis';
+import inquirer from 'inquirer';
 import { existsSync, unlinkSync } from 'node:fs';
 import type { SupportedLang } from '../constants';
 import { LANG_LABELS, MCP_SERVICES, SUPPORTED_LANGS, ZCF_CONFIG_FILE } from '../constants';
 import { getTranslation } from '../i18n';
-import { addNumbersToChoices } from './prompt-helpers';
 import type { McpServerConfig } from '../types';
+import { configureAiPersonality } from './ai-personality';
+import { setupCcrConfiguration } from './ccr/config';
+import { installCcr, isCcrInstalled } from './ccr/installer';
 import {
   applyAiLanguageDirective,
   configureApi,
-  updateDefaultModel,
   getExistingApiConfig,
   getExistingModelConfig,
+  updateDefaultModel,
 } from './config';
+import { modifyApiConfigPartially } from './config-operations';
 import {
+  addCompletedOnboarding,
   backupMcpConfig,
   buildMcpServerConfig,
   fixWindowsMcpConfig,
@@ -21,16 +25,12 @@ import {
   readMcpConfig,
   writeMcpConfig,
 } from './mcp';
-import { isWindows } from './platform';
-import { readZcfConfig, updateZcfConfig } from './zcf-config';
-import { validateApiKey, formatApiKeyDisplay } from './validator';
-import { configureAiPersonality } from './ai-personality';
-import { modifyApiConfigPartially } from './config-operations';
 import { selectMcpServices } from './mcp-selector';
+import { isWindows } from './platform';
+import { addNumbersToChoices } from './prompt-helpers';
 import { importRecommendedEnv, importRecommendedPermissions, openSettingsJson } from './simple-config';
-import { isCcrInstalled, installCcr } from './ccr/installer';
-import { setupCcrConfiguration } from './ccr/config';
-import { addCompletedOnboarding } from './mcp';
+import { formatApiKeyDisplay, validateApiKey } from './validator';
+import { readZcfConfig, updateZcfConfig } from './zcf-config';
 
 // Helper function to handle cancelled operations
 function handleCancellation(scriptLang: SupportedLang): void {
@@ -313,19 +313,27 @@ export async function configureDefaultModelFeature(scriptLang: SupportedLang) {
     }
   }
 
-  const { model } = await inquirer.prompt<{ model: 'opus' | 'sonnet' | 'default' }>({
+  const { model } = await inquirer.prompt<{ model: 'opus' | 'sonnet' | 'opusplan' | 'default' }>({
     type: 'list',
     name: 'model',
     message: i18n.configuration.selectDefaultModel || 'Select default model',
     choices: addNumbersToChoices([
       {
-        name: i18n.configuration.defaultModelOption || 'Default (Let Claude Code choose)',
+        name: i18n.configuration.defaultModelOption || 'Default - Let Claude Code choose',
         value: 'default' as const,
       },
-      { name: 'Opus', value: 'opus' as const },
-      { name: 'Sonnet', value: 'sonnet' as const },
+      {
+        name: i18n.configuration.opusModelOption || 'Opus - Only use opus, high token consumption, use with caution',
+        value: 'opus' as const,
+      },
+      {
+        name:
+          i18n.configuration.opusPlanModelOption ||
+          'OpusPlan - Use Opus for planning, write code with sonnet, recommended',
+        value: 'opusplan' as const,
+      },
     ]),
-    default: existingModel ? ['opus', 'sonnet', 'default'].indexOf(existingModel) : 2,
+    default: existingModel ? ['default', 'opus', 'opusplan'].indexOf(existingModel) : 0,
   });
 
   if (!model) {
@@ -344,7 +352,7 @@ export async function configureAiMemoryFeature(scriptLang: SupportedLang) {
   const { option } = await inquirer.prompt<{ option: string }>({
     type: 'list',
     name: 'option',
-    message: 'Select configuration option',
+    message: i18n.configuration.selectMemoryOption || 'Select configuration option',
     choices: addNumbersToChoices([
       {
         name: i18n.configuration.configureAiLanguage || 'Configure AI output language',

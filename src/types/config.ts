@@ -12,7 +12,7 @@ export interface StatusLineConfig {
 }
 
 export interface ClaudeSettings {
-  model?: 'opus' | 'sonnet';
+  model?: 'opus' | 'sonnet' | 'opusplan';
   env?: {
     ANTHROPIC_API_KEY?: string;
     ANTHROPIC_AUTH_TOKEN?: string;

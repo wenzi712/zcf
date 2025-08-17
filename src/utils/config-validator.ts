@@ -17,8 +17,8 @@ export function validateClaudeSettings(settings: any): settings is ClaudeSetting
   const i18n = getTranslation(lang);
 
   // Validate model if present
-  if (settings.model && !['opus', 'sonnet'].includes(settings.model)) {
-    console.warn(`Invalid model: ${settings.model}. Expected 'opus' or 'sonnet'`);
+  if (settings.model && !['opus', 'sonnet', 'opusplan'].includes(settings.model)) {
+    console.warn(`Invalid model: ${settings.model}. Expected 'opus', 'sonnet', or 'opusplan'`);
     return false;
   }
 
@@ -76,7 +76,7 @@ export function sanitizeClaudeSettings(settings: any): ClaudeSettings {
   }
 
   // Copy valid model
-  if (settings.model && ['opus', 'sonnet'].includes(settings.model)) {
+  if (settings.model && ['opus', 'sonnet', 'opusplan'].includes(settings.model)) {
     sanitized.model = settings.model;
   }
 

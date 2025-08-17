@@ -30,12 +30,13 @@ describe('config-validator utilities', () => {
     it('should validate valid model values', () => {
       expect(validateClaudeSettings({ model: 'opus' })).toBe(true);
       expect(validateClaudeSettings({ model: 'sonnet' })).toBe(true);
+      expect(validateClaudeSettings({ model: 'opusplan' })).toBe(true);
     });
 
     it('should reject invalid model values', () => {
       const consoleSpy = vi.spyOn(console, 'warn');
       expect(validateClaudeSettings({ model: 'invalid' })).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledWith("Invalid model: invalid. Expected 'opus' or 'sonnet'");
+      expect(consoleSpy).toHaveBeenCalledWith("Invalid model: invalid. Expected 'opus', 'sonnet', or 'opusplan'");
     });
 
     it('should validate env object', () => {
@@ -146,6 +147,7 @@ describe('config-validator utilities', () => {
     it('should copy valid model', () => {
       expect(sanitizeClaudeSettings({ model: 'opus' })).toEqual({ model: 'opus' });
       expect(sanitizeClaudeSettings({ model: 'sonnet' })).toEqual({ model: 'sonnet' });
+      expect(sanitizeClaudeSettings({ model: 'opusplan' })).toEqual({ model: 'opusplan' });
     });
 
     it('should filter out invalid model', () => {

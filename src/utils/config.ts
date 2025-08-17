@@ -183,7 +183,7 @@ export function mergeConfigs(sourceFile: string, targetFile: string) {
   writeJsonConfig(targetFile, merged);
 }
 
-export function updateDefaultModel(model: 'opus' | 'sonnet' | 'default') {
+export function updateDefaultModel(model: 'opus' | 'sonnet' | 'opusplan' | 'default') {
   let settings = getDefaultSettings();
   
   const existingSettings = readJsonConfig<ClaudeSettings>(SETTINGS_FILE);
@@ -272,7 +272,7 @@ export function mergeSettingsFile(templatePath: string, targetPath: string): voi
 /**
  * Get existing model configuration from settings.json
  */
-export function getExistingModelConfig(): 'opus' | 'sonnet' | 'default' | null {
+export function getExistingModelConfig(): 'opus' | 'sonnet' | 'opusplan' | 'default' | null {
   const settings = readJsonConfig<ClaudeSettings>(SETTINGS_FILE);
   
   if (!settings) {

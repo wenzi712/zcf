@@ -1,5 +1,41 @@
 # Changelog
 
+## 2.9.11
+
+### Patch Changes
+
+- ## 新功能
+
+  - 新增 OpusPlan 模型选项，支持用 Opus 做计划，Sonnet 编写代码的混合策略
+  - 添加 Opus 独占模式选项，提供更高质量但更高成本的处理能力
+
+  ## New Features
+
+  - Add OpusPlan model option - use Opus for planning and Sonnet for coding (recommended hybrid strategy)
+  - Add Opus-only mode option for higher quality but higher cost processing
+
+  ## 优化
+
+  - 重构预设选择排序逻辑，提升用户体验
+  - 优化代码导入顺序，提升可读性
+  - 改进模型配置选项的描述文本
+
+  ## Optimization
+
+  - Refactor preset selection ordering logic for better user experience
+  - Optimize code import ordering for better readability
+  - Improve model configuration option descriptions
+
+  ## 修复
+
+  - 修复配置验证逻辑
+  - 完善测试覆盖率
+
+  ## Fixes
+
+  - Fix configuration validation logic
+  - Improve test coverage
+
 ## 2.9.10
 
 ### Patch Changes

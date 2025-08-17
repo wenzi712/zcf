@@ -16,7 +16,9 @@ export const configuration = {
   currentModel: '当前模型',
   modifyModel: '是否修改模型配置？',
   keepModel: '保持当前模型配置',
-  defaultModelOption: '默认（让 Claude Code 自动选择）',
+  defaultModelOption: '默认 - 让 Claude Code 自动选择',
+  opusModelOption: 'Opus - 只用opus，token消耗高，慎用',
+  opusPlanModelOption: 'OpusPlan - Opus做计划，sonnet编写代码，推荐',
   modelConfigured: '默认模型已配置',
 
   // AI memory configuration
@@ -57,7 +59,7 @@ export const configuration = {
   envImportSuccess: '环境变量已导入',
   permissionsImportSuccess: '权限配置已导入',
   openingSettingsJson: '正在打开 settings.json...',
-  
+
   // JSON config related
   invalidConfiguration: '配置无效',
   failedToParseJson: '解析 JSON 文件失败:',
