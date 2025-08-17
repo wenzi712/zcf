@@ -1,5 +1,45 @@
 # Changelog
 
+## 2.9.10
+
+### Patch Changes
+
+- ## 新功能
+
+  - 添加 CCometixLine 状态栏配置支持，提供完整的状态栏设置功能
+  - 实现状态栏验证器，确保配置的有效性和一致性
+  - 新增状态栏配置工具，支持基础和高级模板选择
+
+  ## New Features
+
+  - Add CCometixLine status line configuration support with complete setup functionality
+  - Implement status line validator to ensure configuration validity and consistency
+  - Add status line configuration utility with basic and advanced template options
+
+  ## 文档优化
+
+  - 重新组织 CCometixLine 相关文档结构，提升可读性
+  - 更新项目截图，展示最新功能界面
+  - 优化 CLI 帮助文本，提供更清晰的使用指导
+
+  ## Documentation
+
+  - Reorganize CCometixLine documentation structure for better readability
+  - Update project screenshots showcasing latest feature interfaces
+  - Improve CLI help text for clearer usage guidance
+
+  ## 测试增强
+
+  - 新增状态栏配置功能的全面测试覆盖
+  - 添加集成测试确保功能稳定性
+  - 增强现有测试用例的健壮性
+
+  ## Testing
+
+  - Add comprehensive test coverage for status line configuration features
+  - Include integration tests to ensure functionality stability
+  - Enhance robustness of existing test suites
+
 ## 2.9.9
 
 ### Patch Changes
