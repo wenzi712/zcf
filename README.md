@@ -55,6 +55,38 @@ npx zcf → select 2  # Execute workflow update via menu
 > - You can choose operations through the menu or use commands directly for quick execution
 > - `zcf i` = full initialization, `zcf u` = update workflows only
 
+#### 🤖 Non-interactive Mode
+
+For CI/CD and automated setups, use `--skip-prompt` with parameters:
+
+```bash
+# Shorthand version
+npx zcf i -s -g zh-CN -t api_key -k "sk-xxx" -u "https://xxx.xxx"
+
+# Complete version
+npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" --api-url "https://xxx.xxx"
+```
+
+#### Non-interactive Mode Parameters
+
+When using `--skip-prompt`, the following parameters are available:
+
+| Parameter                    | Description                                             | Values                                                                              | Required                               | Default                                                                                                                          |
+| ---------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `--skip-prompt, -s`          | Skip all interactive prompts                            | -                                                                                   | Yes (for non-interactive mode)         | -                                                                                                                                |
+| `--lang, -l`                 | ZCF display language                                    | `zh-CN`, `en`                                                                       | No                                     | `en`                                                                                                                             |
+| `--config-lang, -c`          | Configuration language                                  | `zh-CN`, `en`                                                                       | No                                     | `en`                                                                                                                             |
+| `--ai-output-lang, -a`       | AI output language                                      | `zh-CN`, `en`, custom string                                                        | No                                     | `en`                                                                                                                             |
+| `--all-lang, -g`             | Set all language parameters to this value               | `zh-CN`, `en`, custom string                                                        | No                                     | - (overrides above 3 params. Custom string sets AI output language to custom while interaction and config languages remain 'en') |
+| `--config-action, -o`        | Config handling                                         | `new`, `backup`, `merge`, `docs-only`, `skip`                                       | No                                     | `backup`                                                                                                                         |
+| `--api-type, -t`             | API configuration type                                  | `auth_token`, `api_key`, `ccr_proxy`, `skip`                                        | No                                     | `skip`                                                                                                                           |
+| `--api-key, -k`              | API key (for both API key and auth token types)         | string                                                                              | Required when `api-type` is not `skip` | -                                                                                                                                |
+| `--api-url, -u`              | Custom API URL                                          | URL string                                                                          | No                                     | official API                                                                                                                     |
+| `--mcp-services, -m`         | MCP services to install (multi-select, comma-separated) | `context7`, `mcp-deepwiki`, `Playwright`, `exa`, or `skip` for none                 | No                                     | `all`                                                                                                                            |
+| `--workflows, -w`            | Workflows to install (multi-select, comma-separated)    | `sixStepsWorkflow`, `featPlanUx`, `gitWorkflow`, `bmadWorkflow`, or `skip` for none | No                                     | `all`                                                                                                                            |
+| `--ai-personality, -p`       | AI personality type                                     | `professional`, `catgirl`, `friendly`, `mentor`, `custom`                           | No                                     | `professional`                                                                                                                   |
+| `--install-cometix-line, -x` | Install CCometixLine statusline tool                    | `true`, `false`                                                                     | No                                     | `true`                                                                                                                           |
+
 #### 🎯 BMad Workflow (v2.7 New Feature)
 
 [BMad](https://github.com/bmad-code-org/BMAD-METHOD) (BMad-Method: Universal AI Agent Framework) is an enterprise-grade workflow system that provides:
