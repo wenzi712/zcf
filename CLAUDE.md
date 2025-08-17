@@ -9,6 +9,10 @@ ZCF (Zero-Config Claude-Code Flow) is a CLI tool that automatically configures C
 ## Development Guidelines
 
 - **Documentation Language**: Except for README_zh, all code comments and documentation should be written in English
+- **Test-Driven Development (TDD)**: All development must follow TDD methodology
+  - Write tests BEFORE implementing functionality
+  - Follow Red-Green-Refactor cycle: write failing test → implement minimal code → refactor
+  - Ensure each function/feature has corresponding test coverage before implementation
 - When writing tests, first verify if relevant test files already exist to avoid unnecessary duplication
 - **Internationalization (i18n) Guidelines**:
   - All prompts, logs, and error messages must support i18n
@@ -18,6 +22,7 @@ ZCF (Zero-Config Claude-Code Flow) is a CLI tool that automatically configures C
 ## Development Commands
 
 ### Build & Run
+
 ```bash
 # Development (uses tsx for TypeScript execution)
 pnpm dev
@@ -30,6 +35,7 @@ pnpm typecheck
 ```
 
 ### Testing
+
 ```bash
 # Run all tests
 pnpm test
@@ -54,6 +60,7 @@ pnpm vitest --grep "should handle"
 ```
 
 ### Release & Publishing
+
 ```bash
 # Create a changeset for version updates
 pnpm changeset
@@ -68,17 +75,20 @@ pnpm release
 ## Architecture & Code Organization
 
 ### Entry Points
+
 - `bin/zcf.mjs` - CLI executable entry point
 - `src/cli.ts` - CLI setup and parsing
 - `src/cli-setup.ts` - Command registration and routing
 - `src/index.ts` - Library exports
 
 ### Core Commands
+
 - `src/commands/init.ts` - Full initialization flow (install Claude Code + configure API + setup MCP)
 - `src/commands/update.ts` - Update workflow-related markdown files only
 - `src/commands/menu.ts` - Interactive menu system (default command)
 
 ### Workflow System Architecture
+
 - `src/config/workflows.ts` - Workflow configuration and management
 - `src/utils/workflow-installer.ts` - Workflow installation logic with dependency handling
 - `src/types/workflow.ts` - Workflow type definitions
@@ -88,23 +98,28 @@ pnpm release
   - BMad workflow: Enterprise-grade development workflow with specialized agents
 
 ### Utilities Architecture
+
 The project follows a modular utility architecture:
 
 - **Configuration Management**
+
   - `utils/config.ts` - Core configuration operations (backup, copy, API setup)
   - `utils/config-operations.ts` - Advanced config operations (partial updates, merging)
   - `utils/json-config.ts` - JSON file operations with error handling
   - `utils/zcf-config.ts` - ZCF-specific configuration persistence
 
 - **MCP (Model Context Protocol) Services**
+
   - `utils/mcp.ts` - MCP configuration management
   - `utils/mcp-selector.ts` - Interactive MCP service selection
 
 - **Installation & Platform**
+
   - `utils/installer.ts` - Claude Code installation logic
   - `utils/platform.ts` - Cross-platform compatibility (Windows/macOS/Linux/Termux)
 
 - **User Interaction**
+
   - `utils/prompts.ts` - Language selection and user prompts
   - `utils/ai-personality.ts` - AI personality configuration
   - `utils/banner.ts` - CLI banner display
@@ -136,12 +151,14 @@ The project uses Vitest with a layered testing approach:
 3. **Coverage Goals**: 90% for lines, functions, and statements
 
 #### Key Testing Areas
+
 - **Workflow Installation**: Test workflow selection, dependency resolution, and file installation
 - **Configuration Operations**: Test API configuration flows, partial updates, and validation
 - **MCP Services**: Test service selection and configuration
 - **Platform Compatibility**: Test cross-platform behavior with mocks
 
 Tests extensively use mocking for:
+
 - File system operations
 - External command execution
 - User prompts
@@ -155,11 +172,12 @@ Tests extensively use mocking for:
 4. **Template System**: Configuration templates are stored in `templates/` with language-specific subdirectories
 5. **Error Recovery**: Exit prompt errors are handled separately to ensure clean termination
 6. **Workflow Installation**: Supports modular workflow installation with automatic dependency resolution
-7. **BMad Integration**: Enterprise workflow with specialized agents for complete SDLC management
+7. **BMad Integration**: Enterprise workflow with specialized agents for complete Software Development Life Cycle (SDLC) management
 
 ### Type System
 
 The project uses strict TypeScript with:
+
 - Explicit type definitions in `src/types/` and `src/types.ts`
 - Interface-based design for options and configurations
 - Proper null/undefined handling throughout
@@ -167,17 +185,20 @@ The project uses strict TypeScript with:
 ## Common Development Tasks
 
 ### Adding a New MCP Service
+
 1. Add service definition to `MCP_SERVICES` in `src/constants.ts`
 2. Update types in `src/types.ts` if needed
 3. Test the service configuration flow
 
 ### Adding a New Command
+
 1. Create command file in `src/commands/`
 2. Define options interface
 3. Register in `src/cli-setup.ts`
 4. Add corresponding tests
 
 ### Adding a New Workflow
+
 1. Define workflow configuration in `src/config/workflows.ts`
 2. Add workflow type to `WorkflowType` in `src/types/workflow.ts`
 3. Create template files under `templates/{lang}/workflow/{category}/`
@@ -185,6 +206,7 @@ The project uses strict TypeScript with:
 5. Test workflow installation and cleanup
 
 ### Updating Translations
+
 1. Add or modify translation strings in the appropriate module under `src/i18n/locales/{lang}/`
    - Common strings: `common.ts`
    - API-related: `api.ts`
@@ -196,7 +218,62 @@ The project uses strict TypeScript with:
 4. Test both language flows
 
 ### Debugging Tips
+
 - Use `pnpm dev` for rapid testing during development
 - Check `~/.claude/` for generated configurations
 - Review `~/.claude/backup/` for configuration history
 - Test cross-platform behavior with platform detection mocks
+
+## Additional Development Insights
+
+### Build System & TypeScript
+
+- **unbuild**: Uses unbuild for production builds with ESM-only output and dependency inlining
+- **tsx**: Development runtime uses tsx for direct TypeScript execution
+- **Type Coverage**: Strict TypeScript with coverage goals set at 80% minimum across all metrics in vitest.config.ts
+- **Testing Philosophy**: Layered testing approach with core tests (_.test.ts) and edge case tests (_.edge.test.ts)
+
+### CLI Architecture Patterns
+
+The CLI follows a modular command pattern:
+
+- `src/cli.ts` - Minimal entry point using cac for argument parsing
+- `src/cli-setup.ts` - Command registration hub with extensive help customization
+- Each command is self-contained with its own options interface and action handler
+- Non-interactive mode support for CI/CD with comprehensive parameter validation
+
+### Key Architectural Decisions
+
+1. **ESM-Only**: Project is fully ESM with no CommonJS fallbacks (package.json type: "module")
+2. **Path Handling**: Uses `pathe` for cross-platform path operations (critical for Windows compatibility)
+3. **Command Execution**: Uses `tinyexec` instead of child_process for better cross-platform support
+4. **Configuration Strategy**: Smart merging with automatic backup to `~/.claude/backup/` before any modifications
+5. **Template System**: Language-specific templates under `templates/{lang}/` with workflow categorization
+
+### Integration Points
+
+- **CCR Integration**: Special handling for Claude Code Router proxy configuration
+- **CCometixLine Integration**: Rust-based statusline tool integration with automatic updates
+- **MCP Services**: Dynamic service configuration with Windows-specific command wrappers (`cmd /c`)
+- **BMad Workflow**: Enterprise development workflow integration with specialized agents
+
+### Error Handling Philosophy
+
+- Graceful degradation with user-friendly error messages
+- Automatic backup before dangerous operations
+- Platform-specific error handling (especially Windows path issues in MCP configs)
+- Separate error handling for exit prompts to ensure clean termination
+
+### Performance Considerations
+
+- Lazy loading of dependencies where possible
+- Efficient file operations using streaming where appropriate
+- Parallel execution of independent operations (like multiple MCP service installs)
+- Template caching for repeated operations
+
+### Code Quality Standards
+
+- 80% minimum coverage across lines, functions, branches, and statements
+- Extensive mocking for file system operations, external command execution, and user prompts
+- Cross-platform testing with platform detection mocks
+- Comprehensive edge case testing for boundary conditions and error scenarios
