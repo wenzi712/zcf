@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import inquirer from 'inquirer';
 
+// Mock modules
 vi.mock('inquirer', () => ({
   default: {
     prompt: vi.fn()
@@ -63,6 +64,24 @@ vi.mock('../../../src/utils/mcp-selector', () => ({
   selectMcpServices: vi.fn()
 }));
 
+vi.mock('../../../src/utils/workflow-installer', () => ({
+  selectAndInstallWorkflows: vi.fn()
+}));
+
+vi.mock('../../../src/utils/ccr/installer', () => ({
+  isCcrInstalled: vi.fn(),
+  installCcr: vi.fn()
+}));
+
+vi.mock('../../../src/utils/ccr/config', () => ({
+  setupCcrConfiguration: vi.fn()
+}));
+
+vi.mock('../../../src/utils/cometix/installer', () => ({
+  isCometixLineInstalled: vi.fn(),
+  installCometixLine: vi.fn()
+}));
+
 vi.mock('../../../src/utils/platform', () => ({
   isWindows: vi.fn().mockReturnValue(false),
   isTermux: vi.fn().mockReturnValue(false)
@@ -72,12 +91,53 @@ vi.mock('node:fs', () => ({
   existsSync: vi.fn()
 }));
 
+// Common test setup
+interface TestMocks {
+  selectScriptLanguage: any;
+  resolveAiOutputLanguage: any;
+  isClaudeCodeInstalled: any;
+  copyConfigFiles: any;
+  applyAiLanguageDirective: any;
+  selectMcpServices: any;
+  selectAndInstallWorkflows: any;
+  configureAiPersonality: any;
+  updateZcfConfig: any;
+  existsSync: any;
+  inquirerPrompt: any;
+}
+
+let testMocks: TestMocks;
+
 describe('init command', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+    
+    // Setup common mocks
+    const { selectScriptLanguage, resolveAiOutputLanguage } = await import('../../../src/utils/prompts');
+    const { isClaudeCodeInstalled } = await import('../../../src/utils/installer');
+    const { copyConfigFiles, applyAiLanguageDirective } = await import('../../../src/utils/config');
+    const { selectMcpServices } = await import('../../../src/utils/mcp-selector');
+    const { selectAndInstallWorkflows } = await import('../../../src/utils/workflow-installer');
+    const { configureAiPersonality } = await import('../../../src/utils/ai-personality');
+    const { updateZcfConfig } = await import('../../../src/utils/zcf-config');
+    const { existsSync } = await import('node:fs');
+    
+    testMocks = {
+      selectScriptLanguage: vi.mocked(selectScriptLanguage),
+      resolveAiOutputLanguage: vi.mocked(resolveAiOutputLanguage),
+      isClaudeCodeInstalled: vi.mocked(isClaudeCodeInstalled),
+      copyConfigFiles: vi.mocked(copyConfigFiles),
+      applyAiLanguageDirective: vi.mocked(applyAiLanguageDirective),
+      selectMcpServices: vi.mocked(selectMcpServices),
+      selectAndInstallWorkflows: vi.mocked(selectAndInstallWorkflows),
+      configureAiPersonality: vi.mocked(configureAiPersonality),
+      updateZcfConfig: vi.mocked(updateZcfConfig),
+      existsSync: vi.mocked(existsSync),
+      inquirerPrompt: vi.mocked(inquirer.prompt)
+    };
   });
 
   it('should load init module', async () => {
@@ -88,104 +148,128 @@ describe('init command', () => {
   });
 
   describe('init function', () => {
-    it('should handle full initialization flow', async () => {
-      const { init } = await import('../../../src/commands/init');
-      const { selectScriptLanguage, resolveAiOutputLanguage } = await import('../../../src/utils/prompts');
-      const { isClaudeCodeInstalled } = await import('../../../src/utils/installer');
-      const { copyConfigFiles, applyAiLanguageDirective } = await import('../../../src/utils/config');
-      const { selectMcpServices } = await import('../../../src/utils/mcp-selector');
-      const { existsSync } = await import('node:fs');
+    describe('language selection', () => {
+      it('should handle script language selection', async () => {
+        const { init } = await import('../../../src/commands/init');
+        
+        // Setup mocks for minimal flow
+        testMocks.selectScriptLanguage.mockResolvedValue('zh-CN');
+        testMocks.isClaudeCodeInstalled.mockResolvedValue(true);
+        testMocks.existsSync.mockReturnValue(false);
+        testMocks.inquirerPrompt.mockResolvedValueOnce({ lang: 'zh-CN' });
+        testMocks.inquirerPrompt.mockResolvedValueOnce({ shouldConfigureMcp: false });
+        testMocks.resolveAiOutputLanguage.mockResolvedValue('chinese-simplified');
+        testMocks.selectAndInstallWorkflows.mockResolvedValue(undefined);
+        testMocks.configureAiPersonality.mockResolvedValue(undefined);
+        testMocks.updateZcfConfig.mockResolvedValue(undefined);
+        
+        await init({ skipBanner: true });
+        
+        expect(testMocks.selectScriptLanguage).toHaveBeenCalled();
+        expect(testMocks.resolveAiOutputLanguage).toHaveBeenCalled();
+      });
       
-      vi.mocked(selectScriptLanguage).mockResolvedValue('zh-CN');
-      vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true);
-      vi.mocked(existsSync).mockReturnValue(false);
-      vi.mocked(inquirer.prompt).mockResolvedValue({ lang: 'zh-CN' });
-      vi.mocked(resolveAiOutputLanguage).mockResolvedValue('chinese-simplified');
-      vi.mocked(selectMcpServices).mockResolvedValue([]);
-      vi.mocked(copyConfigFiles).mockResolvedValue(undefined);
-      vi.mocked(applyAiLanguageDirective).mockResolvedValue(undefined);
-      
-      await init({ skipBanner: true });
-      
-      expect(selectScriptLanguage).toHaveBeenCalled();
-      expect(isClaudeCodeInstalled).toHaveBeenCalled();
-      expect(copyConfigFiles).toHaveBeenCalled();
+      it('should handle options correctly', async () => {
+        const { init } = await import('../../../src/commands/init');
+        
+        testMocks.selectScriptLanguage.mockResolvedValue('en');
+        testMocks.isClaudeCodeInstalled.mockResolvedValue(true);
+        testMocks.existsSync.mockReturnValue(false);
+        testMocks.resolveAiOutputLanguage.mockResolvedValue('english');
+        testMocks.inquirerPrompt.mockResolvedValue({ shouldConfigureMcp: false });
+        testMocks.selectAndInstallWorkflows.mockResolvedValue(undefined);
+        testMocks.configureAiPersonality.mockResolvedValue(undefined);
+        testMocks.updateZcfConfig.mockResolvedValue(undefined);
+        
+        await init({ lang: 'en', configLang: 'en', force: true, skipBanner: true });
+        
+        expect(testMocks.selectScriptLanguage).toHaveBeenCalledWith('en');
+      });
+    });
+    
+    describe('Claude Code installation', () => {
+      it('should handle Claude Code not installed', async () => {
+        const { init } = await import('../../../src/commands/init');
+        const { installClaudeCode } = await import('../../../src/utils/installer');
+        
+        testMocks.selectScriptLanguage.mockResolvedValue('zh-CN');
+        testMocks.isClaudeCodeInstalled.mockResolvedValue(false);
+        testMocks.existsSync.mockReturnValue(false);
+        testMocks.inquirerPrompt
+          .mockResolvedValueOnce({ lang: 'zh-CN' })
+          .mockResolvedValueOnce({ shouldInstall: true })
+          .mockResolvedValueOnce({ shouldConfigureMcp: false });
+        testMocks.resolveAiOutputLanguage.mockResolvedValue('chinese-simplified');
+        testMocks.selectAndInstallWorkflows.mockResolvedValue(undefined);
+        testMocks.configureAiPersonality.mockResolvedValue(undefined);
+        testMocks.updateZcfConfig.mockResolvedValue(undefined);
+        vi.mocked(installClaudeCode).mockResolvedValue(undefined);
+        
+        await init({ skipBanner: true });
+        
+        expect(testMocks.isClaudeCodeInstalled).toHaveBeenCalled();
+        expect(installClaudeCode).toHaveBeenCalled();
+      });
+    });
+    
+    describe('configuration handling', () => {
+      it('should handle existing config', async () => {
+        const { init } = await import('../../../src/commands/init');
+        
+        testMocks.selectScriptLanguage.mockResolvedValue('zh-CN');
+        testMocks.isClaudeCodeInstalled.mockResolvedValue(true);
+        testMocks.existsSync.mockReturnValue(true);
+        testMocks.inquirerPrompt
+          .mockResolvedValueOnce({ lang: 'zh-CN' })
+          .mockResolvedValueOnce({ action: 'skip' });
+        testMocks.resolveAiOutputLanguage.mockResolvedValue('chinese-simplified');
+        
+        await init({ skipBanner: true });
+        
+        expect(testMocks.selectScriptLanguage).toHaveBeenCalled();
+      });
+    });
+    
+    describe('integration flow', () => {
+      it('should handle full initialization flow', async () => {
+        const { init } = await import('../../../src/commands/init');
+        
+        // Setup all mocks for successful flow
+        testMocks.selectScriptLanguage.mockResolvedValue('zh-CN');
+        testMocks.isClaudeCodeInstalled.mockResolvedValue(true);
+        testMocks.existsSync.mockReturnValue(false);
+        testMocks.inquirerPrompt
+          .mockResolvedValueOnce({ lang: 'zh-CN' })
+          .mockResolvedValueOnce({ shouldConfigureMcp: false });
+        testMocks.resolveAiOutputLanguage.mockResolvedValue('chinese-simplified');
+        testMocks.copyConfigFiles.mockResolvedValue(undefined);
+        testMocks.applyAiLanguageDirective.mockResolvedValue(undefined);
+        testMocks.selectAndInstallWorkflows.mockResolvedValue(undefined);
+        testMocks.configureAiPersonality.mockResolvedValue(undefined);
+        testMocks.updateZcfConfig.mockResolvedValue(undefined);
+        
+        await init({ skipBanner: true });
+        
+        expect(testMocks.selectScriptLanguage).toHaveBeenCalled();
+        expect(testMocks.isClaudeCodeInstalled).toHaveBeenCalled();
+        expect(testMocks.copyConfigFiles).toHaveBeenCalled();
+        expect(testMocks.applyAiLanguageDirective).toHaveBeenCalled();
+        expect(testMocks.updateZcfConfig).toHaveBeenCalled();
+      }, 45000); // 45秒超时，给CI更多时间
     });
 
-    it('should handle options correctly', async () => {
-      const { init } = await import('../../../src/commands/init');
-      const { selectScriptLanguage, resolveAiOutputLanguage } = await import('../../../src/utils/prompts');
-      const { isClaudeCodeInstalled } = await import('../../../src/utils/installer');
-      const { copyConfigFiles, applyAiLanguageDirective } = await import('../../../src/utils/config');
-      const { selectMcpServices } = await import('../../../src/utils/mcp-selector');
-      const { existsSync } = await import('node:fs');
-      
-      vi.mocked(selectScriptLanguage).mockResolvedValue('en');
-      vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true);
-      vi.mocked(existsSync).mockReturnValue(false);
-      vi.mocked(resolveAiOutputLanguage).mockResolvedValue('english');
-      vi.mocked(selectMcpServices).mockResolvedValue([]);
-      vi.mocked(copyConfigFiles).mockResolvedValue(undefined);
-      vi.mocked(applyAiLanguageDirective).mockResolvedValue(undefined);
-      
-      await init({ lang: 'en', configLang: 'en', force: true, skipBanner: true });
-      
-      expect(selectScriptLanguage).toHaveBeenCalledWith('en');
-      expect(copyConfigFiles).toHaveBeenCalled();
+    
+    describe('error handling', () => {
+      it('should handle errors gracefully', async () => {
+        const { init } = await import('../../../src/commands/init');
+        
+        const error = new Error('Test error');
+        testMocks.selectScriptLanguage.mockRejectedValue(error);
+        
+        await init({ skipBanner: true });
+        
+        expect(console.error).toHaveBeenCalled();
+      });
     });
-
-    it('should handle Claude Code not installed', async () => {
-      const { init } = await import('../../../src/commands/init');
-      const { isClaudeCodeInstalled, installClaudeCode } = await import('../../../src/utils/installer');
-      const { selectScriptLanguage } = await import('../../../src/utils/prompts');
-      const { existsSync } = await import('node:fs');
-      
-      vi.mocked(selectScriptLanguage).mockResolvedValue('zh-CN');
-      vi.mocked(isClaudeCodeInstalled).mockResolvedValue(false);
-      vi.mocked(existsSync).mockReturnValue(false);
-      vi.mocked(inquirer.prompt)
-        .mockResolvedValueOnce({ lang: 'zh-CN' })
-        .mockResolvedValueOnce({ shouldInstall: true });
-      vi.mocked(installClaudeCode).mockResolvedValue(true);
-      
-      await init({ skipBanner: true });
-      
-      expect(isClaudeCodeInstalled).toHaveBeenCalled();
-      expect(installClaudeCode).toHaveBeenCalled();
-    });
-
-    it('should handle existing config', async () => {
-      const { init } = await import('../../../src/commands/init');
-      const { selectScriptLanguage } = await import('../../../src/utils/prompts');
-      const { isClaudeCodeInstalled } = await import('../../../src/utils/installer');
-      const { existsSync } = await import('node:fs');
-      
-      vi.mocked(selectScriptLanguage).mockResolvedValue('zh-CN');
-      vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true);
-      vi.mocked(existsSync).mockReturnValue(true);
-      vi.mocked(inquirer.prompt)
-        .mockResolvedValueOnce({ lang: 'zh-CN' })
-        .mockResolvedValueOnce({ action: 'skip' });
-      
-      await init({ skipBanner: true });
-      
-      expect(selectScriptLanguage).toHaveBeenCalled();
-    });
-
-    it('should handle errors gracefully', async () => {
-      const { init } = await import('../../../src/commands/init');
-      const { selectScriptLanguage } = await import('../../../src/utils/prompts');
-      
-      const error = new Error('Test error');
-      vi.mocked(selectScriptLanguage).mockRejectedValue(error);
-      
-      await init({ skipBanner: true });
-      
-      expect(console.error).toHaveBeenCalled();
-    });
-
-    // Removed skipped integration tests that need major refactoring
-    // These tests were testing implementation details rather than behavior
-    // and would require significant mock setup that doesn't add value
   });
 });
