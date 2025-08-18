@@ -13,4 +13,5 @@ export const COMETIX_COMMANDS = {
   INSTALL: `npm install -g ${COMETIX_PACKAGE_NAME}`,
   UPDATE: `npm update -g ${COMETIX_PACKAGE_NAME}`,
   PRINT_CONFIG: `${COMETIX_COMMAND_NAME} --print`,
+  TUI_CONFIG: `${COMETIX_COMMAND_NAME} -c`,
 } as const;

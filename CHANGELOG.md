@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.10.2
+
+### Patch Changes
+
+- ## 文档改进
+
+  - 添加项目行为准则和贡献指南，规范开源协作流程
+  - 完善开发指南和架构文档，提升开发者体验
+  - 改进 README 文档，添加 CCometixLine TUI 配置功能说明
+
+  ## 功能完善
+
+  - 增强 CCometixLine 菜单选项，提供交互式终端 UI 配置
+  - 优化 CCometixLine 命令处理和错误处理机制
+  - 完善相关国际化翻译和测试用例
+
+  ## Documentation Improvements
+
+  - Add Code of Conduct and Contributing Guidelines to standardize open-source collaboration
+  - Enhanced development guidelines and architecture documentation for better developer experience
+  - Improved README documentation with CCometixLine TUI configuration feature descriptions
+
+  ## Feature Enhancements
+
+  - Enhanced CCometixLine menu options with interactive terminal UI configuration
+  - Optimized CCometixLine command processing and error handling mechanisms
+  - Improved internationalization translations and corresponding test cases
+
 ## 2.10.1
 
 ### Patch Changes

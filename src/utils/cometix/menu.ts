@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import ansis from 'ansis';
 import type { SupportedLang } from '../../constants';
 import { getTranslation } from '../../i18n';
-import { runCometixPrintConfig } from './commands';
+import { runCometixPrintConfig, runCometixTuiConfig } from './commands';
 import { installCometixLine } from './installer';
 import { handleExitPromptError, handleGeneralError } from '../error-handler';
 
@@ -18,6 +18,7 @@ export async function showCometixMenu(scriptLang: SupportedLang): Promise<boolea
     // Display menu options
     console.log(`  ${ansis.cyan('1.')} ${i18n.cometix.cometixMenuOptions.installOrUpdate} ${ansis.gray('- ' + i18n.cometix.cometixMenuDescriptions.installOrUpdate)}`);
     console.log(`  ${ansis.cyan('2.')} ${i18n.cometix.cometixMenuOptions.printConfig} ${ansis.gray('- ' + i18n.cometix.cometixMenuDescriptions.printConfig)}`);
+    console.log(`  ${ansis.cyan('3.')} ${i18n.cometix.cometixMenuOptions.customConfig} ${ansis.gray('- ' + i18n.cometix.cometixMenuDescriptions.customConfig)}`);
     console.log(`  ${ansis.yellow('0.')} ${i18n.cometix.cometixMenuOptions.back}`);
     console.log('');
     
@@ -27,7 +28,7 @@ export async function showCometixMenu(scriptLang: SupportedLang): Promise<boolea
       name: 'choice',
       message: i18n.common.enterChoice,
       validate: (value) => {
-        const valid = ['1', '2', '0'];
+        const valid = ['1', '2', '3', '0'];
         return valid.includes(value) || i18n.common.invalidChoice;
       },
     });
@@ -40,6 +41,10 @@ export async function showCometixMenu(scriptLang: SupportedLang): Promise<boolea
         
       case '2':
         await runCometixPrintConfig(scriptLang);
+        break;
+        
+      case '3':
+        await runCometixTuiConfig(scriptLang);
         break;
         
       case '0':

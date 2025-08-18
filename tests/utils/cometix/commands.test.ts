@@ -1,12 +1,15 @@
-import { exec } from 'node:child_process';
+import { exec, spawn } from 'node:child_process';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as i18n from '../../../src/i18n';
 import * as commandsModule from '../../../src/utils/cometix/commands';
 
 // Don't destructure to allow proper mocking
-const { runCometixPrintConfig } = commandsModule;
+const { runCometixPrintConfig, runCometixTuiConfig } = commandsModule;
 
-vi.mock('node:child_process');
+vi.mock('node:child_process', () => ({
+  exec: vi.fn(),
+  spawn: vi.fn(),
+}));
 vi.mock('node:util', () => ({
   promisify: vi.fn((fn) => {
     return (...args: any[]) => {
@@ -46,6 +49,9 @@ describe('CCometixLine commands', () => {
         printingConfig: 'Printing CCometixLine configuration...',
         printConfigSuccess: 'Configuration printed successfully',
         printConfigFailed: 'Failed to print configuration',
+        enteringTuiConfig: 'Entering CCometixLine TUI configuration mode...',
+        tuiConfigSuccess: 'TUI configuration completed successfully',
+        tuiConfigFailed: 'Failed to run TUI configuration',
         commandNotFound: 'ccline command not found. Please install CCometixLine first.',
       },
     } as any);
@@ -105,6 +111,70 @@ describe('CCometixLine commands', () => {
 
       await expect(runCometixPrintConfig('en')).rejects.toThrow('Config file not found');
       expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to print configuration'));
+    });
+  });
+
+  describe('runCometixTuiConfig', () => {
+    it('should run TUI configuration successfully', async () => {
+      const mockSpawn = vi.mocked(spawn);
+      const mockChild = {
+        on: vi.fn((event, callback) => {
+          if (event === 'close') {
+            // Simulate successful completion
+            callback(0);
+          }
+          return mockChild;
+        }),
+      };
+      
+      mockSpawn.mockReturnValue(mockChild as any);
+
+      await runCometixTuiConfig('en');
+
+      expect(mockSpawn).toHaveBeenCalledWith('ccline', ['-c'], {
+        stdio: 'inherit',
+        shell: true,
+      });
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Entering CCometixLine TUI configuration mode...'));
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('TUI configuration completed successfully'));
+    });
+
+    it('should handle ccline command not found in TUI config', async () => {
+      const mockSpawn = vi.mocked(spawn);
+      const mockChild = {
+        on: vi.fn((event, callback) => {
+          if (event === 'error') {
+            // Simulate command not found error
+            callback(new Error('spawn ccline ENOENT'));
+          }
+          return mockChild;
+        }),
+      };
+      
+      mockSpawn.mockReturnValue(mockChild as any);
+
+      await expect(runCometixTuiConfig('en')).rejects.toThrow('spawn ccline ENOENT');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('ccline command not found. Please install CCometixLine first.')
+      );
+    });
+
+    it('should handle TUI configuration failure', async () => {
+      const mockSpawn = vi.mocked(spawn);
+      const mockChild = {
+        on: vi.fn((event, callback) => {
+          if (event === 'close') {
+            // Simulate exit with error code
+            callback(1);
+          }
+          return mockChild;
+        }),
+      };
+      
+      mockSpawn.mockReturnValue(mockChild as any);
+
+      await expect(runCometixTuiConfig('en')).rejects.toThrow('ccline -c exited with code 1');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to run TUI configuration'));
     });
   });
 });

@@ -20,6 +20,9 @@ export const cometixMessages = {
   printingConfig: '正在打印 CCometixLine 配置...',
   printConfigSuccess: '配置打印成功',
   printConfigFailed: '打印配置失败',
+  enteringTuiConfig: '正在进入 CCometixLine TUI 配置模式...',
+  tuiConfigSuccess: 'TUI 配置完成成功',
+  tuiConfigFailed: '运行 TUI 配置失败',
   commandNotFound: 'ccline 命令未找到。请先安装 CCometixLine。',
   
   // CCometixLine Menu
@@ -27,10 +30,12 @@ export const cometixMessages = {
   cometixMenuOptions: {
     installOrUpdate: '安装或更新',
     printConfig: '打印默认配置',
+    customConfig: '自定义配置',
     back: '返回主菜单',
   },
   cometixMenuDescriptions: {
     installOrUpdate: '使用 npm 安装或更新 CCometixLine',
     printConfig: '显示当前 CCometixLine 配置',
+    customConfig: '进入 CCometixLine 的 TUI 配置模式',
   },
 };

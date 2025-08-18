@@ -135,7 +135,13 @@ After CCR setup, ZCF automatically configures Claude Code to use CCR as the API 
 - **Git Integration**: Display Git status and branch information
 - **Status Line Display**: Native integration with your terminal statusline
 - **Performance Optimized**: Built with Rust for minimal resource usage
+- **TUI Configuration**: Interactive terminal UI for customizing themes, segments, and display options
 - **Auto Updates**: Included in ZCF's update checking system
+
+CCometixLine menu options (accessible via `npx zcf` → `L`):
+- `1` Install or Update - Install or update CCometixLine using npm
+- `2` Print Default Configuration - Display current CCometixLine configuration
+- `3` Custom Config - TUI Configuration Mode - Interactive terminal UI for customizing settings
 
 > **Important Note for v2.9.9 Users**: If you have previously used ZCF v2.9.9 to set up your environment, please re-run the initialization process to ensure CCometixLine configuration is properly added. Run `npx zcf` and select the appropriate setup option to update your configuration with CCometixLine support.
 
