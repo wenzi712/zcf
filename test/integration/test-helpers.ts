@@ -1,25 +1,27 @@
-import { vi, type MockedFunction } from 'vitest';
-import type { SupportedLang } from '../../src/constants';
+import type { MockedFunction } from 'vitest'
+import type { SupportedLang } from '../../src/constants'
+import process from 'node:process'
+import { vi } from 'vitest'
 
 /**
  * 创建标准的inquirer prompt mock
  */
 export function createPromptMock() {
-  return vi.fn();
+  return vi.fn()
 }
 
 /**
  * 创建文件系统mock
  */
 export function createFsMock(options: {
-  existingFiles?: string[];
-  existingDirs?: string[];
+  existingFiles?: string[]
+  existingDirs?: string[]
 } = {}) {
-  const { existingFiles = [], existingDirs = [] } = options;
-  
+  const { existingFiles = [], existingDirs = [] } = options
+
   return {
     existsSync: vi.fn((path: string) => {
-      return existingFiles.includes(path) || existingDirs.includes(path);
+      return existingFiles.includes(path) || existingDirs.includes(path)
     }),
     mkdirSync: vi.fn(),
     writeFileSync: vi.fn(),
@@ -27,66 +29,66 @@ export function createFsMock(options: {
     copyFileSync: vi.fn(),
     unlinkSync: vi.fn(),
     rmSync: vi.fn(),
-    readdirSync: vi.fn()
-  };
+    readdirSync: vi.fn(),
+  }
 }
 
 /**
  * 创建标准的命令执行环境
  */
 export function createTestEnvironment() {
-  const originalArgv = process.argv;
-  const originalExit = process.exit;
-  
+  const originalArgv = process.argv
+  const originalExit = process.exit
+
   const cleanup = () => {
-    process.argv = originalArgv;
-    process.exit = originalExit;
-    vi.clearAllMocks();
-    vi.restoreAllMocks();
-  };
-  
+    process.argv = originalArgv
+    process.exit = originalExit
+    vi.clearAllMocks()
+    vi.restoreAllMocks()
+  }
+
   // Mock console
-  vi.spyOn(console, 'log').mockImplementation(() => {});
-  vi.spyOn(console, 'error').mockImplementation(() => {});
-  vi.spyOn(console, 'warn').mockImplementation(() => {});
-  
+  vi.spyOn(console, 'log').mockImplementation(() => {})
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+  vi.spyOn(console, 'warn').mockImplementation(() => {})
+
   // Mock process.exit
-  vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
-  
-  return { cleanup };
+  vi.spyOn(process, 'exit').mockImplementation((() => {}) as any)
+
+  return { cleanup }
 }
 
 /**
  * 模拟完整的用户交互流程
  */
 export class InteractionSimulator {
-  private responses: any[] = [];
-  private currentIndex = 0;
-  
+  private responses: any[] = []
+  private currentIndex = 0
+
   addResponse(response: any) {
-    this.responses.push(response);
-    return this;
+    this.responses.push(response)
+    return this
   }
-  
+
   addResponses(...responses: any[]) {
-    this.responses.push(...responses);
-    return this;
+    this.responses.push(...responses)
+    return this
   }
-  
+
   getMock() {
     return vi.fn().mockImplementation(() => {
       if (this.currentIndex >= this.responses.length) {
-        throw new Error('No more responses configured');
+        throw new Error('No more responses configured')
       }
-      const response = this.responses[this.currentIndex];
-      this.currentIndex++;
-      return Promise.resolve(response);
-    });
+      const response = this.responses[this.currentIndex]
+      this.currentIndex++
+      return Promise.resolve(response)
+    })
   }
-  
+
   reset() {
-    this.currentIndex = 0;
-    this.responses = [];
+    this.currentIndex = 0
+    this.responses = []
   }
 }
 
@@ -98,8 +100,8 @@ export function createApiConfig(overrides = {}) {
     url: 'https://api.test.com',
     key: 'test-api-key',
     authType: 'api_key' as const,
-    ...overrides
-  };
+    ...overrides,
+  }
 }
 
 /**
@@ -108,24 +110,24 @@ export function createApiConfig(overrides = {}) {
 export function createMcpConfig(servers = {}) {
   return {
     mcpServers: {
-      ...servers
+      ...servers,
     },
-    completedOnboarding: false
-  };
+    completedOnboarding: false,
+  }
 }
 
 /**
  * 运行CLI命令
  */
 export async function runCliCommand(args: string[]) {
-  process.argv = ['node', 'zcf', ...args];
-  
+  process.argv = ['node', 'zcf', ...args]
+
   // Clear module cache to force re-import
-  const cliPath = require.resolve('../../src/cli');
-  delete require.cache[cliPath];
-  
+  const cliPath = require.resolve('../../src/cli')
+  delete require.cache[cliPath]
+
   // Re-import to trigger execution
-  await import('../../src/cli');
+  await import('../../src/cli')
 }
 
 /**
@@ -134,11 +136,11 @@ export async function runCliCommand(args: string[]) {
 export function expectCalledWith<T extends (...args: any[]) => any>(
   fn: MockedFunction<T>,
   args: Parameters<T>,
-  returnValue?: ReturnType<T>
+  returnValue?: ReturnType<T>,
 ) {
-  expect(fn).toHaveBeenCalledWith(...args);
+  expect(fn).toHaveBeenCalledWith(...args)
   if (returnValue !== undefined) {
-    expect(fn).toHaveReturnedWith(returnValue);
+    expect(fn).toHaveReturnedWith(returnValue)
   }
 }
 
@@ -146,26 +148,26 @@ export function expectCalledWith<T extends (...args: any[]) => any>(
  * 创建测试场景
  */
 export interface TestScenario {
-  name: string;
-  setup: () => void;
-  execute: () => Promise<void>;
-  verify: () => void;
+  name: string
+  setup: () => void
+  execute: () => Promise<void>
+  verify: () => void
 }
 
 export class ScenarioRunner {
-  private scenarios: TestScenario[] = [];
-  
+  private scenarios: TestScenario[] = []
+
   add(scenario: TestScenario) {
-    this.scenarios.push(scenario);
-    return this;
+    this.scenarios.push(scenario)
+    return this
   }
-  
+
   async runAll() {
     for (const scenario of this.scenarios) {
-      console.log(`Running scenario: ${scenario.name}`);
-      scenario.setup();
-      await scenario.execute();
-      scenario.verify();
+      console.log(`Running scenario: ${scenario.name}`)
+      scenario.setup()
+      await scenario.execute()
+      scenario.verify()
     }
   }
 }
@@ -178,10 +180,10 @@ export class MockFactory {
     return {
       checkClaudeInstalled: vi.fn(),
       installClaudeCode: vi.fn(),
-      isClaudeCodeInstalled: vi.fn()
-    };
+      isClaudeCodeInstalled: vi.fn(),
+    }
   }
-  
+
   static createConfigMocks() {
     return {
       checkExistingConfig: vi.fn(),
@@ -191,18 +193,18 @@ export class MockFactory {
       applyAiLanguageDirective: vi.fn(),
       getExistingApiConfig: vi.fn(),
       ensureClaudeDir: vi.fn(),
-      updateApiConfigValue: vi.fn()
-    };
+      updateApiConfigValue: vi.fn(),
+    }
   }
-  
+
   static createPromptMocks() {
     return {
       selectScriptLanguage: vi.fn(),
       selectAiOutputLanguage: vi.fn(),
-      resolveAiOutputLanguage: vi.fn()
-    };
+      resolveAiOutputLanguage: vi.fn(),
+    }
   }
-  
+
   static createMcpMocks() {
     return {
       configureMcpServers: vi.fn(),
@@ -212,8 +214,8 @@ export class MockFactory {
       fixWindowsMcpConfig: vi.fn(),
       mergeMcpServers: vi.fn(),
       readMcpConfig: vi.fn(),
-      writeMcpConfig: vi.fn()
-    };
+      writeMcpConfig: vi.fn(),
+    }
   }
 }
 
@@ -221,17 +223,17 @@ export class MockFactory {
  * 测试数据生成器
  */
 export class TestDataGenerator {
-  static languages: SupportedLang[] = ['zh-CN', 'en'];
-  
+  static languages: SupportedLang[] = ['zh-CN', 'en']
+
   static getRandomLanguage(): SupportedLang {
-    return this.languages[Math.floor(Math.random() * this.languages.length)];
+    return this.languages[Math.floor(Math.random() * this.languages.length)]
   }
-  
+
   static generateApiKey(prefix = 'key'): string {
-    return `${prefix}-${Math.random().toString(36).substring(7)}`;
+    return `${prefix}-${Math.random().toString(36).substring(7)}`
   }
-  
+
   static generateUrl(domain = 'api.test.com'): string {
-    return `https://${domain}/v1/api`;
+    return `https://${domain}/v1/api`
   }
 }

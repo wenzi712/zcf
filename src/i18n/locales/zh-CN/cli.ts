@@ -3,4 +3,4 @@ export const cli = {
   forceOverwrite: '强制覆盖现有配置',
   initClaudeConfig: '初始化 Claude Code 配置',
   updatePromptsOnly: '仅更新 Claude Code 提示',
-};
+}

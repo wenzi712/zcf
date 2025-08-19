@@ -578,7 +578,7 @@ A huge thank you to all our sponsors for their generous support!
 
 - Tc (first sponsor)
 - Argolinhas (first ko-fi sponsor ٩(•̤̀ᵕ•̤́๑))
-- r*r
+- r\*r (first anonymous sponsor🤣)
 - 16°C coffee (My best friend🤪, offered Claude Code max $200 package)
 
 ## 📄 License

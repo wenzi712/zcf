@@ -40,4 +40,4 @@ export const cometixMessages = {
     printConfig: 'Display current CCometixLine configuration',
     customConfig: 'Enter TUI configuration mode for CCometixLine',
   },
-};
+}

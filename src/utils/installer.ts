@@ -1,9 +1,9 @@
-import { exec } from 'tinyexec'
-import ansis from 'ansis'
-import { commandExists, isTermux, getTermuxPrefix } from './platform'
 import type { SupportedLang } from '../constants'
+import ansis from 'ansis'
+import { exec } from 'tinyexec'
 import { getTranslation } from '../i18n'
 import { updateClaudeCode } from './auto-updater'
+import { commandExists, getTermuxPrefix, isTermux } from './platform'
 
 export async function isClaudeCodeInstalled(): Promise<boolean> {
   return await commandExists('claude')
@@ -11,7 +11,7 @@ export async function isClaudeCodeInstalled(): Promise<boolean> {
 
 export async function installClaudeCode(lang: SupportedLang): Promise<void> {
   const i18n = getTranslation(lang)
-  
+
   // Check if already installed
   const installed = await isClaudeCodeInstalled()
   if (installed) {
@@ -20,7 +20,7 @@ export async function installClaudeCode(lang: SupportedLang): Promise<void> {
     await updateClaudeCode(lang)
     return
   }
-  
+
   // Check if running in Termux
   if (isTermux()) {
     console.log(ansis.yellow(`ℹ ${i18n.installation.termuxDetected}`))
@@ -29,20 +29,21 @@ export async function installClaudeCode(lang: SupportedLang): Promise<void> {
     console.log(ansis.gray(`Node.js: ${termuxPrefix}/bin/node`))
     console.log(ansis.gray(`npm: ${termuxPrefix}/bin/npm`))
   }
-  
+
   console.log(i18n.installation.installing)
-  
+
   try {
     // Always use npm for installation to ensure automatic updates work
     // Note: If the user can run 'npx zcf', npm is already available
     await exec('npm', ['install', '-g', '@anthropic-ai/claude-code'])
     console.log(`✔ ${i18n.installation.installSuccess}`)
-    
+
     // Additional hint for Termux users
     if (isTermux()) {
       console.log(ansis.gray(`\nClaude Code installed to: ${getTermuxPrefix()}/bin/claude`))
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`✖ ${i18n.installation.installFailed}`)
     if (isTermux()) {
       console.error(ansis.yellow(`\n${i18n.installation.termuxInstallHint}\n`))

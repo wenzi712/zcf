@@ -12,7 +12,7 @@ export const api = {
   enterAuthToken: '请输入 Auth Token',
   enterApiKey: '请输入 API Key',
   apiConfigSuccess: 'API 配置完成',
-  
+
   // API modification
   existingApiConfig: '检测到已有 API 配置：',
   apiConfigUrl: 'URL',
@@ -31,7 +31,7 @@ export const api = {
   enterNewApiUrl: '请输入新的 API URL（当前：{url}）',
   enterNewApiKey: '请输入新的 API Key（当前：{key}）',
   selectNewAuthType: '选择新的认证类型（当前：{type}）',
-  
+
   // API validation
   apiKeyValidation: {
     empty: 'API Key 不能为空',
@@ -41,4 +41,4 @@ export const api = {
   invalidUrl: '无效的 URL',
   keyRequired: '密钥为必填项',
   invalidKeyFormat: '无效的密钥格式',
-};
+}

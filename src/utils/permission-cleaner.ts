@@ -11,13 +11,13 @@
  */
 export function cleanupPermissions(templatePermissions: string[], userPermissions: string[]): string[] {
   // Create a set for template permissions for O(1) lookup
-  const templateSet = new Set(templatePermissions);
+  const templateSet = new Set(templatePermissions)
 
   // Filter user permissions
   const cleanedPermissions = userPermissions.filter((permission) => {
     // Remove literal "mcp__.*" (invalid wildcard from v2.0 and earlier)
     if (['mcp__.*', 'mcp__*', 'mcp__(*)'].includes(permission)) {
-      return false;
+      return false
     }
 
     // Check if this permission is redundant (covered by a template permission)
@@ -25,30 +25,30 @@ export function cleanupPermissions(templatePermissions: string[], userPermission
     for (const templatePerm of templatePermissions) {
       // Skip if it's the exact same permission (will be handled by mergeArraysUnique)
       if (permission === templatePerm) {
-        continue;
+        continue
       }
 
       // Check if user permission starts with template permission followed by "("
       // This catches patterns like "Bash(*)", "Bash(mkdir:*)" when template has "Bash"
       if (permission.startsWith(templatePerm)) {
-        return false; // Remove this redundant permission
+        return false // Remove this redundant permission
       }
     }
 
     // Keep all other permissions
-    return true;
-  });
+    return true
+  })
 
   // Merge template and cleaned user permissions, removing duplicates
-  const merged = [...templateSet];
+  const merged = [...templateSet]
 
   for (const permission of cleanedPermissions) {
     if (!templateSet.has(permission)) {
-      merged.push(permission);
+      merged.push(permission)
     }
   }
 
-  return merged;
+  return merged
 }
 
 /**
@@ -60,10 +60,10 @@ export function cleanupPermissions(templatePermissions: string[], userPermission
  */
 export function mergeAndCleanPermissions(
   templatePermissions: string[] | undefined,
-  userPermissions: string[] | undefined
+  userPermissions: string[] | undefined,
 ): string[] {
-  const template = templatePermissions || [];
-  const user = userPermissions || [];
+  const template = templatePermissions || []
+  const user = userPermissions || []
 
-  return cleanupPermissions(template, user);
+  return cleanupPermissions(template, user)
 }

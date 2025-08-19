@@ -3,4 +3,4 @@ export const cli = {
   forceOverwrite: 'Force overwrite existing configuration',
   initClaudeConfig: 'Initialize Claude Code configuration',
   updatePromptsOnly: 'Update Claude Code prompts only',
-};
+}

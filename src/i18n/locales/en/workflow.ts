@@ -21,4 +21,4 @@ export const workflow = {
   workflowInstallError: 'workflow installation had errors',
   cleaningOldFiles: 'Cleaning up old version files',
   removedOldFile: 'Removed old file',
-};
+}

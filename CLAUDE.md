@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ZCF (Zero-Config Claude-Code Flow) is a CLI tool that automatically configures Claude Code environments. It's built with TypeScript and distributed as an npm package. The tool provides one-click setup for Claude Code including configuration files, API settings, MCP services, and AI workflows.
 
+## CLI Usage
+
+ZCF provides both direct commands and an interactive menu system:
+
+```bash
+# Interactive menu (recommended)
+npx zcf                    # Opens main menu with all options
+
+# Direct commands
+npx zcf i                  # Full initialization
+npx zcf u                  # Update workflows only
+npx zcf ccr [--lang <en|zh-CN>]  # Claude Code Router management
+npx zcf ccu [args...]      # Run ccusage with arguments
+npx zcf check-updates [--lang <en|zh-CN>]  # Check tool updates
+```
+
 ## Development Guidelines
 
 - **Documentation Language**: Except for README_zh, all code comments and documentation should be written in English
@@ -32,6 +48,16 @@ pnpm build
 
 # Type checking
 pnpm typecheck
+```
+
+### Code Quality & Linting
+
+```bash
+# Run ESLint (uses @antfu/eslint-config)
+pnpm lint
+
+# Fix ESLint issues automatically
+pnpm lint:fix
 ```
 
 ### Testing
@@ -86,6 +112,9 @@ pnpm release
 - `src/commands/init.ts` - Full initialization flow (install Claude Code + configure API + setup MCP)
 - `src/commands/update.ts` - Update workflow-related markdown files only
 - `src/commands/menu.ts` - Interactive menu system (default command)
+- `src/commands/ccr.ts` - Claude Code Router management and menu system
+- `src/commands/ccu.ts` - CCusage integration for Claude Code usage analysis
+- `src/commands/check-updates.ts` - Tool update checker for Claude Code, CCR, and CCometixLine
 
 ### Workflow System Architecture
 
@@ -102,24 +131,20 @@ pnpm release
 The project follows a modular utility architecture:
 
 - **Configuration Management**
-
   - `utils/config.ts` - Core configuration operations (backup, copy, API setup)
   - `utils/config-operations.ts` - Advanced config operations (partial updates, merging)
   - `utils/json-config.ts` - JSON file operations with error handling
   - `utils/zcf-config.ts` - ZCF-specific configuration persistence
 
 - **MCP (Model Context Protocol) Services**
-
   - `utils/mcp.ts` - MCP configuration management
   - `utils/mcp-selector.ts` - Interactive MCP service selection
 
 - **Installation & Platform**
-
   - `utils/installer.ts` - Claude Code installation logic
   - `utils/platform.ts` - Cross-platform compatibility (Windows/macOS/Linux/Termux)
 
 - **User Interaction**
-
   - `utils/prompts.ts` - Language selection and user prompts
   - `utils/ai-personality.ts` - AI personality configuration
   - `utils/banner.ts` - CLI banner display
@@ -173,6 +198,9 @@ Tests extensively use mocking for:
 5. **Error Recovery**: Exit prompt errors are handled separately to ensure clean termination
 6. **Workflow Installation**: Supports modular workflow installation with automatic dependency resolution
 7. **BMad Integration**: Enterprise workflow with specialized agents for complete Software Development Life Cycle (SDLC) management
+8. **CCR Integration**: Claude Code Router management through dedicated command and menu system
+9. **CCusage Integration**: Integration with npx ccusage for Claude Code usage analysis and statistics
+10. **Auto-Update System**: Automated checking and updating of Claude Code, CCR, and CCometixLine tools
 
 ### Type System
 
@@ -277,3 +305,8 @@ The CLI follows a modular command pattern:
 - Extensive mocking for file system operations, external command execution, and user prompts
 - Cross-platform testing with platform detection mocks
 - Comprehensive edge case testing for boundary conditions and error scenarios
+- **ESLint Integration**: Uses @antfu/eslint-config with formatters enabled
+  - Run `pnpm lint` to check code style and quality
+  - Run `pnpm lint:fix` to automatically fix issues
+  - Ignores `.bmad-core/` and `.claude/` directories
+  - Allows `console.log` statements for CLI output

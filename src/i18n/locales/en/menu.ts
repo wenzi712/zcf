@@ -40,4 +40,4 @@ export const menu = {
     checkUpdates: 'Check and update Claude Code, CCR and CCometixLine versions',
     changeLanguage: 'Change ZCF interface language',
   },
-};
+}

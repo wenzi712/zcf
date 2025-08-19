@@ -1,30 +1,30 @@
-import ansis from 'ansis';
-import type { CAC } from 'cac';
-import { version } from '../package.json';
-import { init } from './commands/init';
-import { showMainMenu } from './commands/menu';
-import { update } from './commands/update';
-import { executeCcusage } from './commands/ccu';
-import { ccr } from './commands/ccr';
-import { checkUpdates } from './commands/check-updates';
+import type { CAC } from 'cac'
+import ansis from 'ansis'
+import { version } from '../package.json'
+import { ccr } from './commands/ccr'
+import { executeCcusage } from './commands/ccu'
+import { checkUpdates } from './commands/check-updates'
+import { init } from './commands/init'
+import { showMainMenu } from './commands/menu'
+import { update } from './commands/update'
 
 export interface CliOptions {
-  init?: boolean;
-  lang?: 'zh-CN' | 'en';
-  configLang?: 'zh-CN' | 'en';
-  aiOutputLang?: string;
-  force?: boolean;
-  skipPrompt?: boolean;
+  init?: boolean
+  lang?: 'zh-CN' | 'en'
+  configLang?: 'zh-CN' | 'en'
+  aiOutputLang?: string
+  force?: boolean
+  skipPrompt?: boolean
   // Non-interactive parameters
-  configAction?: string; // default: backup
-  apiType?: string;
-  apiKey?: string; // Used for both API key and auth token
-  apiUrl?: string;
-  mcpServices?: string; // default: all non-key services, "skip" to skip all
-  workflows?: string; // default: all workflows, "skip" to skip all
-  aiPersonality?: string; // default: professional
-  allLang?: string; // New: unified language parameter
-  installCometixLine?: string | boolean; // New: CCometixLine installation control, default: true
+  configAction?: string // default: backup
+  apiType?: string
+  apiKey?: string // Used for both API key and auth token
+  apiUrl?: string
+  mcpServices?: string // default: all non-key services, "skip" to skip all
+  workflows?: string // default: all workflows, "skip" to skip all
+  aiPersonality?: string // default: professional
+  allLang?: string // New: unified language parameter
+  installCometixLine?: string | boolean // New: CCometixLine installation control, default: true
 }
 
 export function setupCommands(cli: CAC) {
@@ -35,8 +35,8 @@ export function setupCommands(cli: CAC) {
     .option('--config-lang, -c <lang>', 'Configuration language (zh-CN, en)')
     .option('--force, -f', 'Force overwrite existing configuration')
     .action(async (lang, options) => {
-      await handleDefaultCommand(lang, options);
-    });
+      await handleDefaultCommand(lang, options)
+    })
 
   // Init command
   cli
@@ -57,8 +57,8 @@ export function setupCommands(cli: CAC) {
     .option('--all-lang, -g <lang>', 'Set all language parameters to this value')
     .option('--install-cometix-line, -x <value>', 'Install CCometixLine statusline tool (true/false), default: true')
     .action(async (options) => {
-      await handleInitCommand(options);
-    });
+      await handleInitCommand(options)
+    })
 
   // Update command
   cli
@@ -66,24 +66,24 @@ export function setupCommands(cli: CAC) {
     .alias('u')
     .option('--config-lang, -c <lang>', 'Configuration language (zh-CN, en)')
     .action(async (options) => {
-      await handleUpdateCommand(options);
-    });
+      await handleUpdateCommand(options)
+    })
 
   // CCR command - Configure Claude Code Router
   cli
     .command('ccr', 'Configure Claude Code Router for model proxy')
     .option('--lang, -l <lang>', 'Display language (zh-CN, en)')
     .action(async (options) => {
-      await ccr({ lang: options.lang });
-    });
+      await ccr({ lang: options.lang })
+    })
 
   // CCU command - Claude Code usage analysis
   cli
     .command('ccu [...args]', 'Run Claude Code usage analysis tool')
     .allowUnknownOptions()
     .action(async (args) => {
-      await executeCcusage(args);
-    });
+      await executeCcusage(args)
+    })
 
   // Check updates command
   cli
@@ -91,12 +91,12 @@ export function setupCommands(cli: CAC) {
     .alias('check')
     .option('--lang, -l <lang>', 'Display language (zh-CN, en)')
     .action(async (options) => {
-      await checkUpdates({ lang: options.lang });
-    });
+      await checkUpdates({ lang: options.lang })
+    })
 
   // Custom help
-  cli.help((sections) => customizeHelp(sections));
-  cli.version(version);
+  cli.help(sections => customizeHelp(sections))
+  cli.version(version)
 }
 
 export async function handleDefaultCommand(lang: string | undefined, options: CliOptions) {
@@ -106,10 +106,11 @@ export async function handleDefaultCommand(lang: string | undefined, options: Cl
       lang: (lang || options.lang) as 'zh-CN' | 'en' | undefined,
       configLang: options.configLang,
       force: options.force,
-    });
-  } else {
+    })
+  }
+  else {
     // Show menu by default
-    await showMainMenu();
+    await showMainMenu()
   }
 }
 
@@ -129,11 +130,11 @@ export async function handleInitCommand(options: CliOptions) {
     aiPersonality: options.aiPersonality,
     allLang: options.allLang,
     installCometixLine: options.installCometixLine,
-  });
+  })
 }
 
 export async function handleUpdateCommand(options: { configLang?: string }) {
-  await update({ configLang: options.configLang as 'zh-CN' | 'en' | undefined });
+  await update({ configLang: options.configLang as 'zh-CN' | 'en' | undefined })
 }
 
 export function customizeHelp(sections: any[]) {
@@ -141,7 +142,7 @@ export function customizeHelp(sections: any[]) {
   sections.unshift({
     title: '',
     body: ansis.cyan.bold(`ZCF - Zero-Config Claude-Code Flow v${version}`),
-  });
+  })
 
   // Add commands section with aliases
   sections.push({
@@ -149,7 +150,7 @@ export function customizeHelp(sections: any[]) {
     body: [
       `  ${ansis.cyan('zcf')}              Show interactive menu (default) / 显示交互式菜单（默认）`,
       `  ${ansis.cyan('zcf init')} | ${ansis.cyan(
-        'i'
+        'i',
       )}     Initialize Claude Code configuration / 初始化 Claude Code 配置`,
       `  ${ansis.cyan('zcf update')} | ${ansis.cyan('u')}   Update workflow-related md files / 仅更新工作流相关md`,
       `  ${ansis.cyan('zcf ccr')}          Configure Claude Code Router for model proxy / 配置模型路由代理`,
@@ -161,7 +162,7 @@ export function customizeHelp(sections: any[]) {
       `  ${ansis.cyan('zcf u')}            Quick update / 快速更新`,
       `  ${ansis.cyan('zcf check')}        Quick check updates / 快速检查更新`,
     ].join('\n'),
-  });
+  })
 
   // Add options section
   sections.push({
@@ -186,7 +187,7 @@ export function customizeHelp(sections: any[]) {
       `  ${ansis.green('--ai-personality, -p')} <type> AI personality / AI个性 (default: professional)`,
       `  ${ansis.green('--install-cometix-line, -x')} <value> Install statusline tool / 安装状态栏工具 (default: true)`,
     ].join('\n'),
-  });
+  })
 
   // Add examples section
   sections.push({
@@ -223,7 +224,7 @@ export function customizeHelp(sections: any[]) {
       `  ${ansis.cyan('npx zcf --init -c zh-CN -f')}`,
       `  ${ansis.cyan('npx zcf --init --config-lang zh-CN --force')}`,
     ].join('\n'),
-  });
+  })
 
-  return sections;
+  return sections
 }

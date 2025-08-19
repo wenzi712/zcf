@@ -12,10 +12,10 @@ export const mcp = {
   windowsMcpFixed: 'Windows MCP configuration fixed',
   configureMcpServices: 'Configure MCP Services',
   selectMcpOption: 'Select MCP configuration option',
-};
+}
 
 export const mcpServices = {
-  context7: {
+  'context7': {
     name: 'Context7 Docs',
     description: 'Query latest library documentation and code examples',
   },
@@ -23,13 +23,13 @@ export const mcpServices = {
     name: 'DeepWiki',
     description: 'Query GitHub repository documentation and examples',
   },
-  Playwright: {
+  'Playwright': {
     name: 'Playwright Browser Control',
     description: 'Direct browser control for automation',
   },
-  exa: {
+  'exa': {
     name: 'Exa AI Search',
     description: 'Web search using Exa AI',
     apiKeyPrompt: 'Enter Exa API Key',
   },
-};
+}

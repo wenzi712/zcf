@@ -40,4 +40,4 @@ export const menu = {
     checkUpdates: '检查并更新 Claude Code、CCR 和 CCometixLine 的版本',
     changeLanguage: '更改 ZCF 界面语言',
   },
-};
+}

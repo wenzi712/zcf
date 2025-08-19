@@ -4,6 +4,7 @@
   "language": "en,en-US",
   "allowCompoundWords": true,
   "words": [
+    "antfu",
     "bmad",
     "cometix",
     "miaoda",
@@ -11,6 +12,7 @@
     "npmjs",
     "pathe",
     "rollup",
+    "SDLC",
     "vitest",
     "webp",
     "zcf"

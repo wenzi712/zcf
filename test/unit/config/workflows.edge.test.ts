@@ -1,48 +1,45 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { join } from 'pathe';
-import { existsSync } from 'node:fs';
-import { copyFile, mkdir, rm } from 'node:fs/promises';
-import inquirer from 'inquirer';
-import { 
-  getWorkflowConfig, 
-  getOrderedWorkflows,
-  WORKFLOW_CONFIGS 
-} from '../../../src/config/workflows';
-import { selectAndInstallWorkflows } from '../../../src/utils/workflow-installer';
-import { CLAUDE_DIR } from '../../../src/constants';
-import type { WorkflowConfig } from '../../../src/types/workflow';
+import type { WorkflowConfig } from '../../../src/types/workflow'
+import { existsSync } from 'node:fs'
+import { copyFile, mkdir, rm } from 'node:fs/promises'
+import inquirer from 'inquirer'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  getWorkflowConfig,
+  WORKFLOW_CONFIGS,
+} from '../../../src/config/workflows'
+import { selectAndInstallWorkflows } from '../../../src/utils/workflow-installer'
 
-vi.mock('node:fs');
-vi.mock('node:fs/promises');
-vi.mock('inquirer');
+vi.mock('node:fs')
+vi.mock('node:fs/promises')
+vi.mock('inquirer')
 
 describe('workflows edge cases and error handling', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.spyOn(console, 'log').mockImplementation(() => {});
-    vi.spyOn(console, 'error').mockImplementation(() => {});
-  });
+    vi.clearAllMocks()
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
 
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
+    vi.restoreAllMocks()
+  })
 
   describe('configuration edge cases', () => {
     it('should handle undefined workflow id gracefully', () => {
-      const result = getWorkflowConfig(undefined as any);
-      expect(result).toBeUndefined();
-    });
+      const result = getWorkflowConfig(undefined as any)
+      expect(result).toBeUndefined()
+    })
 
     it('should handle null workflow id gracefully', () => {
-      const result = getWorkflowConfig(null as any);
-      expect(result).toBeUndefined();
-    });
+      const result = getWorkflowConfig(null as any)
+      expect(result).toBeUndefined()
+    })
 
     it('should handle very long workflow id', () => {
-      const longId = 'a'.repeat(1000);
-      const result = getWorkflowConfig(longId);
-      expect(result).toBeUndefined();
-    });
+      const longId = 'a'.repeat(1000)
+      const result = getWorkflowConfig(longId)
+      expect(result).toBeUndefined()
+    })
 
     it('should handle special characters in workflow id', () => {
       const specialIds = [
@@ -51,52 +48,49 @@ describe('workflows edge cases and error handling', () => {
         'workflow\n\r',
         'workflow\0',
         '../../../etc/passwd',
-      ];
-      
-      specialIds.forEach(id => {
-        const result = getWorkflowConfig(id);
-        expect(result).toBeUndefined();
-      });
-    });
+      ]
 
-  });
+      specialIds.forEach((id) => {
+        const result = getWorkflowConfig(id)
+        expect(result).toBeUndefined()
+      })
+    })
+  })
 
   describe('file system edge cases', () => {
-
     it('should handle ENOSPC disk space error', async () => {
       vi.mocked(inquirer.prompt).mockResolvedValue({
         selectedWorkflows: ['gitWorkflow'],
-      });
-      vi.mocked(existsSync).mockReturnValue(true);
-      vi.mocked(mkdir).mockResolvedValue(undefined);
-      vi.mocked(copyFile).mockRejectedValue(new Error('ENOSPC: no space left on device'));
-      
-      await selectAndInstallWorkflows('en', 'en');
-      
-      expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining('ENOSPC')
-      );
-    });
+      })
+      vi.mocked(existsSync).mockReturnValue(true)
+      vi.mocked(mkdir).mockResolvedValue(undefined)
+      vi.mocked(copyFile).mockRejectedValue(new Error('ENOSPC: no space left on device'))
 
+      await selectAndInstallWorkflows('en', 'en')
+
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining('ENOSPC'),
+      )
+    })
 
     it('should handle concurrent workflow installations', async () => {
-      const promises = [];
-      
+      const promises = []
+
       // Simulate concurrent installations
       for (let i = 0; i < 3; i++) {
         vi.mocked(inquirer.prompt).mockResolvedValue({
           selectedWorkflows: ['gitWorkflow'],
-        });
-        vi.mocked(existsSync).mockReturnValue(true);
-        vi.mocked(copyFile).mockResolvedValue(undefined);
-        vi.mocked(mkdir).mockResolvedValue(undefined);
-        
-        promises.push(selectAndInstallWorkflows('en', 'en'));
+        })
+        vi.mocked(existsSync).mockReturnValue(true)
+        vi.mocked(copyFile).mockResolvedValue(undefined)
+        vi.mocked(mkdir).mockResolvedValue(undefined)
+
+        promises.push(selectAndInstallWorkflows('en', 'en'))
       }
-      
+
       // All should complete without errors
-      await expect(Promise.all(promises)).resolves.not.toThrow();
-    });
+      await expect(Promise.all(promises)).resolves.not.toThrow()
+    })
 
     it('should handle corrupted workflow configuration', async () => {
       const corruptedConfig = {
@@ -104,79 +98,79 @@ describe('workflows edge cases and error handling', () => {
         // Missing required fields
         commands: undefined,
         agents: null,
-      } as any;
-      
+      } as any
+
       // Test that the system handles corrupted config gracefully
-      const result = getWorkflowConfig(corruptedConfig.id);
+      const result = getWorkflowConfig(corruptedConfig.id)
       // Should still return valid config from WORKFLOW_CONFIGS
-      expect(result?.commands).toBeDefined();
-      expect(Array.isArray(result?.commands)).toBe(true);
-    });
-  });
+      expect(result?.commands).toBeDefined()
+      expect(Array.isArray(result?.commands)).toBe(true)
+    })
+  })
 
   describe('cleanup edge cases', () => {
     it('should handle partial cleanup failures', async () => {
       vi.mocked(inquirer.prompt).mockResolvedValue({
         selectedWorkflows: ['gitWorkflow'],
-      });
+      })
       vi.mocked(existsSync)
         .mockReturnValueOnce(true) // First old file exists
         .mockReturnValueOnce(true) // Second old file exists
-        .mockReturnValue(true);
+        .mockReturnValue(true)
       vi.mocked(rm)
         .mockResolvedValueOnce(undefined) // First removal succeeds
-        .mockRejectedValueOnce(new Error('Permission denied')); // Second fails
-      vi.mocked(copyFile).mockResolvedValue(undefined);
-      vi.mocked(mkdir).mockResolvedValue(undefined);
-      
-      await selectAndInstallWorkflows('en', 'en');
-      
+        .mockRejectedValueOnce(new Error('Permission denied')) // Second fails
+      vi.mocked(copyFile).mockResolvedValue(undefined)
+      vi.mocked(mkdir).mockResolvedValue(undefined)
+
+      await selectAndInstallWorkflows('en', 'en')
+
       // Should continue despite partial cleanup failure
-      expect(copyFile).toHaveBeenCalled();
-    });
+      expect(copyFile).toHaveBeenCalled()
+    })
 
     it('should handle cleanup with symlinks', async () => {
       vi.mocked(inquirer.prompt).mockResolvedValue({
         selectedWorkflows: ['gitWorkflow'],
-      });
-      vi.mocked(existsSync).mockReturnValue(true);
-      vi.mocked(rm).mockRejectedValue(new Error('EISDIR: illegal operation on a directory'));
-      vi.mocked(copyFile).mockResolvedValue(undefined);
-      vi.mocked(mkdir).mockResolvedValue(undefined);
-      
-      await selectAndInstallWorkflows('en', 'en');
-      
+      })
+      vi.mocked(existsSync).mockReturnValue(true)
+      vi.mocked(rm).mockRejectedValue(new Error('EISDIR: illegal operation on a directory'))
+      vi.mocked(copyFile).mockResolvedValue(undefined)
+      vi.mocked(mkdir).mockResolvedValue(undefined)
+
+      await selectAndInstallWorkflows('en', 'en')
+
       // Should handle symlink errors gracefully
-      expect(console.error).toHaveBeenCalled();
-      expect(copyFile).toHaveBeenCalled();
-    });
-  });
+      expect(console.error).toHaveBeenCalled()
+      expect(copyFile).toHaveBeenCalled()
+    })
+  })
 
   describe('i18n edge cases', () => {
     it('should handle missing translation keys', async () => {
       vi.mocked(inquirer.prompt).mockResolvedValue({
         selectedWorkflows: ['gitWorkflow'],
-      });
-      vi.mocked(existsSync).mockReturnValue(true);
-      vi.mocked(copyFile).mockResolvedValue(undefined);
-      vi.mocked(mkdir).mockResolvedValue(undefined);
-      
+      })
+      vi.mocked(existsSync).mockReturnValue(true)
+      vi.mocked(copyFile).mockResolvedValue(undefined)
+      vi.mocked(mkdir).mockResolvedValue(undefined)
+
       // Should not throw even with missing translations
-      await expect(selectAndInstallWorkflows('en', 'en')).resolves.not.toThrow();
-    });
-  });
+      await expect(selectAndInstallWorkflows('en', 'en')).resolves.not.toThrow()
+    })
+  })
 
   describe('workflow validation edge cases', () => {
     it('should validate workflow has at least one command', () => {
-      const gitWorkflow = WORKFLOW_CONFIGS.find(w => w.id === 'gitWorkflow');
-      expect(gitWorkflow?.commands.length).toBeGreaterThan(0);
-    });
+      const gitWorkflow = WORKFLOW_CONFIGS.find(w => w.id === 'gitWorkflow')
+      expect(gitWorkflow?.commands.length).toBeGreaterThan(0)
+    })
 
     it('should validate workflow category matches known categories', () => {
-      const validCategories = ['plan', 'sixStep', 'bmad', 'git'];
-      const gitWorkflow = WORKFLOW_CONFIGS.find(w => w.id === 'gitWorkflow');
-      expect(validCategories).toContain(gitWorkflow?.category);
-    });
+      const validCategories = ['plan', 'sixStep', 'bmad', 'git']
+      const gitWorkflow = WORKFLOW_CONFIGS.find(w => w.id === 'gitWorkflow')
+      expect(validCategories).toContain(gitWorkflow?.category)
+    })
 
     it('should handle workflow with empty commands array', () => {
       const emptyCommandsConfig: WorkflowConfig = {
@@ -190,31 +184,31 @@ describe('workflows edge cases and error handling', () => {
         agents: [],
         order: 99,
         outputDir: 'empty',
-      };
-      
+      }
+
       // System should handle empty commands gracefully
-      expect(emptyCommandsConfig.commands).toEqual([]);
-      expect(emptyCommandsConfig.commands.length).toBe(0);
-    });
+      expect(emptyCommandsConfig.commands).toEqual([])
+      expect(emptyCommandsConfig.commands.length).toBe(0)
+    })
 
     it('should validate git workflow specific properties', () => {
-      const gitWorkflow = WORKFLOW_CONFIGS.find(w => w.id === 'gitWorkflow');
-      
+      const gitWorkflow = WORKFLOW_CONFIGS.find(w => w.id === 'gitWorkflow')
+
       // Git workflow should not auto-install agents
-      expect(gitWorkflow?.autoInstallAgents).toBe(false);
-      
+      expect(gitWorkflow?.autoInstallAgents).toBe(false)
+
       // Git workflow should have empty agents array
-      expect(gitWorkflow?.agents).toEqual([]);
-      
+      expect(gitWorkflow?.agents).toEqual([])
+
       // Git workflow should have git category
-      expect(gitWorkflow?.category).toBe('git');
-      
+      expect(gitWorkflow?.category).toBe('git')
+
       // Git workflow commands should be markdown files
-      gitWorkflow?.commands.forEach(cmd => {
-        expect(cmd).toMatch(/\.md$/);
-      });
-    });
-  });
+      gitWorkflow?.commands.forEach((cmd) => {
+        expect(cmd).toMatch(/\.md$/)
+      })
+    })
+  })
 
   describe('installation result validation', () => {
     it('should validate installation result structure', async () => {
@@ -229,35 +223,35 @@ describe('workflows edge cases and error handling', () => {
         agents: [],
         order: 4,
         outputDir: 'git',
-      };
+      }
 
-      vi.mocked(existsSync).mockReturnValue(true);
-      vi.mocked(copyFile).mockResolvedValue(undefined);
-      vi.mocked(mkdir).mockResolvedValue(undefined);
+      vi.mocked(existsSync).mockReturnValue(true)
+      vi.mocked(copyFile).mockResolvedValue(undefined)
+      vi.mocked(mkdir).mockResolvedValue(undefined)
 
-      const module = await import('../../../src/utils/workflow-installer');
-      const installWorkflowWithDependencies = (module as any).installWorkflowWithDependencies;
+      const module = await import('../../../src/utils/workflow-installer')
+      const installWorkflowWithDependencies = (module as any).installWorkflowWithDependencies
 
       if (installWorkflowWithDependencies) {
         const result = await installWorkflowWithDependencies(
           gitWorkflowConfig,
           'en',
-          'en'
-        );
+          'en',
+        )
 
         // Validate result structure
-        expect(result).toHaveProperty('workflow');
-        expect(result).toHaveProperty('success');
-        expect(result).toHaveProperty('installedCommands');
-        expect(result).toHaveProperty('installedAgents');
-        expect(result).toHaveProperty('errors');
-        
-        expect(typeof result.workflow).toBe('string');
-        expect(typeof result.success).toBe('boolean');
-        expect(Array.isArray(result.installedCommands)).toBe(true);
-        expect(Array.isArray(result.installedAgents)).toBe(true);
-        expect(Array.isArray(result.errors)).toBe(true);
+        expect(result).toHaveProperty('workflow')
+        expect(result).toHaveProperty('success')
+        expect(result).toHaveProperty('installedCommands')
+        expect(result).toHaveProperty('installedAgents')
+        expect(result).toHaveProperty('errors')
+
+        expect(typeof result.workflow).toBe('string')
+        expect(typeof result.success).toBe('boolean')
+        expect(Array.isArray(result.installedCommands)).toBe(true)
+        expect(Array.isArray(result.installedAgents)).toBe(true)
+        expect(Array.isArray(result.errors)).toBe(true)
       }
-    });
-  });
-});
+    })
+  })
+})

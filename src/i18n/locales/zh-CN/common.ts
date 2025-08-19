@@ -6,7 +6,7 @@ export const common = {
   skip: '跳过',
   cancelled: '操作已取消',
   error: '错误',
-  complete: "🎉 配置完成！使用 'claude' 命令开始体验。",
+  complete: '🎉 配置完成！使用 \'claude\' 命令开始体验。',
   none: '无',
   notConfigured: '未配置',
   spaceToSelectReturn: '- 空格选择，回车提交',
@@ -15,4 +15,4 @@ export const common = {
   goodbye: '👋 感谢使用 ZCF！再见！',
   returnToMenu: '返回主菜单？',
   back: '返回',
-};
+}

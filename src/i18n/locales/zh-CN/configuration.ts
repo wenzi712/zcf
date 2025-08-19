@@ -70,4 +70,4 @@ export const configuration = {
   memoryDirNotFound: '未找到记忆目录',
   failedToSetOnboarding: '设置引导标志失败',
   fixWindowsMcp: '修复 Windows MCP 配置？',
-};
+}

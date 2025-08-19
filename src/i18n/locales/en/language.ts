@@ -7,11 +7,11 @@ export const language = {
   languageChanged: 'Language changed',
   configLangHint: {
     'zh-CN': 'easier for Chinese users to customize',
-    en: 'recommended, lower token consumption',
+    'en': 'recommended, lower token consumption',
   },
   updateConfigLangPrompt: 'Select configuration language',
   updateConfigLangChoice: {
     'zh-CN': 'Chinese configuration',
-    en: 'English configuration',
+    'en': 'English configuration',
   },
-};
+}

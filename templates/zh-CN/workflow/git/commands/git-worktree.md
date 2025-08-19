@@ -37,60 +37,67 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 
 ### Options
 
-| 选项 | 说明 |
-|------|------|
-| `add <path>` | 在 `.zcf/<path>` 添加新的 worktree |
-| `migrate <target>` | 迁移内容到指定 worktree |
-| `list` | 列出所有 worktree 及其状态 |
-| `remove <path>` | 删除指定路径的 worktree |
-| `prune` | 清理无效的 worktree 引用 |
-| `-b <branch>` | 创建新分支并检出到 worktree |
-| `-o, --open` | 创建成功后直接用 IDE 打开（跳过询问）|
-| `--from <source>` | 指定迁移源路径（migrate 专用）|
-| `--stash` | 迁移当前 stash 内容（migrate 专用）|
-| `--track` | 设置新分支跟踪对应的远程分支 |
-| `--guess-remote` | 自动猜测远程分支进行跟踪 |
-| `--detach` | 创建分离 HEAD 的 worktree |
-| `--checkout` | 创建后立即检出（默认行为）|
-| `--lock` | 创建后锁定 worktree |
+| 选项               | 说明                                  |
+| ------------------ | ------------------------------------- |
+| `add <path>`       | 在 `.zcf/<path>` 添加新的 worktree    |
+| `migrate <target>` | 迁移内容到指定 worktree               |
+| `list`             | 列出所有 worktree 及其状态            |
+| `remove <path>`    | 删除指定路径的 worktree               |
+| `prune`            | 清理无效的 worktree 引用              |
+| `-b <branch>`      | 创建新分支并检出到 worktree           |
+| `-o, --open`       | 创建成功后直接用 IDE 打开（跳过询问） |
+| `--from <source>`  | 指定迁移源路径（migrate 专用）        |
+| `--stash`          | 迁移当前 stash 内容（migrate 专用）   |
+| `--track`          | 设置新分支跟踪对应的远程分支          |
+| `--guess-remote`   | 自动猜测远程分支进行跟踪              |
+| `--detach`         | 创建分离 HEAD 的 worktree             |
+| `--checkout`       | 创建后立即检出（默认行为）            |
+| `--lock`           | 创建后锁定 worktree                   |
 
 ---
 
 ## What This Command Does
 
 ### 1. **环境检查**
-   - 通过 `git rev-parse --is-inside-work-tree` 确认在 Git 仓库中
+
+- 通过 `git rev-parse --is-inside-work-tree` 确认在 Git 仓库中
 
 ### 2. **忽略规则配置**
-   - 检查 `.git/info/exclude` 是否包含 `/.zcf/` 规则
-   - 如果不存在，自动添加 `/.zcf/` 到 `.git/info/exclude`
+
+- 检查 `.git/info/exclude` 是否包含 `/.zcf/` 规则
+- 如果不存在，自动添加 `/.zcf/` 到 `.git/info/exclude`
 
 ### 3. **Worktree 操作**
-   - **add**: 在 `.zcf/<path>` 创建新的 worktree
-   - **list**: 显示所有 worktree 的路径、分支和状态
-   - **remove**: 安全删除指定的 worktree
-   - **prune**: 清理孤立的 worktree 记录
+
+- **add**: 在 `.zcf/<path>` 创建新的 worktree
+- **list**: 显示所有 worktree 的路径、分支和状态
+- **remove**: 安全删除指定的 worktree
+- **prune**: 清理孤立的 worktree 记录
 
 ### 4. **🆕 IDE 快速打开功能**
-   - **默认行为**：`add` 操作成功后询问是否用 IDE 打开新 worktree
-   - **直接打开**：使用 `-o/--open` 参数跳过询问，直接打开
-   - **IDE 检测**：自动检测常用 IDE（VS Code、Cursor、WebStorm 等）
-   - **智能选择**：基于项目类型和已安装的 IDE 推荐最佳选择
+
+- **默认行为**：`add` 操作成功后询问是否用 IDE 打开新 worktree
+- **直接打开**：使用 `-o/--open` 参数跳过询问，直接打开
+- **IDE 检测**：自动检测常用 IDE（VS Code、Cursor、WebStorm 等）
+- **智能选择**：基于项目类型和已安装的 IDE 推荐最佳选择
 
 ### 5. **🆕 内容迁移功能**
-   - **未提交内容迁移**：将一个 worktree 的未提交改动迁移到另一个
-   - **Stash 迁移**：将当前 stash 内容应用到目标 worktree
-   - **安全检查**：迁移前检查目标 worktree 状态，避免冲突
+
+- **未提交内容迁移**：将一个 worktree 的未提交改动迁移到另一个
+- **Stash 迁移**：将当前 stash 内容应用到目标 worktree
+- **安全检查**：迁移前检查目标 worktree 状态，避免冲突
 
 ### 6. **路径处理**
-   - 所有相对路径自动添加 `.zcf/` 前缀
-   - 绝对路径保持原样
-   - 自动创建 `.zcf/` 目录（如果不存在）
+
+- 所有相对路径自动添加 `.zcf/` 前缀
+- 绝对路径保持原样
+- 自动创建 `.zcf/` 目录（如果不存在）
 
 ### 7. **分支管理**
-   - 支持检出现有分支或创建新分支
-   - 自动处理远程分支跟踪
-   - 提供分支状态和 HEAD 位置信息
+
+- 支持检出现有分支或创建新分支
+- 自动处理远程分支跟踪
+- 提供分支状态和 HEAD 位置信息
 
 ---
 
@@ -99,12 +106,14 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ### 🖥️ **IDE 集成**
 
 **支持的 IDE**
+
 - **VS Code**: `code <path>`
-- **Cursor**: `cursor <path>`  
+- **Cursor**: `cursor <path>`
 - **WebStorm**: `webstorm <path>`
 - **其他**: 可配置自定义 IDE 命令
 
 **打开模式**
+
 ```bash
 # 默认：创建后询问是否打开
 /git-worktree add feature-ui
@@ -116,6 +125,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 **智能检测流程**
+
 1. 检查系统中已安装的 IDE
 2. 基于项目类型推荐（如 Node.js 项目推荐 VS Code）
 3. 提供选择菜单让用户选择（默认模式）
@@ -124,6 +134,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ### 📦 **内容迁移系统**
 
 **迁移类型**
+
 ```bash
 # 从主分支迁移未提交内容
 /git-worktree migrate feature-ui --from main
@@ -139,6 +150,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 **迁移流程**
+
 1. **源检查**：验证源路径存在且有未提交内容
 2. **目标检查**：确保目标 worktree 工作区干净
 3. **内容分析**：显示即将迁移的文件和改动
@@ -155,12 +167,14 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 - **状态显示**：清晰显示每个 worktree 的分支、提交和状态
 
 ### **迁移安全保护**
+
 - **冲突检测**：迁移前检查是否会产生文件冲突
 - **备份机制**：迁移前自动创建 stash 备份
 - **回滚支持**：提供迁移失败时的回滚方案
 - **状态验证**：确保源和目标 worktree 处于正确状态
 
 ### **IDE 集成安全**
+
 - **路径验证**：确保 IDE 命令使用正确的路径
 - **权限检查**：验证 IDE 可执行文件的权限
 - **错误处理**：IDE 启动失败时的友好错误提示
@@ -170,6 +184,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ## Examples
 
 ### **基础使用 + IDE 打开**
+
 ```bash
 # 创建 worktree 并询问 IDE 打开（默认行为）
 /git-worktree add feature-ui
@@ -195,6 +210,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 ### **内容迁移场景**
+
 ```bash
 # 场景：在 main 分支开发了一些功能，想移到新分支
 # 1. 创建新的 feature worktree
@@ -215,6 +231,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 ### **Stash 迁移**
+
 ```bash
 # 当前有一些 stash，想应用到特定 worktree
 /git-worktree migrate hotfix --stash
@@ -228,6 +245,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 ### **列出和管理 worktree**
+
 ```bash
 # 查看所有 worktree
 /git-worktree list
@@ -252,6 +270,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ## Directory Structure
 
 使用此命令后，项目结构会是：
+
 ```
 your-project/
 ├── .git/
@@ -269,7 +288,9 @@ your-project/
 ## Configuration
 
 ### **IDE 偏好设置**
+
 命令会在 `.zcf/.worktree-config` 中保存用户偏好：
+
 ```json
 {
   "preferredIDE": "code",
@@ -280,6 +301,7 @@ your-project/
 ```
 
 ### **自定义 IDE 命令**
+
 ```bash
 # 设置自定义 IDE
 git config worktree.ide.custom "subl %s"  # Sublime Text

@@ -1,74 +1,78 @@
-import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
-import ansis from 'ansis';
-import type { SupportedLang } from '../../constants';
-import { getTranslation } from '../../i18n';
-import { updateCcr } from '../auto-updater';
+import type { SupportedLang } from '../../constants'
+import { exec } from 'node:child_process'
+import { promisify } from 'node:util'
+import ansis from 'ansis'
+import { getTranslation } from '../../i18n'
+import { updateCcr } from '../auto-updater'
 
-const execAsync = promisify(exec);
+const execAsync = promisify(exec)
 
 export interface CcrInstallStatus {
-  isInstalled: boolean;
-  hasCorrectPackage: boolean;
+  isInstalled: boolean
+  hasCorrectPackage: boolean
 }
 
 export async function isCcrInstalled(): Promise<CcrInstallStatus> {
   // First check if ccr command exists
-  let commandExists = false;
+  let commandExists = false
   try {
     // Try to run ccr version to check if it's installed
-    await execAsync('ccr version');
-    commandExists = true;
-  } catch {
+    await execAsync('ccr version')
+    commandExists = true
+  }
+  catch {
     // If ccr command not found, try which command
     try {
-      await execAsync('which ccr');
-      commandExists = true;
-    } catch {
-      commandExists = false;
+      await execAsync('which ccr')
+      commandExists = true
+    }
+    catch {
+      commandExists = false
     }
   }
 
   // Check if the correct package is installed
-  let hasCorrectPackage = false;
+  let hasCorrectPackage = false
   try {
-    await execAsync('npm list -g @musistudio/claude-code-router');
-    hasCorrectPackage = true;
-  } catch {
+    await execAsync('npm list -g @musistudio/claude-code-router')
+    hasCorrectPackage = true
+  }
+  catch {
     // Correct package not found
-    hasCorrectPackage = false;
+    hasCorrectPackage = false
   }
 
   // If command exists but correct package is not installed,
   // it means the incorrect package is installed
   return {
     isInstalled: commandExists,
-    hasCorrectPackage: hasCorrectPackage
-  };
+    hasCorrectPackage,
+  }
 }
 
 export async function getCcrVersion(): Promise<string | null> {
   try {
-    const { stdout } = await execAsync('ccr version');
+    const { stdout } = await execAsync('ccr version')
     // Extract version from output
-    const match = stdout.match(/(\d+\.\d+\.\d+)/);
-    return match ? match[1] : null;
-  } catch {
-    return null;
+    const match = stdout.match(/(\d+\.\d+\.\d+)/)
+    return match ? match[1] : null
+  }
+  catch {
+    return null
   }
 }
 
 export async function installCcr(scriptLang: SupportedLang): Promise<void> {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   // Check CCR installation status
-  const { isInstalled, hasCorrectPackage } = await isCcrInstalled();
+  const { isInstalled, hasCorrectPackage } = await isCcrInstalled()
 
   // If correct package is already installed, just check for updates
   if (hasCorrectPackage) {
-    console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));
-    await updateCcr(scriptLang);
-    return;
+    console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`))
+    await updateCcr(scriptLang)
+    return
   }
 
   // If ccr command exists but correct package is not installed,
@@ -76,54 +80,58 @@ export async function installCcr(scriptLang: SupportedLang): Promise<void> {
   if (isInstalled && !hasCorrectPackage) {
     // Try to uninstall the incorrect package
     try {
-      await execAsync('npm list -g claude-code-router');
-      console.log(ansis.yellow(`⚠ ${i18n.ccr.detectedIncorrectPackage}`));
+      await execAsync('npm list -g claude-code-router')
+      console.log(ansis.yellow(`⚠ ${i18n.ccr.detectedIncorrectPackage}`))
       try {
-        await execAsync('npm uninstall -g claude-code-router');
-        console.log(ansis.green(`✔ ${i18n.ccr.uninstalledIncorrectPackage}`));
-      } catch (uninstallError) {
-        console.log(ansis.yellow(`⚠ ${i18n.ccr.failedToUninstallIncorrectPackage}`));
+        await execAsync('npm uninstall -g claude-code-router')
+        console.log(ansis.green(`✔ ${i18n.ccr.uninstalledIncorrectPackage}`))
       }
-    } catch {
+      catch {
+        console.log(ansis.yellow(`⚠ ${i18n.ccr.failedToUninstallIncorrectPackage}`))
+      }
+    }
+    catch {
       // Incorrect package not found, but ccr command exists
       // This could be a different installation method
     }
   }
 
   // Install the correct package
-  console.log(ansis.cyan(`📦 ${i18n.ccr.installingCcr}`));
+  console.log(ansis.cyan(`📦 ${i18n.ccr.installingCcr}`))
 
   try {
-    await execAsync('npm install -g @musistudio/claude-code-router --force');
-    console.log(ansis.green(`✔ ${i18n.ccr.ccrInstallSuccess}`));
-  } catch (error: any) {
+    await execAsync('npm install -g @musistudio/claude-code-router --force')
+    console.log(ansis.green(`✔ ${i18n.ccr.ccrInstallSuccess}`))
+  }
+  catch (error: any) {
     // Check if it's an EEXIST error
     if (error.message?.includes('EEXIST')) {
-      console.log(ansis.yellow(`⚠ ${i18n.ccr.ccrAlreadyInstalled}`));
+      console.log(ansis.yellow(`⚠ ${i18n.ccr.ccrAlreadyInstalled}`))
       // Check for updates even if EEXIST error
-      await updateCcr(scriptLang);
-      return;
+      await updateCcr(scriptLang)
+      return
     }
-    console.error(ansis.red(`✖ ${i18n.ccr.ccrInstallFailed}`));
-    throw error;
+    console.error(ansis.red(`✖ ${i18n.ccr.ccrInstallFailed}`))
+    throw error
   }
 }
 
 export async function startCcrService(scriptLang?: SupportedLang): Promise<void> {
-  const lang = scriptLang || 'zh-CN';
-  const i18n = getTranslation(lang);
+  const lang = scriptLang || 'zh-CN'
+  const i18n = getTranslation(lang)
 
   try {
     // Start CCR service in background
     exec('ccr', (error) => {
       if (error) {
-        console.error(ansis.red(`${i18n.ccr.failedToStartCcrService}:`), error);
+        console.error(ansis.red(`${i18n.ccr.failedToStartCcrService}:`), error)
       }
-    });
+    })
 
     // Give it a moment to start
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-  } catch (error) {
-    console.error(ansis.red(`${i18n.ccr.errorStartingCcrService}:`), error);
+    await new Promise(resolve => setTimeout(resolve, 2000))
+  }
+  catch (error) {
+    console.error(ansis.red(`${i18n.ccr.errorStartingCcrService}:`), error)
   }
 }

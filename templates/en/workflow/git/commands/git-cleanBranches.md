@@ -32,6 +32,7 @@ Runs in **read-only preview (`--dry-run`)** mode by default, requiring explicit 
 ```
 
 ### Options
+
 - `--base <branch>`: Specify the base branch for cleanup (defaults to repository's `main`/`master`).
 - `--stale <days>`: Clean branches with no commits for specified days (disabled by default).
 - `--remote`: Also clean remote merged/stale branches.

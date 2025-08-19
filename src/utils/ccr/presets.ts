@@ -1,24 +1,24 @@
-import type { ProviderPreset } from '../../types/ccr';
+import type { ProviderPreset } from '../../types/ccr'
 
-const PROVIDER_PRESETS_URL = 'https://pub-0dc3e1677e894f07bbea11b17a29e032.r2.dev/providers.json';
+const PROVIDER_PRESETS_URL = 'https://pub-0dc3e1677e894f07bbea11b17a29e032.r2.dev/providers.json'
 
 export async function fetchProviderPresets(): Promise<ProviderPreset[]> {
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
 
     const response = await fetch(PROVIDER_PRESETS_URL, {
       signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
+    })
+    clearTimeout(timeoutId)
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
-    const data = await response.json();
+    const data = await response.json()
 
     // Transform the data to our ProviderPreset format
-    const presets: ProviderPreset[] = [];
+    const presets: ProviderPreset[] = []
 
     // Parse the providers from the fetched data (it's an array)
     if (Array.isArray(data)) {
@@ -32,14 +32,15 @@ export async function fetchProviderPresets(): Promise<ProviderPreset[]> {
             models: provider.models || [],
             description: provider.description || provider.name || '',
             transformer: provider.transformer,
-          });
+          })
         }
       }
-    } else if (data && typeof data === 'object') {
+    }
+    else if (data && typeof data === 'object') {
       // Fallback for object format
       for (const [key, value] of Object.entries(data)) {
         if (typeof value === 'object' && value !== null) {
-          const provider = value as any;
+          const provider = value as any
           presets.push({
             name: provider.name || key,
             provider: key,
@@ -48,16 +49,16 @@ export async function fetchProviderPresets(): Promise<ProviderPreset[]> {
             models: provider.models || [],
             description: provider.description || '',
             transformer: provider.transformer,
-          });
+          })
         }
       }
     }
 
-    return presets;
-  } catch (error) {
+    return presets
+  }
+  catch {
     // Silently fall back to local presets, don't show error to user
-    // console.error('Failed to fetch provider presets:', error);
-    return getFallbackPresets();
+    return getFallbackPresets()
   }
 }
 
@@ -71,7 +72,7 @@ export function getFallbackPresets(): ProviderPreset[] {
       models: ['qwen3-coder-plus'],
       description: 'Alibaba DashScope',
       transformer: {
-        use: [['maxtoken', { max_tokens: 65536 }]],
+        'use': [['maxtoken', { max_tokens: 65536 }]],
         'qwen3-coder-plus': {
           use: ['enhancetool'],
         },
@@ -85,7 +86,7 @@ export function getFallbackPresets(): ProviderPreset[] {
       models: ['deepseek-chat', 'deepseek-reasoner'],
       description: 'DeepSeek AI models',
       transformer: {
-        use: ['deepseek'],
+        'use': ['deepseek'],
         'deepseek-chat': {
           use: ['tooluse'],
         },
@@ -110,7 +111,7 @@ export function getFallbackPresets(): ProviderPreset[] {
       models: ['Qwen/Qwen3-Coder-480B-A35B-Instruct', 'Qwen/Qwen3-235B-A22B-Thinking-2507', 'ZhipuAI/GLM-4.5'],
       description: 'ModelScope AI models',
       transformer: {
-        use: [['maxtoken', { max_tokens: 65536 }]],
+        'use': [['maxtoken', { max_tokens: 65536 }]],
         'Qwen/Qwen3-Coder-480B-A35B-Instruct': {
           use: ['enhancetool'],
         },
@@ -157,5 +158,5 @@ export function getFallbackPresets(): ProviderPreset[] {
         use: ['deepseek'],
       },
     },
-  ];
+  ]
 }

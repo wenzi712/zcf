@@ -8,11 +8,11 @@ export const cometixMessages = {
   statusLineConfigFailed: '状态栏配置失败',
   statusLineManualConfig: '请手动添加状态栏配置到 Claude Code 设置中',
   statusLineAlreadyConfigured: 'Claude Code 状态栏配置已存在',
-  
+
   // Installation prompt in init
   installCometixPrompt: '是否安装 CCometixLine - 基于 Rust 的高性能 Claude Code 状态栏工具，集成 Git 信息和实时使用量跟踪？',
   cometixSkipped: 'CCometixLine 安装已跳过',
-  
+
   // Commands
   installingOrUpdating: '正在安装/更新 CCometixLine...',
   installUpdateSuccess: 'CCometixLine 安装/更新完成',
@@ -24,7 +24,7 @@ export const cometixMessages = {
   tuiConfigSuccess: 'TUI 配置完成成功',
   tuiConfigFailed: '运行 TUI 配置失败',
   commandNotFound: 'ccline 命令未找到。请先安装 CCometixLine。',
-  
+
   // CCometixLine Menu
   cometixMenuTitle: 'CCometixLine - 基于 Rust 的高性能 Claude Code 状态栏工具，集成 Git 信息和实时使用量跟踪',
   cometixMenuOptions: {
@@ -38,4 +38,4 @@ export const cometixMessages = {
     printConfig: '显示当前 CCometixLine 配置',
     customConfig: '进入 CCometixLine 的 TUI 配置模式',
   },
-};
+}

@@ -1,9 +1,9 @@
 export interface McpService {
   id: string
-  name: { en: string; 'zh-CN': string }
-  description: { en: string; 'zh-CN': string }
+  name: { 'en': string, 'zh-CN': string }
+  description: { 'en': string, 'zh-CN': string }
   requiresApiKey: boolean
-  apiKeyPrompt?: { en: string; 'zh-CN': string }
+  apiKeyPrompt?: { 'en': string, 'zh-CN': string }
   apiKeyPlaceholder?: string
   apiKeyEnvVar?: string
   config: McpServerConfig

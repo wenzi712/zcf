@@ -12,10 +12,10 @@ export const mcp = {
   windowsMcpFixed: 'Windows MCP 配置已修复',
   configureMcpServices: '配置 MCP 服务',
   selectMcpOption: '选择 MCP 配置选项',
-};
+}
 
 export const mcpServices = {
-  context7: {
+  'context7': {
     name: 'Context7 文档查询',
     description: '查询最新的库文档和代码示例',
   },
@@ -23,13 +23,13 @@ export const mcpServices = {
     name: 'DeepWiki',
     description: '查询 GitHub 仓库文档和示例',
   },
-  Playwright: {
+  'Playwright': {
     name: 'Playwright 浏览器控制',
     description: '直接控制浏览器进行自动化操作',
   },
-  exa: {
+  'exa': {
     name: 'Exa AI 搜索',
     description: '使用 Exa AI 进行网页搜索',
     apiKeyPrompt: '请输入 Exa API Key',
   },
-};
+}

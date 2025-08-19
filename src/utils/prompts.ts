@@ -1,49 +1,50 @@
-import ansis from 'ansis';
-import inquirer from 'inquirer';
-import { version } from '../../package.json';
-import type { AiOutputLanguage, SupportedLang } from '../constants';
-import { AI_OUTPUT_LANGUAGES, LANG_LABELS, SUPPORTED_LANGS } from '../constants';
-import { getTranslation } from '../i18n';
-import type { ZcfConfig } from './zcf-config';
-import { readZcfConfig, updateZcfConfig } from './zcf-config';
-import { addNumbersToChoices } from './prompt-helpers';
+import type { AiOutputLanguage, SupportedLang } from '../constants'
+import type { ZcfConfig } from './zcf-config'
+import process from 'node:process'
+import ansis from 'ansis'
+import inquirer from 'inquirer'
+import { version } from '../../package.json'
+import { AI_OUTPUT_LANGUAGES, LANG_LABELS, SUPPORTED_LANGS } from '../constants'
+import { getTranslation } from '../i18n'
+import { addNumbersToChoices } from './prompt-helpers'
+import { readZcfConfig, updateZcfConfig } from './zcf-config'
 
 /**
  * Prompt user to select AI output language
  */
 export async function selectAiOutputLanguage(
   scriptLang: SupportedLang,
-  defaultLang?: AiOutputLanguage | string
+  defaultLang?: AiOutputLanguage | string,
 ): Promise<AiOutputLanguage | string> {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
-  console.log(ansis.dim(`\n  ${i18n.language.aiOutputLangHint}\n`));
+  console.log(ansis.dim(`\n  ${i18n.language.aiOutputLangHint}\n`))
 
   const aiLangChoices = Object.entries(AI_OUTPUT_LANGUAGES).map(([key, value]) => ({
     title: value.label,
     value: key,
-  }));
+  }))
 
   // Set default selection
-  const defaultChoice = defaultLang || (scriptLang === 'zh-CN' ? 'zh-CN' : 'en');
+  const defaultChoice = defaultLang || (scriptLang === 'zh-CN' ? 'zh-CN' : 'en')
 
   const { lang } = await inquirer.prompt<{ lang: string }>({
     type: 'list',
     name: 'lang',
     message: i18n.language.selectAiOutputLang,
-    choices: addNumbersToChoices(aiLangChoices.map((choice) => ({
+    choices: addNumbersToChoices(aiLangChoices.map(choice => ({
       name: choice.title,
       value: choice.value,
     }))),
     default: defaultChoice,
-  });
+  })
 
   if (!lang) {
-    console.log(ansis.yellow(i18n.common.cancelled));
-    process.exit(0);
+    console.log(ansis.yellow(i18n.common.cancelled))
+    process.exit(0)
   }
 
-  let aiOutputLang = lang as AiOutputLanguage;
+  const aiOutputLang = lang as AiOutputLanguage
 
   // If custom language selected, ask for the specific language
   if (aiOutputLang === 'custom') {
@@ -51,18 +52,18 @@ export async function selectAiOutputLanguage(
       type: 'input',
       name: 'customLang',
       message: i18n.language.enterCustomLanguage,
-      validate: (value) => !!value || i18n.language?.languageRequired || 'Language is required',
-    });
+      validate: value => !!value || i18n.language?.languageRequired || 'Language is required',
+    })
 
     if (!customLang) {
-      console.log(ansis.yellow(i18n.common.cancelled));
-      process.exit(0);
+      console.log(ansis.yellow(i18n.common.cancelled))
+      process.exit(0)
     }
 
-    return customLang;
+    return customLang
   }
 
-  return aiOutputLang;
+  return aiOutputLang
 }
 
 /**
@@ -70,14 +71,14 @@ export async function selectAiOutputLanguage(
  */
 export async function selectScriptLanguage(currentLang?: SupportedLang): Promise<SupportedLang> {
   // Try to read from saved config first
-  const zcfConfig = readZcfConfig();
+  const zcfConfig = readZcfConfig()
   if (zcfConfig?.preferredLang) {
-    return zcfConfig.preferredLang;
+    return zcfConfig.preferredLang
   }
 
   // If provided as parameter, use it
   if (currentLang) {
-    return currentLang;
+    return currentLang
   }
 
   // Ask user to select
@@ -85,26 +86,26 @@ export async function selectScriptLanguage(currentLang?: SupportedLang): Promise
     type: 'list',
     name: 'lang',
     message: 'Select ZCF display language / 选择ZCF显示语言',
-    choices: addNumbersToChoices(SUPPORTED_LANGS.map((l) => ({
+    choices: addNumbersToChoices(SUPPORTED_LANGS.map(l => ({
       name: LANG_LABELS[l],
       value: l,
     }))),
-  });
+  })
 
   if (!lang) {
-    console.log(ansis.yellow('Operation cancelled / 操作已取消'));
-    process.exit(0);
+    console.log(ansis.yellow('Operation cancelled / 操作已取消'))
+    process.exit(0)
   }
 
-  const scriptLang = lang;
+  const scriptLang = lang
 
   // Save the selected language preference
   updateZcfConfig({
     version,
     preferredLang: scriptLang,
-  });
+  })
 
-  return scriptLang;
+  return scriptLang
 }
 
 /**
@@ -114,21 +115,21 @@ export async function selectScriptLanguage(currentLang?: SupportedLang): Promise
 export async function resolveAiOutputLanguage(
   scriptLang: SupportedLang,
   commandLineOption?: AiOutputLanguage | string,
-  savedConfig?: ZcfConfig | null
+  savedConfig?: ZcfConfig | null,
 ): Promise<AiOutputLanguage | string> {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   // Priority 1: Command line option
   if (commandLineOption) {
-    return commandLineOption;
+    return commandLineOption
   }
 
   // Priority 2: Saved config
   if (savedConfig?.aiOutputLang) {
-    console.log(ansis.gray(`✔ ${i18n.language.aiOutputLangHint}: ${savedConfig.aiOutputLang}`));
-    return savedConfig.aiOutputLang;
+    console.log(ansis.gray(`✔ ${i18n.language.aiOutputLangHint}: ${savedConfig.aiOutputLang}`))
+    return savedConfig.aiOutputLang
   }
 
   // Priority 3: Ask user
-  return await selectAiOutputLanguage(scriptLang, scriptLang);
+  return await selectAiOutputLanguage(scriptLang, scriptLang)
 }

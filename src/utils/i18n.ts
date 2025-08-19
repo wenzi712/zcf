@@ -1,22 +1,23 @@
-import { getTranslation, type SupportedLang, type TranslationStructure } from '../i18n';
+import type { SupportedLang, TranslationStructure } from '../i18n'
+import { getTranslation } from '../i18n'
 
-let currentLang: SupportedLang = 'zh-CN';
+let currentLang: SupportedLang = 'zh-CN'
 
 export function setLanguage(lang: SupportedLang): void {
-  currentLang = lang;
+  currentLang = lang
 }
 
 export function getLanguage(): SupportedLang {
-  return currentLang;
+  return currentLang
 }
 
 export function t(): TranslationStructure {
-  return getTranslation(currentLang);
+  return getTranslation(currentLang)
 }
 
 // Helper function for formatted strings with replacements
 export function format(template: string, replacements: Record<string, string>): string {
   return template.replace(/\{(\w+)\}/g, (match, key) => {
-    return replacements[key] || match;
-  });
+    return replacements[key] || match
+  })
 }

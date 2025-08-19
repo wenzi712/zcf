@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-describe("init - Edge Cases", () => {
+describe('init - Edge Cases', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
-  it("should handle initialization edge cases", () => {
+  it('should handle initialization edge cases', () => {
     // Placeholder for edge cases from init.extended.test.ts
-    expect(true).toBe(true);
-  });
-});
+    expect(true).toBe(true)
+  })
+})

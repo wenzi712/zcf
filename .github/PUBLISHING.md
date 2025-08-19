@@ -13,6 +13,7 @@ pnpm changeset
 ```
 
 按照提示选择：
+
 - 变更类型（patch/minor/major）
 - 输入变更描述（支持 Markdown）
 
@@ -56,17 +57,18 @@ git push origin main --follow-tags
 
 遵循语义化版本（Semantic Versioning）：
 
-| 类型 | 版本变化 | 适用场景 |
-|------|---------|---------|
-| **patch** | x.x.1 | Bug 修复、文档更新、依赖更新 |
-| **minor** | x.1.0 | 新增功能、向后兼容的改进 |
-| **major** | 1.0.0 | 破坏性更改、架构调整、API 变更 |
+| 类型      | 版本变化 | 适用场景                       |
+| --------- | -------- | ------------------------------ |
+| **patch** | x.x.1    | Bug 修复、文档更新、依赖更新   |
+| **minor** | x.1.0    | 新增功能、向后兼容的改进       |
+| **major** | 1.0.0    | 破坏性更改、架构调整、API 变更 |
 
 ## 🔧 配置要求
 
 ### GitHub Secrets
 
 在仓库设置中配置：
+
 - `NPM_TOKEN`: npm 发布令牌
   1. 访问 https://www.npmjs.com/settings/[username]/tokens
   2. 创建 "Automation" 类型的 token
@@ -75,6 +77,7 @@ git push origin main --follow-tags
 ### 权限设置
 
 确保 GitHub Actions 有以下权限：
+
 - `contents: write` - 创建发布
 - `pull-requests: write` - 创建 PR
 - `id-token: write` - npm provenance
@@ -82,6 +85,7 @@ git push origin main --follow-tags
 ## 📋 CI/CD 工作流
 
 ### CI 工作流（ci.yml）
+
 - **触发**：Push 到 main 或 PR
 - **测试矩阵**：
   - OS: Ubuntu, macOS, Windows
@@ -89,6 +93,7 @@ git push origin main --follow-tags
 - **步骤**：依赖安装 → 类型检查 → 构建 → 测试
 
 ### Release 工作流（release.yml）
+
 - **触发**：Push 到 main
 - **功能**：
   - 检测 changesets
@@ -106,12 +111,15 @@ git push origin main --follow-tags
 ## 🔍 常见问题
 
 ### Q: 忘记添加 changeset 怎么办？
+
 A: 可以在 PR 中补充，运行 `pnpm changeset` 并提交
 
 ### Q: 如何发布预发布版本？
+
 A: 使用 `pnpm changeset pre enter <tag>` 进入预发布模式
 
 ### Q: 如何撤销发布？
+
 A: npm 不支持撤销，只能发布新版本修复
 
 ## 📚 相关链接

@@ -12,7 +12,7 @@ export const api = {
   enterAuthToken: 'Enter Auth Token',
   enterApiKey: 'Enter API Key',
   apiConfigSuccess: 'API configured',
-  
+
   // API modification
   existingApiConfig: 'Existing API configuration detected:',
   apiConfigUrl: 'URL',
@@ -31,7 +31,7 @@ export const api = {
   enterNewApiUrl: 'Enter new API URL (current: {url})',
   enterNewApiKey: 'Enter new API Key (current: {key})',
   selectNewAuthType: 'Select new auth type (current: {type})',
-  
+
   // API validation
   apiKeyValidation: {
     empty: 'API Key cannot be empty',
@@ -41,4 +41,4 @@ export const api = {
   invalidUrl: 'Invalid URL',
   keyRequired: 'Key is required',
   invalidKeyFormat: 'Invalid key format',
-};
+}

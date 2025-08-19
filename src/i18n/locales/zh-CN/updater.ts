@@ -1,4 +1,4 @@
-import type { UpdaterTranslations } from '../../types';
+import type { UpdaterTranslations } from '../../types'
 
 export const updater: UpdaterTranslations = {
   checkingVersion: '正在检查版本...',
@@ -17,5 +17,5 @@ export const updater: UpdaterTranslations = {
   updating: '正在更新 {tool}...',
   updateSuccess: '{tool} 更新成功！',
   updateFailed: '{tool} 更新失败',
-  checkFailed: '版本检查失败'
-};
+  checkFailed: '版本检查失败',
+}

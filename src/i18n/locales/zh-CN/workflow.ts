@@ -21,4 +21,4 @@ export const workflow = {
   workflowInstallError: '工作流安装出错',
   cleaningOldFiles: '清理旧版本文件',
   removedOldFile: '已删除旧文件',
-};
+}

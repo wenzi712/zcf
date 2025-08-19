@@ -23,7 +23,7 @@ test/
 
 ## Test Layering Strategy
 
-### 1. Core Tests (*.test.ts)
+### 1. Core Tests (\*.test.ts)
 
 Every source file must have a corresponding core test file containing:
 
@@ -32,21 +32,22 @@ Every source file must have a corresponding core test file containing:
 - **Basic error handling**: Handle expected error conditions
 
 Example:
+
 ```typescript
 describe('configUtils', () => {
   describe('readConfig', () => {
     it('should read valid config file', () => {
       // Test implementation
-    });
-    
+    })
+
     it('should return default when file not exists', () => {
       // Test implementation
-    });
-  });
-});
+    })
+  })
+})
 ```
 
-### 2. Edge Tests (*.edge.test.ts)
+### 2. Edge Tests (\*.edge.test.ts)
 
 For complex modules, optionally create edge test files containing:
 
@@ -55,21 +56,22 @@ For complex modules, optionally create edge test files containing:
 - **Error recovery**: State recovery tests after errors
 
 Example:
+
 ```typescript
 describe('configUtils - Edge Cases', () => {
   describe('Error Handling', () => {
     it('should handle corrupted JSON gracefully', () => {
       // Test implementation
-    });
-    
+    })
+
     it('should handle file permission errors', () => {
       // Test implementation
-    });
-  });
-});
+    })
+  })
+})
 ```
 
-### 3. Integration Tests (*.integration.test.ts)
+### 3. Integration Tests (\*.integration.test.ts)
 
 When testing interactions between multiple modules, create integration tests:
 
@@ -88,33 +90,33 @@ When testing interactions between multiple modules, create integration tests:
 ### 2. Test Structure
 
 ```typescript
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock dependencies
-vi.mock('../../../src/utils/fs-operations');
+vi.mock('../../../src/utils/fs-operations')
 
 describe('ModuleName', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
+    vi.restoreAllMocks()
+  })
 
   describe('FunctionName', () => {
     it('should do something specific', () => {
       // Arrange
-      const input = 'test';
-      
+      const input = 'test'
+
       // Act
-      const result = functionUnderTest(input);
-      
+      const result = functionUnderTest(input)
+
       // Assert
-      expect(result).toBe('expected');
-    });
-  });
-});
+      expect(result).toBe('expected')
+    })
+  })
+})
 ```
 
 ### 3. Mock Usage Principles
@@ -127,13 +129,13 @@ describe('ModuleName', () => {
 
 ```typescript
 it('should handle async operations', async () => {
-  const result = await asyncFunction();
-  expect(result).toBeDefined();
-});
+  const result = await asyncFunction()
+  expect(result).toBeDefined()
+})
 
 it('should handle async errors', async () => {
-  await expect(asyncFunction()).rejects.toThrow('Error message');
-});
+  await expect(asyncFunction()).rejects.toThrow('Error message')
+})
 ```
 
 ## Running Tests
@@ -163,6 +165,7 @@ pnpm vitest run --coverage
 - **Line coverage**: Target 90%+
 
 Current coverage status (needs improvement):
+
 - Lines: ~79%
 - Functions: ~86%
 - Statements: ~79%
@@ -181,6 +184,7 @@ Current coverage status (needs improvement):
 ### Q: When should I create edge test files?
 
 A: When a module has:
+
 - Complex error handling logic
 - Multiple boundary conditions to test
 - Core test file is already large (>500 lines)
@@ -188,6 +192,7 @@ A: When a module has:
 ### Q: How to handle dependencies that are hard to mock?
 
 A: Consider:
+
 - Using dependency injection pattern
 - Creating test-specific mock implementations
 - Using Vitest's `vi.importActual` for partial mocks
@@ -195,6 +200,7 @@ A: Consider:
 ### Q: What if tests run slowly?
 
 A: Optimization tips:
+
 - Check for unnecessary `setTimeout`
 - Run independent tests in parallel
 - Use `--reporter=dot` to reduce output

@@ -50,31 +50,26 @@ argument-hint: [--no-verify] [--all] [--amend] [--signoff] [--emoji] [--scope <s
 ## What This Command Does
 
 1. **仓库/分支校验**
-
    - 通过 `git rev-parse --is-inside-work-tree` 判断是否位于 Git 仓库。
    - 读取当前分支/HEAD 状态；如处于 rebase/merge 冲突状态，先提示处理冲突后再继续。
 
 2. **改动检测**
-
    - 用 `git status --porcelain` 与 `git diff` 获取已暂存与未暂存的改动。
    - 若已暂存文件为 0：
      - 若传入 `--all` → 执行 `git add -A`。
      - 否则提示你选择：继续仅分析未暂存改动并给出**建议**，或取消命令后手动分组暂存。
 
 3. **拆分建议（Split Heuristics）**
-
    - 按**关注点**、**文件模式**、**改动类型**聚类（示例：源代码 vs 文档、测试；不同目录/包；新增 vs 删除）。
    - 若检测到**多组独立变更**或 diff 规模过大（如 > 300 行 / 跨多个顶级目录），建议拆分提交，并给出每一组的 pathspec（便于后续执行 `git add <paths>`）。
 
 4. **提交信息生成（Conventional 规范，可选 Emoji）**
-
    - 自动推断 `type`（`feat`/`fix`/`docs`/`refactor`/`test`/`chore`/`perf`/`style`/`ci`/`revert` …）与可选 `scope`。
    - 生成消息头：`[<emoji>] <type>(<scope>)?: <subject>`（首行 ≤ 72 字符，祈使语气，仅在使用 `--emoji` 时包含 emoji）。
    - 生成消息体：要点列表（动机、实现要点、影响范围、BREAKING CHANGE 如有）。
    - 将草稿写入 `.git/COMMIT_EDITMSG`，并用于 `git commit`。
 
 5. **执行提交**
-
    - 单提交场景：`git commit [-S] [--no-verify] [-s] -F .git/COMMIT_EDITMSG`
    - 多提交场景（如接受拆分建议）：按分组给出 `git add <paths> && git commit ...` 的明确指令；若允许执行则逐一完成。
 

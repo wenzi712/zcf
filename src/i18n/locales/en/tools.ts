@@ -15,4 +15,4 @@ export const tools = {
   ccusageFailed: 'Failed to run ccusage',
   checkNetworkConnection: 'Please check your network connection and try again',
   errorDetails: 'Error details:',
-};
+}

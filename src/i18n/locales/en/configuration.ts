@@ -71,4 +71,4 @@ export const configuration = {
   memoryDirNotFound: 'Memory directory not found',
   failedToSetOnboarding: 'Failed to set onboarding flag',
   fixWindowsMcp: 'Fix Windows MCP configuration?',
-};
+}

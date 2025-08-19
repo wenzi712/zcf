@@ -7,7 +7,7 @@ export const ccrMessages = {
   detectedIncorrectPackage: 'Detected incorrect package claude-code-router, uninstalling...',
   uninstalledIncorrectPackage: 'Successfully uninstalled incorrect package',
   failedToUninstallIncorrectPackage: 'Failed to uninstall incorrect package, continuing with installation',
-  
+
   // Configuration
   configureCcr: 'Configure Model Proxy (CCR)',
   useCcrProxy: 'Use CCR Proxy',
@@ -16,7 +16,7 @@ export const ccrMessages = {
   noPresetsAvailable: 'No presets available',
   selectCcrPreset: 'Select a provider preset:',
   keyRequired: 'API key is required',
-  
+
   // Existing config
   existingCcrConfig: 'Existing CCR configuration found',
   overwriteCcrConfig: 'Backup existing CCR configuration and reconfigure?',
@@ -24,15 +24,15 @@ export const ccrMessages = {
   backupCcrConfig: 'Backing up existing CCR configuration...',
   ccrBackupSuccess: 'CCR configuration backed up to: {path}',
   ccrBackupFailed: 'Failed to backup CCR configuration',
-  
+
   // Model selection
   selectDefaultModelForProvider: 'Select default model for {provider}:',
   enterApiKeyForProvider: 'Enter API key for {provider}:',
-  
+
   // Skip option
   skipOption: 'Skip, configure in CCR manually',
   skipConfiguring: 'Skipping preset configuration, will create empty configuration framework',
-  
+
   // Success/Error messages
   ccrConfigSuccess: 'CCR configuration saved',
   proxyConfigSuccess: 'Proxy settings configured',
@@ -41,17 +41,17 @@ export const ccrMessages = {
   fetchPresetsError: 'Failed to fetch provider presets',
   failedToStartCcrService: 'Failed to start CCR service',
   errorStartingCcrService: 'Error starting CCR service',
-  
+
   // CCR service status
   ccrRestartSuccess: 'CCR service restarted',
   ccrRestartFailed: 'Failed to restart CCR service',
-  
+
   // Configuration tips
   configTips: 'Configuration Tips',
   useClaudeCommand: 'Use the claude command to start Claude Code (not ccr code)',
   advancedConfigTip: 'You can use the ccr ui command for advanced configuration',
   manualConfigTip: 'After manually modifying the configuration file, run ccr restart to apply changes',
-  
+
   // CCR Menu
   ccrMenuTitle: 'CCR - Claude Code Router Management',
   ccrMenuOptions: {
@@ -71,7 +71,7 @@ export const ccrMessages = {
     start: 'Start CCR service',
     stop: 'Stop CCR service',
   },
-  
+
   // Command execution messages
   startingCcrUi: 'Starting CCR UI...',
   ccrUiStarted: 'CCR UI started',
@@ -84,12 +84,12 @@ export const ccrMessages = {
   stoppingCcr: 'Stopping CCR...',
   ccrStopped: 'CCR stopped',
   ccrCommandFailed: 'Failed to execute CCR command',
-  
+
   // Configuration check messages
   ccrNotConfigured: 'CCR is not configured yet. Please initialize CCR first.',
   pleaseInitFirst: 'Please select option 1 to initialize CCR.',
-  
+
   // UI API Key messages
   ccrUiApiKey: 'CCR UI API Key',
   ccrUiApiKeyHint: 'Use this API key to login to CCR UI',
-};
+}

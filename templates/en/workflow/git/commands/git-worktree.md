@@ -37,60 +37,67 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 
 ### Options
 
-| Option | Description |
-|--------|-------------|
-| `add <path>` | Add new worktree in `.zcf/<path>` |
-| `migrate <target>` | Migrate content to specified worktree |
-| `list` | List all worktrees and their status |
-| `remove <path>` | Remove worktree at specified path |
-| `prune` | Clean invalid worktree references |
-| `-b <branch>` | Create new branch and checkout to worktree |
-| `-o, --open` | Open directly in IDE after creation (skip prompt) |
-| `--from <source>` | Specify migration source path (migrate only) |
-| `--stash` | Migrate current stash content (migrate only) |
-| `--track` | Set new branch to track corresponding remote branch |
-| `--guess-remote` | Auto guess remote branch for tracking |
-| `--detach` | Create detached HEAD worktree |
-| `--checkout` | Checkout immediately after creation (default behavior) |
-| `--lock` | Lock worktree after creation |
+| Option             | Description                                            |
+| ------------------ | ------------------------------------------------------ |
+| `add <path>`       | Add new worktree in `.zcf/<path>`                      |
+| `migrate <target>` | Migrate content to specified worktree                  |
+| `list`             | List all worktrees and their status                    |
+| `remove <path>`    | Remove worktree at specified path                      |
+| `prune`            | Clean invalid worktree references                      |
+| `-b <branch>`      | Create new branch and checkout to worktree             |
+| `-o, --open`       | Open directly in IDE after creation (skip prompt)      |
+| `--from <source>`  | Specify migration source path (migrate only)           |
+| `--stash`          | Migrate current stash content (migrate only)           |
+| `--track`          | Set new branch to track corresponding remote branch    |
+| `--guess-remote`   | Auto guess remote branch for tracking                  |
+| `--detach`         | Create detached HEAD worktree                          |
+| `--checkout`       | Checkout immediately after creation (default behavior) |
+| `--lock`           | Lock worktree after creation                           |
 
 ---
 
 ## What This Command Does
 
 ### 1. **Environment Check**
-   - Confirm in Git repository via `git rev-parse --is-inside-work-tree`
+
+- Confirm in Git repository via `git rev-parse --is-inside-work-tree`
 
 ### 2. **Ignore Rules Configuration**
-   - Check if `.git/info/exclude` contains `/.zcf/` rule
-   - Auto-add `/.zcf/` to `.git/info/exclude` if not exists
+
+- Check if `.git/info/exclude` contains `/.zcf/` rule
+- Auto-add `/.zcf/` to `.git/info/exclude` if not exists
 
 ### 3. **Worktree Operations**
-   - **add**: Create new worktree in `.zcf/<path>`
-   - **list**: Show all worktree paths, branches and status
-   - **remove**: Safely remove specified worktree
-   - **prune**: Clean orphaned worktree records
+
+- **add**: Create new worktree in `.zcf/<path>`
+- **list**: Show all worktree paths, branches and status
+- **remove**: Safely remove specified worktree
+- **prune**: Clean orphaned worktree records
 
 ### 4. **🆕 IDE Quick Open Feature**
-   - **Default behavior**: Ask whether to open new worktree in IDE after `add` operation
-   - **Direct open**: Use `-o/--open` parameter to skip prompt and open directly
-   - **IDE detection**: Auto-detect common IDEs (VS Code, Cursor, WebStorm, etc.)
-   - **Smart selection**: Recommend best choice based on project type and installed IDEs
+
+- **Default behavior**: Ask whether to open new worktree in IDE after `add` operation
+- **Direct open**: Use `-o/--open` parameter to skip prompt and open directly
+- **IDE detection**: Auto-detect common IDEs (VS Code, Cursor, WebStorm, etc.)
+- **Smart selection**: Recommend best choice based on project type and installed IDEs
 
 ### 5. **🆕 Content Migration Feature**
-   - **Uncommitted content migration**: Migrate uncommitted changes from one worktree to another
-   - **Stash migration**: Apply current stash content to target worktree
-   - **Safety check**: Check target worktree status before migration to avoid conflicts
+
+- **Uncommitted content migration**: Migrate uncommitted changes from one worktree to another
+- **Stash migration**: Apply current stash content to target worktree
+- **Safety check**: Check target worktree status before migration to avoid conflicts
 
 ### 6. **Path Handling**
-   - Auto-add `.zcf/` prefix to all relative paths
-   - Keep absolute paths as-is
-   - Auto-create `.zcf/` directory if not exists
+
+- Auto-add `.zcf/` prefix to all relative paths
+- Keep absolute paths as-is
+- Auto-create `.zcf/` directory if not exists
 
 ### 7. **Branch Management**
-   - Support checking out existing branches or creating new branches
-   - Auto-handle remote branch tracking
-   - Provide branch status and HEAD position info
+
+- Support checking out existing branches or creating new branches
+- Auto-handle remote branch tracking
+- Provide branch status and HEAD position info
 
 ---
 
@@ -99,12 +106,14 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ### 🖥️ **IDE Integration**
 
 **Supported IDEs**
+
 - **VS Code**: `code <path>`
-- **Cursor**: `cursor <path>`  
+- **Cursor**: `cursor <path>`
 - **WebStorm**: `webstorm <path>`
 - **Others**: Configurable custom IDE commands
 
 **Open Modes**
+
 ```bash
 # Default: ask whether to open after creation
 /git-worktree add feature-ui
@@ -116,6 +125,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 **Smart Detection Flow**
+
 1. Check installed IDEs in system
 2. Recommend based on project type (e.g., recommend VS Code for Node.js projects)
 3. Provide selection menu for user choice (default mode)
@@ -124,6 +134,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ### 📦 **Content Migration System**
 
 **Migration Types**
+
 ```bash
 # Migrate uncommitted content from main branch
 /git-worktree migrate feature-ui --from main
@@ -139,6 +150,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 **Migration Flow**
+
 1. **Source check**: Verify source path exists and has uncommitted content
 2. **Target check**: Ensure target worktree working directory is clean
 3. **Content analysis**: Show files and changes to be migrated
@@ -155,12 +167,14 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 - **Status display**: Clearly show each worktree's branch, commit and status
 
 ### **Migration Safety Protection**
+
 - **Conflict detection**: Check for potential file conflicts before migration
 - **Backup mechanism**: Auto-create stash backup before migration
 - **Rollback support**: Provide rollback solution when migration fails
 - **Status validation**: Ensure source and target worktrees are in correct state
 
 ### **IDE Integration Safety**
+
 - **Path validation**: Ensure IDE commands use correct paths
 - **Permission check**: Verify IDE executable permissions
 - **Error handling**: Friendly error messages when IDE startup fails
@@ -170,6 +184,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ## Examples
 
 ### **Basic Usage + IDE Open**
+
 ```bash
 # Create worktree and ask for IDE open (default behavior)
 /git-worktree add feature-ui
@@ -195,6 +210,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 ### **Content Migration Scenarios**
+
 ```bash
 # Scenario: developed some features on main branch, want to move to new branch
 # 1. Create new feature worktree
@@ -215,6 +231,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 ### **Stash Migration**
+
 ```bash
 # Have some stashes, want to apply to specific worktree
 /git-worktree migrate hotfix --stash
@@ -228,6 +245,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ```
 
 ### **List and Manage Worktrees**
+
 ```bash
 # View all worktrees
 /git-worktree list
@@ -252,6 +270,7 @@ argument-hint: <add|list|remove|prune|migrate> [path] [-b <branch>] [-o|--open] 
 ## Directory Structure
 
 After using this command, project structure will be:
+
 ```
 your-project/
 ├── .git/
@@ -269,7 +288,9 @@ your-project/
 ## Configuration
 
 ### **IDE Preferences**
+
 Command saves user preferences in `.zcf/.worktree-config`:
+
 ```json
 {
   "preferredIDE": "code",
@@ -280,6 +301,7 @@ Command saves user preferences in `.zcf/.worktree-config`:
 ```
 
 ### **Custom IDE Commands**
+
 ```bash
 # Set custom IDE
 git config worktree.ide.custom "subl %s"  # Sublime Text

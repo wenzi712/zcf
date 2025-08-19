@@ -1,4 +1,4 @@
-import type { UpdaterTranslations } from '../../types';
+import type { UpdaterTranslations } from '../../types'
 
 export const updater: UpdaterTranslations = {
   checkingVersion: 'Checking version...',
@@ -17,5 +17,5 @@ export const updater: UpdaterTranslations = {
   updating: 'Updating {tool}...',
   updateSuccess: '{tool} updated successfully!',
   updateFailed: '{tool} update failed',
-  checkFailed: 'Version check failed'
-};
+  checkFailed: 'Version check failed',
+}

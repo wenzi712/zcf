@@ -14,6 +14,7 @@ argument-hint: [--no-verify] [--all] [--amend] [--signoff] [--emoji] [--scope <s
 # Claude Command: Commit (Git-only)
 
 This command works **without any package manager/build tools**, using only **Git** to:
+
 - Read changes (staged/unstaged)
 - Determine if changes should be **split into multiple commits**
 - Generate **Conventional Commits** style messages with optional emoji for each commit
@@ -33,6 +34,7 @@ This command works **without any package manager/build tools**, using only **Git
 ```
 
 ### Options
+
 - `--no-verify`: Skip local Git hooks (`pre-commit`/`commit-msg` etc.).
 - `--all`: When staging area is empty, automatically `git add -A` to include all changes in the commit.
 - `--amend`: **Amend** the last commit without creating a new one (preserves author and timestamp unless local Git config specifies otherwise).
@@ -88,16 +90,16 @@ This command works **without any package manager/build tools**, using only **Git
 
 ## Type to Emoji Mapping (When --emoji is Used)
 
-- ✨ `feat`: New feature  
-- 🐛 `fix`: Bug fix (includes 🔥 remove code/files, 🚑️ hotfix, 👽️ adapt to external API changes, 🔒️ security fix, 🚨 fix warnings, 💚 fix CI)  
-- 📝 `docs`: Documentation and comments  
-- 🎨 `style`: Code style/formatting (no semantic changes)  
-- ♻️ `refactor`: Refactoring (no new features, no bug fixes)  
-- ⚡️ `perf`: Performance improvements  
-- ✅ `test`: Add/fix tests, snapshots  
-- 🔧 `chore`: Build/tools/misc tasks (merge branches, update configs, release tags, pin dependencies, .gitignore, etc.)  
-- 👷 `ci`: CI/CD configuration and scripts  
-- ⏪️ `revert`: Revert commits  
+- ✨ `feat`: New feature
+- 🐛 `fix`: Bug fix (includes 🔥 remove code/files, 🚑️ hotfix, 👽️ adapt to external API changes, 🔒️ security fix, 🚨 fix warnings, 💚 fix CI)
+- 📝 `docs`: Documentation and comments
+- 🎨 `style`: Code style/formatting (no semantic changes)
+- ♻️ `refactor`: Refactoring (no new features, no bug fixes)
+- ⚡️ `perf`: Performance improvements
+- ✅ `test`: Add/fix tests, snapshots
+- 🔧 `chore`: Build/tools/misc tasks (merge branches, update configs, release tags, pin dependencies, .gitignore, etc.)
+- 👷 `ci`: CI/CD configuration and scripts
+- ⏪️ `revert`: Revert commits
 - 💥 `feat`: Breaking changes (explained in `BREAKING CHANGE:` section)
 
 > If `--type`/`--scope` is passed, it will **override** auto-detection.
@@ -107,10 +109,10 @@ This command works **without any package manager/build tools**, using only **Git
 
 ## Guidelines for Splitting Commits
 
-1. **Different concerns**: Unrelated feature/module changes should be split.  
-2. **Different types**: Don't mix `feat`, `fix`, `refactor` in the same commit.  
-3. **File modes**: Source code vs docs/tests/configs should be grouped separately.  
-4. **Size threshold**: Large diffs (e.g., >300 lines or across multiple top-level directories) should be split.  
+1. **Different concerns**: Unrelated feature/module changes should be split.
+2. **Different types**: Don't mix `feat`, `fix`, `refactor` in the same commit.
+3. **File modes**: Source code vs docs/tests/configs should be grouped separately.
+4. **Size threshold**: Large diffs (e.g., >300 lines or across multiple top-level directories) should be split.
 5. **Revertability**: Ensure each commit can be independently reverted.
 
 ---
@@ -118,24 +120,27 @@ This command works **without any package manager/build tools**, using only **Git
 ## Examples
 
 **Good (with --emoji)**
-- ✨ feat(ui): add user authentication flow  
-- 🐛 fix(api): handle token refresh race condition  
-- 📝 docs: update API usage examples  
-- ♻️ refactor(core): extract retry logic into helper  
-- ✅ test: add unit tests for rate limiter  
-- 🔧 chore: update git hooks and repository settings  
+
+- ✨ feat(ui): add user authentication flow
+- 🐛 fix(api): handle token refresh race condition
+- 📝 docs: update API usage examples
+- ♻️ refactor(core): extract retry logic into helper
+- ✅ test: add unit tests for rate limiter
+- 🔧 chore: update git hooks and repository settings
 - ⏪️ revert: revert "feat(core): introduce streaming API"
 
 **Good (without --emoji)**
-- feat(ui): add user authentication flow  
-- fix(api): handle token refresh race condition  
-- docs: update API usage examples  
-- refactor(core): extract retry logic into helper  
-- test: add unit tests for rate limiter  
-- chore: update git hooks and repository settings  
+
+- feat(ui): add user authentication flow
+- fix(api): handle token refresh race condition
+- docs: update API usage examples
+- refactor(core): extract retry logic into helper
+- test: add unit tests for rate limiter
+- chore: update git hooks and repository settings
 - revert: revert "feat(core): introduce streaming API"
 
 **Split Example**
+
 - `feat(types): add new type defs for payment method`
 - `docs: update API docs for new types`
 - `test: add unit tests for payment types`
@@ -145,8 +150,8 @@ This command works **without any package manager/build tools**, using only **Git
 
 ## Important Notes
 
-- **Git only**: No package manager/build commands (`pnpm`/`npm`/`yarn` etc.).  
-- **Respects hooks**: Executes local Git hooks by default; use `--no-verify` to skip.  
-- **No source code changes**: Command only reads/writes `.git/COMMIT_EDITMSG` and staging area; doesn't directly edit working directory files.  
-- **Safety prompts**: In rebase/merge conflicts, detached HEAD states, prompts to handle/confirm before continuing.  
+- **Git only**: No package manager/build commands (`pnpm`/`npm`/`yarn` etc.).
+- **Respects hooks**: Executes local Git hooks by default; use `--no-verify` to skip.
+- **No source code changes**: Command only reads/writes `.git/COMMIT_EDITMSG` and staging area; doesn't directly edit working directory files.
+- **Safety prompts**: In rebase/merge conflicts, detached HEAD states, prompts to handle/confirm before continuing.
 - **Auditable and controllable**: If `confirm: true` is enabled, each actual `git add`/`git commit` step requires confirmation.

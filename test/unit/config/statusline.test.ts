@@ -1,61 +1,60 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { join } from 'pathe';
-import { mergeSettingsFile, getDefaultSettings } from '../../../src/utils/config';
-import { readJsonConfig, writeJsonConfig } from '../../../src/utils/json-config';
-import { exists, remove } from '../../../src/utils/fs-operations';
-import type { ClaudeSettings, StatusLineConfig } from '../../../src/types/config';
+import type { ClaudeSettings, StatusLineConfig } from '../../../src/types/config'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { mergeSettingsFile } from '../../../src/utils/config'
+import { exists } from '../../../src/utils/fs-operations'
+import { readJsonConfig, writeJsonConfig } from '../../../src/utils/json-config'
 
 // Mock external dependencies
-vi.mock('../../../src/utils/fs-operations');
-vi.mock('../../../src/utils/json-config');
-vi.mock('../../../src/utils/zcf-config');
+vi.mock('../../../src/utils/fs-operations')
+vi.mock('../../../src/utils/json-config')
+vi.mock('../../../src/utils/zcf-config')
 
-const mockExists = vi.mocked(exists);
-const mockReadJsonConfig = vi.mocked(readJsonConfig);
-const mockWriteJsonConfig = vi.mocked(writeJsonConfig);
+const mockExists = vi.mocked(exists)
+const mockReadJsonConfig = vi.mocked(readJsonConfig)
+const mockWriteJsonConfig = vi.mocked(writeJsonConfig)
 
-describe('StatusLine Configuration', () => {
+describe('statusLine Configuration', () => {
   const mockTemplateSettings: ClaudeSettings = {
     model: 'sonnet',
     env: {
-      DISABLE_TELEMETRY: '1'
+      DISABLE_TELEMETRY: '1',
     },
     permissions: {
-      allow: ['Bash', 'Read', 'Write']
+      allow: ['Bash', 'Read', 'Write'],
     },
     statusLine: {
       type: 'command',
       command: '~/.claude/ccline/ccline',
-      padding: 0
-    }
-  };
+      padding: 0,
+    },
+  }
 
   const mockExistingSettings: ClaudeSettings = {
     model: 'opus',
     env: {
       ANTHROPIC_API_KEY: 'user-key',
-      DISABLE_TELEMETRY: '1'
+      DISABLE_TELEMETRY: '1',
     },
     permissions: {
-      allow: ['Bash', 'Read']
-    }
-  };
+      allow: ['Bash', 'Read'],
+    },
+  }
 
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
+    vi.restoreAllMocks()
+  })
 
-  describe('StatusLine configuration merging', () => {
+  describe('statusLine configuration merging', () => {
     it('should merge statusLine config correctly when target file does not exist', () => {
       // Red: This test should FAIL initially because statusLine merging is not implemented yet
-      mockExists.mockReturnValue(false);
-      mockReadJsonConfig.mockReturnValue(mockTemplateSettings);
+      mockExists.mockReturnValue(false)
+      mockReadJsonConfig.mockReturnValue(mockTemplateSettings)
 
-      mergeSettingsFile('/template/settings.json', '/target/settings.json');
+      mergeSettingsFile('/template/settings.json', '/target/settings.json')
 
       expect(mockWriteJsonConfig).toHaveBeenCalledWith(
         '/target/settings.json',
@@ -63,11 +62,11 @@ describe('StatusLine Configuration', () => {
           statusLine: {
             type: 'command',
             command: '~/.claude/ccline/ccline',
-            padding: 0
-          }
-        })
-      );
-    });
+            padding: 0,
+          },
+        }),
+      )
+    })
 
     it('should preserve existing statusLine config when user has custom configuration', () => {
       // Red: This test should FAIL initially
@@ -76,16 +75,16 @@ describe('StatusLine Configuration', () => {
         statusLine: {
           type: 'command',
           command: 'custom-command',
-          padding: 1
-        }
-      };
+          padding: 1,
+        },
+      }
 
-      mockExists.mockReturnValue(true);
+      mockExists.mockReturnValue(true)
       mockReadJsonConfig
         .mockReturnValueOnce(mockTemplateSettings)
-        .mockReturnValueOnce(existingWithStatusLine);
+        .mockReturnValueOnce(existingWithStatusLine)
 
-      mergeSettingsFile('/template/settings.json', '/target/settings.json');
+      mergeSettingsFile('/template/settings.json', '/target/settings.json')
 
       expect(mockWriteJsonConfig).toHaveBeenCalledWith(
         '/target/settings.json',
@@ -93,20 +92,20 @@ describe('StatusLine Configuration', () => {
           statusLine: {
             type: 'command',
             command: 'custom-command', // User's custom command should be preserved
-            padding: 1
-          }
-        })
-      );
-    });
+            padding: 1,
+          },
+        }),
+      )
+    })
 
     it('should add statusLine config when existing settings has no statusLine', () => {
       // Red: This test should FAIL initially
-      mockExists.mockReturnValue(true);
+      mockExists.mockReturnValue(true)
       mockReadJsonConfig
         .mockReturnValueOnce(mockTemplateSettings)
-        .mockReturnValueOnce(mockExistingSettings);
+        .mockReturnValueOnce(mockExistingSettings)
 
-      mergeSettingsFile('/template/settings.json', '/target/settings.json');
+      mergeSettingsFile('/template/settings.json', '/target/settings.json')
 
       expect(mockWriteJsonConfig).toHaveBeenCalledWith(
         '/target/settings.json',
@@ -114,15 +113,15 @@ describe('StatusLine Configuration', () => {
           statusLine: {
             type: 'command',
             command: '~/.claude/ccline/ccline',
-            padding: 0
+            padding: 0,
           },
           env: {
             ANTHROPIC_API_KEY: 'user-key', // User's API key should be preserved
-            DISABLE_TELEMETRY: '1'
-          }
-        })
-      );
-    });
+            DISABLE_TELEMETRY: '1',
+          },
+        }),
+      )
+    })
 
     it('should handle platform-specific statusLine paths', () => {
       // Red: This test should FAIL initially
@@ -131,14 +130,14 @@ describe('StatusLine Configuration', () => {
         statusLine: {
           type: 'command',
           command: '%USERPROFILE%\\.claude\\ccline\\ccline.exe',
-          padding: 0
-        }
-      };
+          padding: 0,
+        },
+      }
 
-      mockExists.mockReturnValue(false);
-      mockReadJsonConfig.mockReturnValue(windowsTemplateSettings);
+      mockExists.mockReturnValue(false)
+      mockReadJsonConfig.mockReturnValue(windowsTemplateSettings)
 
-      mergeSettingsFile('/template/settings.json', '/target/settings.json');
+      mergeSettingsFile('/template/settings.json', '/target/settings.json')
 
       expect(mockWriteJsonConfig).toHaveBeenCalledWith(
         '/target/settings.json',
@@ -146,11 +145,11 @@ describe('StatusLine Configuration', () => {
           statusLine: {
             type: 'command',
             command: '%USERPROFILE%\\.claude\\ccline\\ccline.exe',
-            padding: 0
-          }
-        })
-      );
-    });
+            padding: 0,
+          },
+        }),
+      )
+    })
 
     it('should validate statusLine configuration structure', () => {
       // Red: This test should FAIL initially
@@ -159,43 +158,43 @@ describe('StatusLine Configuration', () => {
         statusLine: {
           type: 'invalid-type',
           command: '',
-        } as any
-      };
+        } as any,
+      }
 
-      mockExists.mockReturnValue(false);
-      mockReadJsonConfig.mockReturnValue(invalidStatusLineSettings);
+      mockExists.mockReturnValue(false)
+      mockReadJsonConfig.mockReturnValue(invalidStatusLineSettings)
 
       // This should either throw an error or sanitize the configuration
       expect(() => {
-        mergeSettingsFile('/template/settings.json', '/target/settings.json');
-      }).not.toThrow(); // For now, we expect it to handle gracefully
-    });
-  });
+        mergeSettingsFile('/template/settings.json', '/target/settings.json')
+      }).not.toThrow() // For now, we expect it to handle gracefully
+    })
+  })
 
-  describe('StatusLine type validation', () => {
+  describe('statusLine type validation', () => {
     it('should accept valid StatusLineConfig structure', () => {
       // Red: This test should FAIL initially
       const validStatusLine: StatusLineConfig = {
         type: 'command',
         command: '~/.claude/ccline/ccline',
-        padding: 0
-      };
+        padding: 0,
+      }
 
       // Type assertion should not throw compile error
-      expect(validStatusLine.type).toBe('command');
-      expect(validStatusLine.command).toBe('~/.claude/ccline/ccline');
-      expect(validStatusLine.padding).toBe(0);
-    });
+      expect(validStatusLine.type).toBe('command')
+      expect(validStatusLine.command).toBe('~/.claude/ccline/ccline')
+      expect(validStatusLine.padding).toBe(0)
+    })
 
     it('should accept StatusLineConfig with optional padding', () => {
       // Red: This test should FAIL initially
       const statusLineWithoutPadding: StatusLineConfig = {
         type: 'command',
-        command: '~/.claude/ccline/ccline'
-      };
+        command: '~/.claude/ccline/ccline',
+      }
 
-      expect(statusLineWithoutPadding.padding).toBeUndefined();
-      expect(statusLineWithoutPadding.type).toBe('command');
-    });
-  });
-});
+      expect(statusLineWithoutPadding.padding).toBeUndefined()
+      expect(statusLineWithoutPadding.type).toBe('command')
+    })
+  })
+})

@@ -1,4 +1,4 @@
-import type { WorkflowConfig } from '../types/workflow';
+import type { WorkflowConfig } from '../types/workflow'
 
 export const WORKFLOW_CONFIGS: WorkflowConfig[] = [
   {
@@ -52,12 +52,12 @@ export const WORKFLOW_CONFIGS: WorkflowConfig[] = [
     category: 'bmad',
     outputDir: 'bmad',
   },
-];
+]
 
 export function getWorkflowConfig(workflowId: string): WorkflowConfig | undefined {
-  return WORKFLOW_CONFIGS.find((config) => config.id === workflowId);
+  return WORKFLOW_CONFIGS.find(config => config.id === workflowId)
 }
 
 export function getOrderedWorkflows(): WorkflowConfig[] {
-  return [...WORKFLOW_CONFIGS].sort((a, b) => a.order - b.order);
+  return [...WORKFLOW_CONFIGS].sort((a, b) => a.order - b.order)
 }

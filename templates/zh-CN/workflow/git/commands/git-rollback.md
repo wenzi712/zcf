@@ -10,7 +10,7 @@ argument-hint: [--branch <branch>] [--target <rev>] [--mode reset|revert] [--dep
 
 # Claude Command: Git Rollback
 
-**目的**：安全、可视地将指定分支回滚到旧版本。  
+**目的**：安全、可视地将指定分支回滚到旧版本。
 默认处于 **只读预览 (`--dry-run`)**；真正执行需加 `--yes` 或在交互中确认。
 
 ---

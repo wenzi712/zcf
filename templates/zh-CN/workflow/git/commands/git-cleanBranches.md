@@ -32,6 +32,7 @@ argument-hint: [--base <branch>] [--stale <days>] [--remote] [--force] [--dry-ru
 ```
 
 ### Options
+
 - `--base <branch>`：指定清理的基准分支（默认为仓库的 `main`/`master`）。
 - `--stale <days>`：清理超过指定天数未提交的分支（默认不启用）。
 - `--remote`：同时清理远程已合并/过期的分支。

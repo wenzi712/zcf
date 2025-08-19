@@ -1,6 +1,6 @@
-import ansis from 'ansis';
-import { type SupportedLang } from '../constants';
-import { getTranslation } from '../i18n';
+import type { SupportedLang } from '../constants'
+import ansis from 'ansis'
+import { getTranslation } from '../i18n'
 
 /**
  * Validate API Key format
@@ -8,18 +8,18 @@ import { getTranslation } from '../i18n';
  * @param lang - Language for error messages
  * @returns Validation result
  */
-export function validateApiKey(apiKey: string, lang: SupportedLang = 'zh-CN'): { isValid: boolean; error?: string } {
-  const i18n = getTranslation(lang);
+export function validateApiKey(apiKey: string, lang: SupportedLang = 'zh-CN'): { isValid: boolean, error?: string } {
+  const i18n = getTranslation(lang)
 
   // Empty check
   if (!apiKey || apiKey.trim() === '') {
     return {
       isValid: false,
       error: i18n.api.apiKeyValidation.empty,
-    };
+    }
   }
 
-  return { isValid: true };
+  return { isValid: true }
 }
 
 /**
@@ -29,11 +29,11 @@ export function validateApiKey(apiKey: string, lang: SupportedLang = 'zh-CN'): {
  */
 export function formatApiKeyDisplay(apiKey: string): string {
   if (!apiKey || apiKey.length < 12) {
-    return apiKey;
+    return apiKey
   }
 
   // Show first 8 and last 4 characters
-  return `${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}`;
+  return `${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}`
 }
 
 /**
@@ -42,10 +42,10 @@ export function formatApiKeyDisplay(apiKey: string): string {
  * @param lang - Language for example format
  */
 export function showApiKeyError(error: string, lang: SupportedLang = 'zh-CN'): void {
-  const i18n = getTranslation(lang);
+  const i18n = getTranslation(lang)
 
-  console.log(ansis.red(`✗ ${error}`));
-  console.log(ansis.gray(i18n.api.apiKeyValidation.example));
+  console.log(ansis.red(`✗ ${error}`))
+  console.log(ansis.gray(i18n.api.apiKeyValidation.example))
 }
 
 /**
@@ -56,8 +56,8 @@ export function showApiKeyError(error: string, lang: SupportedLang = 'zh-CN'): v
 export function detectAuthType(apiKey: string): 'auth_token' | 'api_key' {
   // Claude API keys typically start with 'sk-ant-'
   if (apiKey.startsWith('sk-ant-')) {
-    return 'auth_token';
+    return 'auth_token'
   }
   // Default to api_key for other formats
-  return 'api_key';
+  return 'api_key'
 }

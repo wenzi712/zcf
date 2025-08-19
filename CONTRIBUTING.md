@@ -27,39 +27,42 @@ ZCF is a CLI tool built with TypeScript that provides zero-configuration setup f
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - pnpm 9.15.9+ (specified in `packageManager` field)
 
 ### Installation
 
 1. Fork and clone the repository:
+
 ```bash
 git clone https://github.com/YOUR_USERNAME/zcf.git
 cd zcf
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 3. Start development:
+
 ```bash
 pnpm dev
 ```
 
 ### Development Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Run CLI in development mode using tsx |
-| `pnpm build` | Build for production using unbuild |
-| `pnpm typecheck` | Type checking with TypeScript |
-| `pnpm test` | Run all tests |
-| `pnpm test:watch` | Run tests in watch mode |
-| `pnpm test:ui` | Run tests with UI |
-| `pnpm test:coverage` | Generate coverage report |
-| `pnpm test:run` | Run tests once |
+| Command              | Description                           |
+| -------------------- | ------------------------------------- |
+| `pnpm dev`           | Run CLI in development mode using tsx |
+| `pnpm build`         | Build for production using unbuild    |
+| `pnpm typecheck`     | Type checking with TypeScript         |
+| `pnpm test`          | Run all tests                         |
+| `pnpm test:watch`    | Run tests in watch mode               |
+| `pnpm test:ui`       | Run tests with UI                     |
+| `pnpm test:coverage` | Generate coverage report              |
+| `pnpm test:run`      | Run tests once                        |
 
 ### Project Structure
 
@@ -90,6 +93,7 @@ test/                   # Test files
 We use **Test-Driven Development (TDD)** methodology:
 
 ### TDD Workflow
+
 1. **Red**: Write a failing test first
 2. **Green**: Write minimal code to make the test pass
 3. **Refactor**: Improve code while keeping tests green
@@ -122,19 +126,20 @@ pnpm test:coverage
 5. Verify test files exist before adding to avoid duplication
 
 Example test structure:
+
 ```typescript
 describe('ConfigManager', () => {
   it('should create backup before config changes', async () => {
     // Arrange
-    const mockConfig = { /* test config */ };
-    
+    const mockConfig = { /* test config */ }
+
     // Act
-    await configManager.updateConfig(mockConfig);
-    
+    await configManager.updateConfig(mockConfig)
+
     // Assert
-    expect(backupService.createBackup).toHaveBeenCalled();
-  });
-});
+    expect(backupService.createBackup).toHaveBeenCalled()
+  })
+})
 ```
 
 ## 📝 Code Style & Standards
@@ -164,12 +169,12 @@ describe('ConfigManager', () => {
 ### Import Standards
 
 ```typescript
+// Usage: Cross-platform path operations
+import { join, resolve } from 'pathe'
+
 // Add usage description before import statements
 // Usage: Configuration management utilities
-import { createConfig, validateConfig } from './utils/config.ts';
-
-// Usage: Cross-platform path operations
-import { join, resolve } from 'pathe';
+import { createConfig, validateConfig } from './utils/config.ts'
 ```
 
 ## 🔄 Pull Request Process
@@ -195,20 +200,24 @@ import { join, resolve } from 'pathe';
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Tests added/updated
 - [ ] All tests pass
 - [ ] Coverage maintained
 
 ## Checklist
+
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
@@ -275,17 +284,18 @@ ZCF supports bilingual functionality (English/Chinese):
 - Update `TranslationKeys` interface for new keys
 
 Example:
+
 ```typescript
 // In src/i18n/locales/en/errors.ts
+// Usage
+import { format, t } from '../utils/i18n.ts'
+
 export default {
   config: {
     invalidFormat: 'Invalid configuration format: {error}',
   },
-};
-
-// Usage
-import { t, format } from '../utils/i18n.ts';
-const message = format(t('errors.config.invalidFormat'), { error: 'missing field' });
+}
+const message = format(t('errors.config.invalidFormat'), { error: 'missing field' })
 ```
 
 ## 🤝 Community Guidelines
@@ -306,6 +316,7 @@ const message = format(t('errors.config.invalidFormat'), { error: 'missing field
 ### Recognition
 
 Contributors will be:
+
 - Listed in release notes for significant contributions
 - Added to the contributors section (if desired)
 - Recognized in project documentation
@@ -322,7 +333,7 @@ Contributors will be:
 ### Key Technologies
 
 - **Build System**: unbuild (ESM-only output)
-- **Development**: tsx for TypeScript execution  
+- **Development**: tsx for TypeScript execution
 - **Testing**: Vitest with layered testing approach
 - **CLI Framework**: cac for argument parsing
 - **Cross-Platform**: pathe for path operations, tinyexec for command execution

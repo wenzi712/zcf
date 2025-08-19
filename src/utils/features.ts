@@ -1,21 +1,21 @@
-import ansis from 'ansis';
-import inquirer from 'inquirer';
-import { existsSync, unlinkSync } from 'node:fs';
-import type { SupportedLang } from '../constants';
-import { LANG_LABELS, MCP_SERVICES, SUPPORTED_LANGS, ZCF_CONFIG_FILE } from '../constants';
-import { getTranslation } from '../i18n';
-import type { McpServerConfig } from '../types';
-import { configureAiPersonality } from './ai-personality';
-import { setupCcrConfiguration } from './ccr/config';
-import { installCcr, isCcrInstalled } from './ccr/installer';
+import type { SupportedLang } from '../constants'
+import type { McpServerConfig } from '../types'
+import { existsSync, unlinkSync } from 'node:fs'
+import ansis from 'ansis'
+import inquirer from 'inquirer'
+import { LANG_LABELS, MCP_SERVICES, SUPPORTED_LANGS, ZCF_CONFIG_FILE } from '../constants'
+import { getTranslation } from '../i18n'
+import { configureAiPersonality } from './ai-personality'
+import { setupCcrConfiguration } from './ccr/config'
+import { installCcr, isCcrInstalled } from './ccr/installer'
 import {
   applyAiLanguageDirective,
   configureApi,
   getExistingApiConfig,
   getExistingModelConfig,
   updateDefaultModel,
-} from './config';
-import { modifyApiConfigPartially } from './config-operations';
+} from './config'
+import { modifyApiConfigPartially } from './config-operations'
 import {
   addCompletedOnboarding,
   backupMcpConfig,
@@ -24,41 +24,41 @@ import {
   mergeMcpServers,
   readMcpConfig,
   writeMcpConfig,
-} from './mcp';
-import { selectMcpServices } from './mcp-selector';
-import { isWindows } from './platform';
-import { addNumbersToChoices } from './prompt-helpers';
-import { importRecommendedEnv, importRecommendedPermissions, openSettingsJson } from './simple-config';
-import { formatApiKeyDisplay, validateApiKey } from './validator';
-import { readZcfConfig, updateZcfConfig } from './zcf-config';
+} from './mcp'
+import { selectMcpServices } from './mcp-selector'
+import { isWindows } from './platform'
+import { addNumbersToChoices } from './prompt-helpers'
+import { importRecommendedEnv, importRecommendedPermissions, openSettingsJson } from './simple-config'
+import { formatApiKeyDisplay, validateApiKey } from './validator'
+import { readZcfConfig, updateZcfConfig } from './zcf-config'
 
 // Helper function to handle cancelled operations
 function handleCancellation(scriptLang: SupportedLang): void {
-  const i18n = getTranslation(scriptLang);
-  console.log(ansis.yellow(i18n.common.cancelled));
+  const i18n = getTranslation(scriptLang)
+  console.log(ansis.yellow(i18n.common.cancelled))
 }
 
 // Configure API
 export async function configureApiFeature(scriptLang: SupportedLang) {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   // Check for existing API configuration
-  const existingApiConfig = getExistingApiConfig();
+  const existingApiConfig = getExistingApiConfig()
 
   if (existingApiConfig) {
     // Display existing configuration
-    console.log('\n' + ansis.blue(`ℹ ${i18n.api.existingApiConfig}`));
-    console.log(ansis.gray(`  ${i18n.api.apiConfigUrl}: ${existingApiConfig.url || i18n.common.notConfigured}`));
+    console.log(`\n${ansis.blue(`ℹ ${i18n.api.existingApiConfig}`)}`)
+    console.log(ansis.gray(`  ${i18n.api.apiConfigUrl}: ${existingApiConfig.url || i18n.common.notConfigured}`))
     console.log(
       ansis.gray(
         `  ${i18n.api.apiConfigKey}: ${
           existingApiConfig.key ? formatApiKeyDisplay(existingApiConfig.key) : i18n.common.notConfigured
-        }`
-      )
-    );
+        }`,
+      ),
+    )
     console.log(
-      ansis.gray(`  ${i18n.api.apiConfigAuthType}: ${existingApiConfig.authType || i18n.common.notConfigured}\n`)
-    );
+      ansis.gray(`  ${i18n.api.apiConfigAuthType}: ${existingApiConfig.authType || i18n.common.notConfigured}\n`),
+    )
 
     // Ask user what to do with existing config
     const { action } = await inquirer.prompt<{ action: string }>({
@@ -71,43 +71,47 @@ export async function configureApiFeature(scriptLang: SupportedLang) {
         { name: i18n.api.modifyPartialConfig, value: 'modify-partial' },
         { name: i18n.api.useCcrProxy, value: 'use-ccr' },
       ]),
-    });
+    })
 
     if (!action) {
-      handleCancellation(scriptLang);
-      return;
+      handleCancellation(scriptLang)
+      return
     }
 
     if (action === 'keep') {
-      console.log(ansis.green(`✔ ${i18n.api.keepExistingConfig}`));
+      console.log(ansis.green(`✔ ${i18n.api.keepExistingConfig}`))
       // Ensure onboarding flag is set for existing API config
       try {
-        addCompletedOnboarding();
-      } catch (error) {
-        console.error(ansis.red(i18n.configuration.failedToSetOnboarding), error);
+        addCompletedOnboarding()
       }
-      return;
-    } else if (action === 'modify-partial') {
+      catch (error) {
+        console.error(ansis.red(i18n.configuration.failedToSetOnboarding), error)
+      }
+      return
+    }
+    else if (action === 'modify-partial') {
       // Handle partial modification
-      await modifyApiConfigPartially(existingApiConfig, i18n, scriptLang);
+      await modifyApiConfigPartially(existingApiConfig, i18n, scriptLang)
       // addCompletedOnboarding is already called inside modifyApiConfigPartially -> configureApi
-      return;
-    } else if (action === 'use-ccr') {
+      return
+    }
+    else if (action === 'use-ccr') {
       // Handle CCR proxy configuration
-      const ccrStatus = await isCcrInstalled();
+      const ccrStatus = await isCcrInstalled()
       if (!ccrStatus.hasCorrectPackage) {
-        await installCcr(scriptLang);
-      } else {
-        console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));
+        await installCcr(scriptLang)
+      }
+      else {
+        console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`))
       }
 
       // Setup CCR configuration
-      const ccrConfigured = await setupCcrConfiguration(scriptLang);
+      const ccrConfigured = await setupCcrConfiguration(scriptLang)
       if (ccrConfigured) {
-        console.log(ansis.green(`✔ ${i18n.ccr.ccrSetupComplete}`));
+        console.log(ansis.green(`✔ ${i18n.ccr.ccrSetupComplete}`))
         // addCompletedOnboarding is already called inside setupCcrConfiguration
       }
-      return;
+      return
     }
     // If 'modify-all', continue to full configuration below
   }
@@ -135,28 +139,29 @@ export async function configureApiFeature(scriptLang: SupportedLang) {
       },
       { name: i18n.api.skipApi, value: 'skip' },
     ]),
-  });
+  })
 
   if (!apiChoice || apiChoice === 'skip') {
-    return;
+    return
   }
 
   // Handle CCR proxy configuration
   if (apiChoice === 'ccr_proxy') {
-    const ccrStatus = await isCcrInstalled();
+    const ccrStatus = await isCcrInstalled()
     if (!ccrStatus.hasCorrectPackage) {
-      await installCcr(scriptLang);
-    } else {
-      console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`));
+      await installCcr(scriptLang)
+    }
+    else {
+      console.log(ansis.green(`✔ ${i18n.ccr.ccrAlreadyInstalled}`))
     }
 
     // Setup CCR configuration
-    const ccrConfigured = await setupCcrConfiguration(scriptLang);
+    const ccrConfigured = await setupCcrConfiguration(scriptLang)
     if (ccrConfigured) {
-      console.log(ansis.green(`✔ ${i18n.ccr.ccrSetupComplete}`));
+      console.log(ansis.green(`✔ ${i18n.ccr.ccrSetupComplete}`))
       // addCompletedOnboarding is already called inside setupCcrConfiguration
     }
-    return;
+    return
   }
 
   const { url } = await inquirer.prompt<{ url: string }>({
@@ -164,59 +169,61 @@ export async function configureApiFeature(scriptLang: SupportedLang) {
     name: 'url',
     message: i18n.api.enterApiUrl,
     validate: (value) => {
-      if (!value) return i18n.api.urlRequired;
+      if (!value)
+        return i18n.api.urlRequired
       try {
-        new URL(value);
-        return true;
-      } catch {
-        return i18n.api.invalidUrl;
+        void new URL(value)
+        return true
+      }
+      catch {
+        return i18n.api.invalidUrl
       }
     },
-  });
+  })
 
   if (!url) {
-    handleCancellation(scriptLang);
-    return;
+    handleCancellation(scriptLang)
+    return
   }
 
-  const keyMessage = apiChoice === 'auth_token' ? i18n.api.enterAuthToken : i18n.api.enterApiKey;
+  const keyMessage = apiChoice === 'auth_token' ? i18n.api.enterAuthToken : i18n.api.enterApiKey
   const { key } = await inquirer.prompt<{ key: string }>({
     type: 'input',
     name: 'key',
     message: keyMessage,
     validate: (value) => {
       if (!value) {
-        return i18n.api.keyRequired;
+        return i18n.api.keyRequired
       }
 
-      const validation = validateApiKey(value, scriptLang);
+      const validation = validateApiKey(value, scriptLang)
       if (!validation.isValid) {
-        return validation.error || i18n.api.invalidKeyFormat;
+        return validation.error || i18n.api.invalidKeyFormat
       }
 
-      return true;
+      return true
     },
-  });
+  })
 
   if (!key) {
-    handleCancellation(scriptLang);
-    return;
+    handleCancellation(scriptLang)
+    return
   }
 
-  const apiConfig = { url, key, authType: apiChoice as 'auth_token' | 'api_key' };
-  const configuredApi = configureApi(apiConfig);
+  const apiConfig = { url, key, authType: apiChoice as 'auth_token' | 'api_key' }
+  const configuredApi = configureApi(apiConfig)
 
   if (configuredApi) {
-    console.log(ansis.green(`✔ ${i18n.api.apiConfigSuccess}`));
-    console.log(ansis.gray(`  URL: ${configuredApi.url}`));
-    console.log(ansis.gray(`  Key: ${formatApiKeyDisplay(configuredApi.key)}`));
+    console.log(ansis.green(`✔ ${i18n.api.apiConfigSuccess}`))
+    console.log(ansis.gray(`  URL: ${configuredApi.url}`))
+    console.log(ansis.gray(`  Key: ${formatApiKeyDisplay(configuredApi.key)}`))
     // addCompletedOnboarding is already called inside configureApi
   }
 }
 
 // Configure MCP
 export async function configureMcpFeature(scriptLang: SupportedLang) {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   // Check if Windows needs fix
   if (isWindows()) {
@@ -225,79 +232,81 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
       name: 'fixWindows',
       message: i18n.configuration.fixWindowsMcp || 'Fix Windows MCP configuration?',
       default: true,
-    });
+    })
 
     if (fixWindows) {
-      const existingConfig = readMcpConfig() || { mcpServers: {} };
-      const fixedConfig = fixWindowsMcpConfig(existingConfig);
-      writeMcpConfig(fixedConfig);
-      console.log(ansis.green(`✔ Windows MCP configuration fixed`));
+      const existingConfig = readMcpConfig() || { mcpServers: {} }
+      const fixedConfig = fixWindowsMcpConfig(existingConfig)
+      writeMcpConfig(fixedConfig)
+      console.log(ansis.green(`✔ Windows MCP configuration fixed`))
     }
   }
 
   // Use common MCP selector
-  const selectedServices = await selectMcpServices(scriptLang);
+  const selectedServices = await selectMcpServices(scriptLang)
 
   if (!selectedServices) {
-    return;
+    return
   }
 
   if (selectedServices.length > 0) {
-    const mcpBackupPath = backupMcpConfig();
+    const mcpBackupPath = backupMcpConfig()
     if (mcpBackupPath) {
-      console.log(ansis.gray(`✔ ${i18n.mcp.mcpBackupSuccess}: ${mcpBackupPath}`));
+      console.log(ansis.gray(`✔ ${i18n.mcp.mcpBackupSuccess}: ${mcpBackupPath}`))
     }
 
-    const newServers: Record<string, McpServerConfig> = {};
+    const newServers: Record<string, McpServerConfig> = {}
 
     for (const serviceId of selectedServices) {
-      const service = MCP_SERVICES.find((s) => s.id === serviceId);
-      if (!service) continue;
+      const service = MCP_SERVICES.find(s => s.id === serviceId)
+      if (!service)
+        continue
 
-      let config = service.config;
+      let config = service.config
 
       if (service.requiresApiKey) {
         const { apiKey } = await inquirer.prompt<{ apiKey: string }>({
           type: 'input',
           name: 'apiKey',
           message: service.apiKeyPrompt![scriptLang],
-          validate: (value) => !!value || i18n.api.keyRequired,
-        });
+          validate: value => !!value || i18n.api.keyRequired,
+        })
 
         if (apiKey) {
-          config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder, service.apiKeyEnvVar);
-        } else {
-          continue;
+          config = buildMcpServerConfig(service.config, apiKey, service.apiKeyPlaceholder, service.apiKeyEnvVar)
+        }
+        else {
+          continue
         }
       }
 
-      newServers[service.id] = config;
+      newServers[service.id] = config
     }
 
-    const existingConfig = readMcpConfig();
-    let mergedConfig = mergeMcpServers(existingConfig, newServers);
-    mergedConfig = fixWindowsMcpConfig(mergedConfig);
+    const existingConfig = readMcpConfig()
+    let mergedConfig = mergeMcpServers(existingConfig, newServers)
+    mergedConfig = fixWindowsMcpConfig(mergedConfig)
 
-    writeMcpConfig(mergedConfig);
-    console.log(ansis.green(`✔ ${i18n.mcp.mcpConfigSuccess}`));
+    writeMcpConfig(mergedConfig)
+    console.log(ansis.green(`✔ ${i18n.mcp.mcpConfigSuccess}`))
   }
 }
 
 // Configure default model
 export async function configureDefaultModelFeature(scriptLang: SupportedLang) {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   // Check for existing model configuration
-  const existingModel = getExistingModelConfig();
+  const existingModel = getExistingModelConfig()
 
   if (existingModel) {
     // Display existing configuration
-    console.log('\n' + ansis.blue(`ℹ ${i18n.configuration.existingModelConfig || 'Existing model configuration'}`));
-    const modelDisplay =
-      existingModel === 'default'
+    console.log(`\n${ansis.blue(`ℹ ${i18n.configuration.existingModelConfig || 'Existing model configuration'}`)}`)
+    const modelDisplay
+      = existingModel === 'default'
         ? i18n.configuration.defaultModelOption || 'Default (Let Claude Code choose)'
-        : existingModel.charAt(0).toUpperCase() + existingModel.slice(1);
-    console.log(ansis.gray(`  ${i18n.configuration.currentModel || 'Current model'}: ${modelDisplay}\n`));
+        : existingModel.charAt(0).toUpperCase() + existingModel.slice(1)
+    console.log(ansis.gray(`  ${i18n.configuration.currentModel || 'Current model'}: ${modelDisplay}\n`))
 
     // Ask user what to do with existing config
     const { modify } = await inquirer.prompt<{ modify: boolean }>({
@@ -305,11 +314,11 @@ export async function configureDefaultModelFeature(scriptLang: SupportedLang) {
       name: 'modify',
       message: i18n.configuration.modifyModel || 'Modify model configuration?',
       default: false,
-    });
+    })
 
     if (!modify) {
-      console.log(ansis.green(`✔ ${i18n.configuration.keepModel || 'Keeping existing model configuration'}`));
-      return;
+      console.log(ansis.green(`✔ ${i18n.configuration.keepModel || 'Keeping existing model configuration'}`))
+      return
     }
   }
 
@@ -328,26 +337,26 @@ export async function configureDefaultModelFeature(scriptLang: SupportedLang) {
       },
       {
         name:
-          i18n.configuration.opusPlanModelOption ||
-          'OpusPlan - Use Opus for planning, write code with sonnet, recommended',
+          i18n.configuration.opusPlanModelOption
+          || 'OpusPlan - Use Opus for planning, write code with sonnet, recommended',
         value: 'opusplan' as const,
       },
     ]),
     default: existingModel ? ['default', 'opus', 'opusplan'].indexOf(existingModel) : 0,
-  });
+  })
 
   if (!model) {
-    handleCancellation(scriptLang);
-    return;
+    handleCancellation(scriptLang)
+    return
   }
 
-  updateDefaultModel(model);
-  console.log(ansis.green(`✔ ${i18n.configuration.modelConfigured || 'Default model configured'}`));
+  updateDefaultModel(model)
+  console.log(ansis.green(`✔ ${i18n.configuration.modelConfigured || 'Default model configured'}`))
 }
 
 // Configure AI memory
 export async function configureAiMemoryFeature(scriptLang: SupportedLang) {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   const { option } = await inquirer.prompt<{ option: string }>({
     type: 'list',
@@ -363,104 +372,106 @@ export async function configureAiMemoryFeature(scriptLang: SupportedLang) {
         value: 'personality',
       },
     ]),
-  });
+  })
 
   if (!option) {
-    return;
+    return
   }
 
   if (option === 'language') {
-    const zcfConfig = readZcfConfig();
-    const existingLang = zcfConfig?.aiOutputLang;
+    const zcfConfig = readZcfConfig()
+    const existingLang = zcfConfig?.aiOutputLang
 
     // Show existing language configuration if any
     if (existingLang) {
       console.log(
-        '\n' +
-          ansis.blue(`ℹ ${i18n.configuration.existingLanguageConfig || 'Existing AI output language configuration'}`)
-      );
-      console.log(ansis.gray(`  ${i18n.configuration.currentLanguage || 'Current language'}: ${existingLang}\n`));
+        `\n${
+          ansis.blue(`ℹ ${i18n.configuration.existingLanguageConfig || 'Existing AI output language configuration'}`)}`,
+      )
+      console.log(ansis.gray(`  ${i18n.configuration.currentLanguage || 'Current language'}: ${existingLang}\n`))
 
       const { modify } = await inquirer.prompt<{ modify: boolean }>({
         type: 'confirm',
         name: 'modify',
         message: i18n.configuration.modifyLanguage || 'Modify AI output language?',
         default: false,
-      });
+      })
 
       if (!modify) {
-        console.log(ansis.green(`✔ ${i18n.configuration.keepLanguage || 'Keeping existing language configuration'}`));
-        return;
+        console.log(ansis.green(`✔ ${i18n.configuration.keepLanguage || 'Keeping existing language configuration'}`))
+        return
       }
     }
 
     // Ask user to select language (don't use resolveAiOutputLanguage to avoid auto-skip)
-    const { selectAiOutputLanguage } = await import('./prompts');
-    const aiOutputLang = await selectAiOutputLanguage(scriptLang, scriptLang);
+    const { selectAiOutputLanguage } = await import('./prompts')
+    const aiOutputLang = await selectAiOutputLanguage(scriptLang, scriptLang)
 
-    applyAiLanguageDirective(aiOutputLang);
-    updateZcfConfig({ aiOutputLang });
-    console.log(ansis.green(`✔ ${i18n.configuration.aiLanguageConfigured || 'AI output language configured'}`));
-  } else {
-    await configureAiPersonality(scriptLang);
+    applyAiLanguageDirective(aiOutputLang)
+    updateZcfConfig({ aiOutputLang })
+    console.log(ansis.green(`✔ ${i18n.configuration.aiLanguageConfigured || 'AI output language configured'}`))
+  }
+  else {
+    await configureAiPersonality(scriptLang)
   }
 }
 
 // Clear ZCF cache
 export async function clearZcfCacheFeature(scriptLang: SupportedLang) {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   const { confirm } = await inquirer.prompt<{ confirm: boolean }>({
     type: 'confirm',
     name: 'confirm',
     message: i18n.configuration.confirmClearCache || 'Clear all ZCF preferences cache?',
     default: false,
-  });
+  })
 
   if (!confirm) {
-    handleCancellation(scriptLang);
-    return;
+    handleCancellation(scriptLang)
+    return
   }
 
   if (existsSync(ZCF_CONFIG_FILE)) {
-    unlinkSync(ZCF_CONFIG_FILE);
-    console.log(ansis.green(`✔ ${i18n.configuration.cacheCleared || 'ZCF cache cleared'}`));
-  } else {
-    console.log(ansis.yellow('No cache found'));
+    unlinkSync(ZCF_CONFIG_FILE)
+    console.log(ansis.green(`✔ ${i18n.configuration.cacheCleared || 'ZCF cache cleared'}`))
+  }
+  else {
+    console.log(ansis.yellow('No cache found'))
   }
 }
 
 // Change script language
 export async function changeScriptLanguageFeature(currentLang: SupportedLang): Promise<SupportedLang> {
-  const i18n = getTranslation(currentLang);
+  const i18n = getTranslation(currentLang)
 
   const { lang } = await inquirer.prompt<{ lang: SupportedLang }>({
     type: 'list',
     name: 'lang',
     message: i18n.language.selectScriptLang,
     choices: addNumbersToChoices(
-      SUPPORTED_LANGS.map((l) => ({
+      SUPPORTED_LANGS.map(l => ({
         name: LANG_LABELS[l],
         value: l,
-      }))
+      })),
     ),
     default: SUPPORTED_LANGS.indexOf(currentLang),
-  });
+  })
 
   if (!lang) {
-    return currentLang;
+    return currentLang
   }
 
-  updateZcfConfig({ preferredLang: lang });
-  const newI18n = getTranslation(lang);
-  console.log(ansis.green(`✔ ${newI18n.language.languageChanged || 'Language changed'}`));
+  updateZcfConfig({ preferredLang: lang })
+  const newI18n = getTranslation(lang)
+  console.log(ansis.green(`✔ ${newI18n.language.languageChanged || 'Language changed'}`))
 
-  return lang;
+  return lang
 }
 
 // Configure environment variables and permissions
 export async function configureEnvPermissionFeature(scriptLang: SupportedLang) {
-  const i18n = getTranslation(scriptLang);
+  const i18n = getTranslation(scriptLang)
 
   const { choice } = await inquirer.prompt<{ choice: string }>({
     type: 'list',
@@ -469,46 +480,47 @@ export async function configureEnvPermissionFeature(scriptLang: SupportedLang) {
     choices: addNumbersToChoices([
       {
         name: `${i18n.configuration?.importRecommendedEnv || 'Import environment'} ${ansis.gray(
-          '- ' + (i18n.configuration?.importRecommendedEnvDesc || 'Import env settings')
+          `- ${i18n.configuration?.importRecommendedEnvDesc || 'Import env settings'}`,
         )}`,
         value: 'env',
       },
       {
         name: `${i18n.configuration?.importRecommendedPermissions || 'Import permissions'} ${ansis.gray(
-          '- ' + (i18n.configuration?.importRecommendedPermissionsDesc || 'Import permission settings')
+          `- ${i18n.configuration?.importRecommendedPermissionsDesc || 'Import permission settings'}`,
         )}`,
         value: 'permissions',
       },
       {
         name: `${i18n.configuration?.openSettingsJson || 'Open settings'} ${ansis.gray(
-          '- ' + (i18n.configuration?.openSettingsJsonDesc || 'View settings file')
+          `- ${i18n.configuration?.openSettingsJsonDesc || 'View settings file'}`,
         )}`,
         value: 'open',
       },
     ]),
-  });
+  })
 
   if (!choice) {
-    handleCancellation(scriptLang);
-    return;
+    handleCancellation(scriptLang)
+    return
   }
 
   try {
     switch (choice) {
       case 'env':
-        await importRecommendedEnv();
-        console.log(ansis.green(`✅ ${i18n.configuration.envImportSuccess}`));
-        break;
+        await importRecommendedEnv()
+        console.log(ansis.green(`✅ ${i18n.configuration.envImportSuccess}`))
+        break
       case 'permissions':
-        await importRecommendedPermissions();
-        console.log(ansis.green(`✅ ${i18n.configuration?.permissionsImportSuccess || 'Permissions imported'}`));
-        break;
+        await importRecommendedPermissions()
+        console.log(ansis.green(`✅ ${i18n.configuration?.permissionsImportSuccess || 'Permissions imported'}`))
+        break
       case 'open':
-        console.log(ansis.cyan(i18n.configuration?.openingSettingsJson || 'Opening settings.json...'));
-        await openSettingsJson();
-        break;
+        console.log(ansis.cyan(i18n.configuration?.openingSettingsJson || 'Opening settings.json...'))
+        await openSettingsJson()
+        break
     }
-  } catch (error: any) {
-    console.error(ansis.red(`${i18n.common.error}: ${error.message}`));
+  }
+  catch (error: any) {
+    console.error(ansis.red(`${i18n.common.error}: ${error.message}`))
   }
 }

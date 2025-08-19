@@ -1,63 +1,64 @@
-import { existsSync } from 'node:fs';
-import { ZCF_CONFIG_FILE, LEGACY_ZCF_CONFIG_FILE, type AiOutputLanguage, type SupportedLang } from '../constants';
-import { readJsonConfig, writeJsonConfig } from './json-config';
+import type { AiOutputLanguage, SupportedLang } from '../constants'
+import { existsSync } from 'node:fs'
+import { LEGACY_ZCF_CONFIG_FILE, ZCF_CONFIG_FILE } from '../constants'
+import { readJsonConfig, writeJsonConfig } from './json-config'
 
 export interface ZcfConfig {
-  version: string;
-  preferredLang: SupportedLang;
-  aiOutputLang?: AiOutputLanguage | string;
-  aiPersonality?: string;
-  lastUpdated: string;
+  version: string
+  preferredLang: SupportedLang
+  aiOutputLang?: AiOutputLanguage | string
+  aiPersonality?: string
+  lastUpdated: string
 }
-
 
 export function readZcfConfig(): ZcfConfig | null {
   // Try new location first
-  let config = readJsonConfig<ZcfConfig>(ZCF_CONFIG_FILE);
-  
+  let config = readJsonConfig<ZcfConfig>(ZCF_CONFIG_FILE)
+
   // If not found, try legacy location (for backward compatibility)
   if (!config && existsSync(LEGACY_ZCF_CONFIG_FILE)) {
-    config = readJsonConfig<ZcfConfig>(LEGACY_ZCF_CONFIG_FILE);
+    config = readJsonConfig<ZcfConfig>(LEGACY_ZCF_CONFIG_FILE)
   }
-  
-  return config;
+
+  return config
 }
 
 export async function readZcfConfigAsync(): Promise<ZcfConfig | null> {
-  return readZcfConfig();
+  return readZcfConfig()
 }
 
 export function writeZcfConfig(config: ZcfConfig): void {
   try {
     // Always write to new location
-    writeJsonConfig(ZCF_CONFIG_FILE, config);
-  } catch (error) {
+    writeJsonConfig(ZCF_CONFIG_FILE, config)
+  }
+  catch {
     // Silently fail if cannot write config - user's system may have permission issues
     // The app should still work without saved preferences
   }
 }
 
 export function updateZcfConfig(updates: Partial<ZcfConfig>): void {
-  const existingConfig = readZcfConfig();
+  const existingConfig = readZcfConfig()
   const newConfig: ZcfConfig = {
     version: updates.version || existingConfig?.version || '1.0.0',
     preferredLang: updates.preferredLang || existingConfig?.preferredLang || 'en',
     aiOutputLang: updates.aiOutputLang || existingConfig?.aiOutputLang,
     aiPersonality: updates.aiPersonality !== undefined ? updates.aiPersonality : existingConfig?.aiPersonality,
     lastUpdated: new Date().toISOString(),
-  };
-  writeZcfConfig(newConfig);
+  }
+  writeZcfConfig(newConfig)
 }
 
 export async function getZcfConfig(): Promise<ZcfConfig> {
-  const config = await readZcfConfigAsync();
+  const config = await readZcfConfigAsync()
   return config || {
     version: '1.0.0',
     preferredLang: 'en',
     lastUpdated: new Date().toISOString(),
-  };
+  }
 }
 
 export async function saveZcfConfig(config: ZcfConfig): Promise<void> {
-  writeZcfConfig(config);
+  writeZcfConfig(config)
 }

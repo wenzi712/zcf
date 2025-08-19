@@ -1,77 +1,79 @@
-import inquirer from 'inquirer';
-import ansis from 'ansis';
-import { version } from '../../package.json';
-import type { AiOutputLanguage, SupportedLang } from '../constants';
-import { I18N, LANG_LABELS, SUPPORTED_LANGS } from '../constants';
-import { displayBanner } from '../utils/banner';
-import { updatePromptOnly } from '../utils/config-operations';
-import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts';
-import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config';
-import { handleExitPromptError, handleGeneralError } from '../utils/error-handler';
-import { selectAndInstallWorkflows } from '../utils/workflow-installer';
-import { addNumbersToChoices } from '../utils/prompt-helpers';
+import type { AiOutputLanguage, SupportedLang } from '../constants'
+import process from 'node:process'
+import ansis from 'ansis'
+import inquirer from 'inquirer'
+import { version } from '../../package.json'
+import { I18N, LANG_LABELS, SUPPORTED_LANGS } from '../constants'
+import { displayBanner } from '../utils/banner'
+import { updatePromptOnly } from '../utils/config-operations'
+import { handleExitPromptError, handleGeneralError } from '../utils/error-handler'
+import { addNumbersToChoices } from '../utils/prompt-helpers'
+import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts'
+import { selectAndInstallWorkflows } from '../utils/workflow-installer'
+import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config'
 
 export interface UpdateOptions {
-  configLang?: SupportedLang;
-  aiOutputLang?: AiOutputLanguage | string;
-  skipBanner?: boolean;
+  configLang?: SupportedLang
+  aiOutputLang?: AiOutputLanguage | string
+  skipBanner?: boolean
 }
 
 export async function update(options: UpdateOptions = {}) {
   try {
     // Display banner
     if (!options.skipBanner) {
-      displayBanner('Update configuration for Claude Code');
+      displayBanner('Update configuration for Claude Code')
     }
 
     // Get script language from config or ask user
-    const scriptLang = await selectScriptLanguage();
-    const zcfConfig = readZcfConfig();
+    const scriptLang = await selectScriptLanguage()
+    const zcfConfig = readZcfConfig()
 
     // Now use the selected script language for all messages
-    const i18n = I18N[scriptLang];
+    const i18n = I18N[scriptLang]
 
     // Select config language if not provided
-    let configLang = options.configLang as SupportedLang;
+    let configLang = options.configLang as SupportedLang
     if (!configLang) {
       const { lang } = await inquirer.prompt<{ lang: SupportedLang }>({
         type: 'list',
         name: 'lang',
         message: i18n.language.updateConfigLangPrompt,
-        choices: addNumbersToChoices(SUPPORTED_LANGS.map((l) => ({
+        choices: addNumbersToChoices(SUPPORTED_LANGS.map(l => ({
           name: `${LANG_LABELS[l]} - ${i18n.language.configLangHint[l]}`,
           value: l,
         }))),
-      });
+      })
 
       if (!lang) {
-        console.log(ansis.yellow(i18n.common.cancelled));
-        process.exit(0);
+        console.log(ansis.yellow(i18n.common.cancelled))
+        process.exit(0)
       }
 
-      configLang = lang;
+      configLang = lang
     }
 
     // Select AI output language
-    const aiOutputLang = await resolveAiOutputLanguage(scriptLang, options.aiOutputLang, zcfConfig);
-    
-    console.log(ansis.cyan(`\n${i18n.configuration.updatingPrompts}\n`));
+    const aiOutputLang = await resolveAiOutputLanguage(scriptLang, options.aiOutputLang, zcfConfig)
+
+    console.log(ansis.cyan(`\n${i18n.configuration.updatingPrompts}\n`))
 
     // Execute prompt-only update with AI language
-    await updatePromptOnly(configLang, scriptLang, aiOutputLang);
-    
+    await updatePromptOnly(configLang, scriptLang, aiOutputLang)
+
     // Select and install workflows
-    await selectAndInstallWorkflows(configLang, scriptLang);
+    await selectAndInstallWorkflows(configLang, scriptLang)
 
     // Update zcf config with new version and AI language preference
     updateZcfConfig({
       version,
       preferredLang: scriptLang,
-      aiOutputLang: aiOutputLang,
-    });
-  } catch (error) {
+      aiOutputLang,
+    })
+  }
+  catch (error) {
     if (!handleExitPromptError(error)) {
-      handleGeneralError(error);
+      handleGeneralError(error)
     }
   }
 }

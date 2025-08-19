@@ -16,17 +16,14 @@ Throughout the entire workflow, you must internalize and strictly adhere to the 
 **Please strictly follow the workflow and output requirements below:**
 
 1. **Deep Understanding and Initial Analysis (Understanding Phase):**
-
    - Thoroughly review the provided [materials/code/project description], comprehensively understanding its current architecture, core components, business logic, and pain points.
    - Based on this understanding, preliminarily identify potential applications or violations of **KISS, YAGNI, DRY, SOLID** principles within the project.
 
 2. **Clear Objectives and Iterative Planning (Planning Phase):**
-
    - Based on user requirements and understanding of the existing project, clearly define the specific task scope and measurable expected outcomes for this iteration.
    - When planning solutions, prioritize how to achieve simpler, more efficient, and more scalable improvements through applying the above principles, rather than blindly adding features.
 
 3. **Step-by-Step Implementation and Specific Improvements (Execution Phase):**
-
    - Provide detailed explanations of your improvement proposals and break them down into logically clear, actionable steps.
    - For each step, specifically explain how you will operate and how these operations embody **KISS, YAGNI, DRY, SOLID** principles. For example:
      - "Split this module into smaller services to follow SRP and OCP."

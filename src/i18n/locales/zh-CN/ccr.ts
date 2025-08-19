@@ -7,7 +7,7 @@ export const ccrMessages = {
   detectedIncorrectPackage: '检测到错误的包 claude-code-router，正在卸载...',
   uninstalledIncorrectPackage: '成功卸载错误的包',
   failedToUninstallIncorrectPackage: '卸载错误的包失败，继续安装',
-  
+
   // Configuration
   configureCcr: '配置模型代理 (CCR)',
   useCcrProxy: '使用 CCR 代理',
@@ -16,7 +16,7 @@ export const ccrMessages = {
   noPresetsAvailable: '没有可用的预设',
   selectCcrPreset: '选择一个提供商预设：',
   keyRequired: 'API 密钥不能为空',
-  
+
   // Existing config
   existingCcrConfig: '发现现有的 CCR 配置',
   overwriteCcrConfig: '是否备份现有的 CCR 配置并重新配置？',
@@ -24,15 +24,15 @@ export const ccrMessages = {
   backupCcrConfig: '正在备份现有的 CCR 配置...',
   ccrBackupSuccess: 'CCR 配置已备份到：{path}',
   ccrBackupFailed: '备份 CCR 配置失败',
-  
+
   // Model selection
   selectDefaultModelForProvider: '选择 {provider} 的默认模型：',
   enterApiKeyForProvider: '请输入 {provider} 的 API 密钥：',
-  
+
   // Skip option
   skipOption: '跳过，在 CCR 中自行配置',
   skipConfiguring: '跳过预设配置，将创建空配置框架',
-  
+
   // Success/Error messages
   ccrConfigSuccess: 'CCR 配置已保存',
   proxyConfigSuccess: '代理设置已配置',
@@ -41,17 +41,17 @@ export const ccrMessages = {
   fetchPresetsError: '获取提供商预设失败',
   failedToStartCcrService: '启动 CCR 服务失败',
   errorStartingCcrService: '启动 CCR 服务时出错',
-  
+
   // CCR service status
   ccrRestartSuccess: 'CCR 服务已重启',
   ccrRestartFailed: 'CCR 服务重启失败',
-  
+
   // Configuration tips
   configTips: '配置提示',
   useClaudeCommand: '请使用 claude 命令启动 Claude Code（而非 ccr code）',
   advancedConfigTip: '您可以使用 ccr ui 命令进行更高级的配置',
   manualConfigTip: '手动修改配置文件后，请执行 ccr restart 使配置生效',
-  
+
   // CCR Menu
   ccrMenuTitle: 'CCR - Claude Code Router 管理',
   ccrMenuOptions: {
@@ -71,7 +71,7 @@ export const ccrMessages = {
     start: '启动 CCR 服务',
     stop: '停止 CCR 服务',
   },
-  
+
   // Command execution messages
   startingCcrUi: '正在启动 CCR UI...',
   ccrUiStarted: 'CCR UI 已启动',
@@ -84,12 +84,12 @@ export const ccrMessages = {
   stoppingCcr: '正在停止 CCR...',
   ccrStopped: 'CCR 已停止',
   ccrCommandFailed: '执行 CCR 命令失败',
-  
+
   // Configuration check messages
   ccrNotConfigured: 'CCR 尚未配置。请先初始化 CCR。',
   pleaseInitFirst: '请选择选项 1 来初始化 CCR。',
-  
+
   // UI API Key messages
   ccrUiApiKey: 'CCR UI 登录密钥',
   ccrUiApiKeyHint: '使用此密钥登录 CCR UI 界面',
-};
+}

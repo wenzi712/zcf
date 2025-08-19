@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import cac from 'cac';
-import { setupCommands } from './cli-setup';
+import cac from 'cac'
+import { setupCommands } from './cli-setup'
 
 async function main() {
   // Setup and run CLI
-  const cli = cac('zcf');
-  setupCommands(cli);
-  cli.parse();
+  const cli = cac('zcf')
+  setupCommands(cli)
+  cli.parse()
 }
 
-main().catch(console.error);
+main().catch(console.error)

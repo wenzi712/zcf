@@ -6,37 +6,37 @@
  * StatusLine configuration for Claude Code
  */
 export interface StatusLineConfig {
-  type: 'command';
-  command: string;
-  padding?: number;
+  type: 'command'
+  command: string
+  padding?: number
 }
 
 export interface ClaudeSettings {
-  model?: 'opus' | 'sonnet' | 'opusplan';
+  model?: 'opus' | 'sonnet' | 'opusplan'
   env?: {
-    ANTHROPIC_API_KEY?: string;
-    ANTHROPIC_AUTH_TOKEN?: string;
-    ANTHROPIC_BASE_URL?: string;
-    [key: string]: string | undefined;
-  };
+    ANTHROPIC_API_KEY?: string
+    ANTHROPIC_AUTH_TOKEN?: string
+    ANTHROPIC_BASE_URL?: string
+    [key: string]: string | undefined
+  }
   permissions?: {
-    allow?: string[];
-  };
+    allow?: string[]
+  }
   chat?: {
-    alwaysApprove?: string[];
-  };
+    alwaysApprove?: string[]
+  }
   experimental?: {
-    [key: string]: any;
-  };
-  statusLine?: StatusLineConfig;
-  [key: string]: any;
+    [key: string]: any
+  }
+  statusLine?: StatusLineConfig
+  [key: string]: any
 }
 
 /**
  * API configuration for Claude Code
  */
 export interface ApiConfig {
-  url: string;
-  key: string;
-  authType?: 'auth_token' | 'api_key';
+  url: string
+  key: string
+  authType?: 'auth_token' | 'api_key'
 }

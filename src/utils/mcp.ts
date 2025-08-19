@@ -1,50 +1,50 @@
-import { join } from 'pathe';
-import { CLAUDE_DIR, ClAUDE_CONFIG_FILE } from '../constants';
-import { getTranslation } from '../i18n';
-import type { ClaudeConfiguration, McpServerConfig } from '../types';
-import { getMcpCommand, isWindows } from './platform';
-import { readJsonConfig, writeJsonConfig, backupJsonConfig } from './json-config';
-import { deepClone } from './object-utils';
-import { readZcfConfig } from './zcf-config';
+import type { ClaudeConfiguration, McpServerConfig } from '../types'
+import { join } from 'pathe'
+import { ClAUDE_CONFIG_FILE, CLAUDE_DIR } from '../constants'
+import { getTranslation } from '../i18n'
+import { backupJsonConfig, readJsonConfig, writeJsonConfig } from './json-config'
+import { deepClone } from './object-utils'
+import { getMcpCommand, isWindows } from './platform'
+import { readZcfConfig } from './zcf-config'
 
 export function getMcpConfigPath(): string {
-  return ClAUDE_CONFIG_FILE;
+  return ClAUDE_CONFIG_FILE
 }
 
 export function readMcpConfig(): ClaudeConfiguration | null {
-  return readJsonConfig<ClaudeConfiguration>(ClAUDE_CONFIG_FILE);
+  return readJsonConfig<ClaudeConfiguration>(ClAUDE_CONFIG_FILE)
 }
 
 export function writeMcpConfig(config: ClaudeConfiguration): void {
-  writeJsonConfig(ClAUDE_CONFIG_FILE, config);
+  writeJsonConfig(ClAUDE_CONFIG_FILE, config)
 }
 
 export function backupMcpConfig(): string | null {
-  const backupBaseDir = join(CLAUDE_DIR, 'backup');
-  return backupJsonConfig(ClAUDE_CONFIG_FILE, backupBaseDir);
+  const backupBaseDir = join(CLAUDE_DIR, 'backup')
+  return backupJsonConfig(ClAUDE_CONFIG_FILE, backupBaseDir)
 }
 
 export function mergeMcpServers(
   existing: ClaudeConfiguration | null,
-  newServers: Record<string, McpServerConfig>
+  newServers: Record<string, McpServerConfig>,
 ): ClaudeConfiguration {
-  const config: ClaudeConfiguration = existing || { mcpServers: {} };
+  const config: ClaudeConfiguration = existing || { mcpServers: {} }
 
   if (!config.mcpServers) {
-    config.mcpServers = {};
+    config.mcpServers = {}
   }
 
   // Merge new servers into existing config
-  Object.assign(config.mcpServers, newServers);
+  Object.assign(config.mcpServers, newServers)
 
-  return config;
+  return config
 }
 
 function applyPlatformCommand(config: McpServerConfig): void {
   if (config.command === 'npx' && isWindows()) {
-    const mcpCmd = getMcpCommand();
-    config.command = mcpCmd[0];
-    config.args = [...mcpCmd.slice(1), ...(config.args || [])];
+    const mcpCmd = getMcpCommand()
+    config.command = mcpCmd[0]
+    config.args = [...mcpCmd.slice(1), ...(config.args || [])]
   }
 }
 
@@ -52,75 +52,76 @@ export function buildMcpServerConfig(
   baseConfig: McpServerConfig,
   apiKey?: string,
   placeholder: string = 'YOUR_EXA_API_KEY',
-  envVarName?: string
+  envVarName?: string,
 ): McpServerConfig {
   // Deep clone the config to avoid mutation
-  const config = deepClone(baseConfig);
+  const config = deepClone(baseConfig)
 
   // Apply platform-specific command
-  applyPlatformCommand(config);
+  applyPlatformCommand(config)
 
   if (!apiKey) {
-    return config;
+    return config
   }
 
   // New approach: If environment variable name is specified, set it directly
   if (envVarName && config.env) {
-    config.env[envVarName] = apiKey;
-    return config; // Return early for env-based configuration
+    config.env[envVarName] = apiKey
+    return config // Return early for env-based configuration
   }
 
   // Legacy approach: Replace placeholder in args and URL
   if (config.args) {
-    config.args = config.args.map((arg: string) => arg.replace(placeholder, apiKey));
+    config.args = config.args.map((arg: string) => arg.replace(placeholder, apiKey))
   }
 
   if (config.url) {
-    config.url = config.url.replace(placeholder, apiKey);
+    config.url = config.url.replace(placeholder, apiKey)
   }
 
-  return config;
+  return config
 }
 
 export function fixWindowsMcpConfig(config: ClaudeConfiguration): ClaudeConfiguration {
   if (!isWindows() || !config.mcpServers) {
-    return config;
+    return config
   }
 
-  const fixed = { ...config };
+  const fixed = { ...config }
 
   // Fix each MCP server configuration
   for (const [, serverConfig] of Object.entries(fixed.mcpServers)) {
     if (serverConfig && typeof serverConfig === 'object' && 'command' in serverConfig) {
-      applyPlatformCommand(serverConfig);
+      applyPlatformCommand(serverConfig)
     }
   }
 
-  return fixed;
+  return fixed
 }
 
 export function addCompletedOnboarding(): void {
   try {
     // Read existing config or create new one
-    let config = readMcpConfig();
+    let config = readMcpConfig()
     if (!config) {
-      config = { mcpServers: {} };
+      config = { mcpServers: {} }
     }
 
     // Check if already set to avoid redundant operations
     if (config.hasCompletedOnboarding === true) {
-      return; // Already set, no need to update
+      return // Already set, no need to update
     }
 
     // Add hasCompletedOnboarding flag
-    config.hasCompletedOnboarding = true;
+    config.hasCompletedOnboarding = true
 
     // Write updated config
-    writeMcpConfig(config);
-  } catch (error) {
-    const lang = readZcfConfig()?.preferredLang || 'en';
-    const i18n = getTranslation(lang);
-    console.error(i18n.configuration?.failedToAddOnboardingFlag || 'Failed to add onboarding flag', error);
-    throw error;
+    writeMcpConfig(config)
+  }
+  catch (error) {
+    const lang = readZcfConfig()?.preferredLang || 'en'
+    const i18n = getTranslation(lang)
+    console.error(i18n.configuration?.failedToAddOnboardingFlag || 'Failed to add onboarding flag', error)
+    throw error
   }
 }

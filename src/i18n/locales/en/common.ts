@@ -6,7 +6,7 @@ export const common = {
   skip: 'Skip',
   cancelled: 'Operation cancelled',
   error: 'Error',
-  complete: "🎉 Setup complete! Use 'claude' command to start.",
+  complete: '🎉 Setup complete! Use \'claude\' command to start.',
   none: 'None',
   notConfigured: 'Not configured',
   spaceToSelectReturn: '- Space to select. Return to submit',
@@ -15,4 +15,4 @@ export const common = {
   goodbye: '👋 Thanks for using ZCF! Goodbye!',
   returnToMenu: 'Return to main menu?',
   back: 'Back',
-};
+}

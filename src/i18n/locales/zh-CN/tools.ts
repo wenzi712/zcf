@@ -15,4 +15,4 @@ export const tools = {
   ccusageFailed: '运行 ccusage 失败',
   checkNetworkConnection: '请检查网络连接并重试',
   errorDetails: '错误详情:',
-};
+}
