@@ -139,6 +139,7 @@ After CCR setup, ZCF automatically configures Claude Code to use CCR as the API 
 - **Auto Updates**: Included in ZCF's update checking system
 
 CCometixLine menu options (accessible via `npx zcf` → `L`):
+
 - `1` Install or Update - Install or update CCometixLine using npm
 - `2` Print Default Configuration - Display current CCometixLine configuration
 - `3` Custom Config - TUI Configuration Mode - Interactive terminal UI for customizing settings
@@ -576,6 +577,7 @@ If you find this project helpful, please consider sponsoring its development. Yo
 A huge thank you to all our sponsors for their generous support!
 
 - Tc (first sponsor)
+- Argolinhas (first ko-fi sponsor ٩(•̤̀ᵕ•̤́๑))
 - 16°C 咖啡 (My best friend🤪, offered Claude Code max $200 package)
 
 ## 📄 License

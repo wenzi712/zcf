@@ -139,6 +139,7 @@ CCR 设置完成后，ZCF 会自动配置 Claude Code 使用 CCR 作为 API 代�
 - **自动更新**：已集成到 ZCF 的更新检查系统
 
 CCometixLine 菜单选项（通过 `npx zcf` → `L` 访问）：
+
 - `1` 安装或更新 - 使用 npm 安装或更新 CCometixLine
 - `2` 打印默认配置 - 显示当前 CCometixLine 配置
 - `3` 自定义配置 - TUI 配置模式 - 交互式终端界面，用于自定义设置
@@ -576,6 +577,7 @@ ZCF 现已支持在 Android Termux 环境中运行：
 非常感谢所有赞助商的慷慨支持！
 
 - Tc (第一个赞助者)
+- Argolinhas (第一个 ko-fi 赞助者 ٩(•̤̀ᵕ•̤́๑))
 - 16°C 咖啡 (我的好基友 🤪, 提供了 Claude Code max $200 套餐)
 
 ## 📄 许可证
