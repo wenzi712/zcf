@@ -578,6 +578,7 @@ ZCF 现已支持在 Android Termux 环境中运行：
 
 - Tc (第一个赞助者)
 - Argolinhas (第一个 ko-fi 赞助者 ٩(•̤̀ᵕ•̤́๑))
+- r*r
 - 16°C 咖啡 (我的好基友 🤪, 提供了 Claude Code max $200 套餐)
 
 ## 📄 许可证
