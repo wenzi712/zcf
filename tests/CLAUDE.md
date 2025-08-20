@@ -76,21 +76,25 @@ export function validateWorkflowInstallation(result: WorkflowInstallResult): boo
 ### Test Layering Strategy
 
 #### 1. Unit Test Layer (`test/unit/`)
+
 - **Scope**: Individual function or class behavior
 - **Isolation**: Completely isolated test environment
 - **Mock**: All external dependencies
 
 #### 2. Integration Test Layer (`test/integration/`)
+
 - **Scope**: Multi-module interaction
 - **Dependencies**: Allow real module interaction
 - **Validation**: End-to-end functionality verification
 
 #### 3. Edge Test Layer (`*.edge.test.ts`)
+
 - **Scope**: Error conditions and boundary cases
 - **Coverage**: Exception handling and extreme inputs
 - **Validation**: Error recovery and graceful degradation
 
 #### 4. New Test Suite (`tests/`)
+
 - **Scope**: New features and refactoring tests
 - **Organization**: Organized by functional modules
 - **Standards**: Higher testing standards
@@ -100,57 +104,68 @@ export function validateWorkflowInstallation(result: WorkflowInstallResult): boo
 ### Command Layer Test Coverage
 
 #### ✅ Init Command Tests
+
 - **File**: `test/unit/commands/init.test.ts` (29 line configuration)
 - **Edge**: `init.edge.test.ts` - Error scenarios
 - **Skip Prompt**: `init-skip-prompt.test.ts` - Non-interactive mode
 - **Coverage**: High - Complete initialization flow
 
 #### ✅ Menu Command Tests
+
 - **File**: `test/unit/commands/menu.test.ts` (40 line configuration)
 - **Function**: Interactive menu logic validation
 - **Mock**: User input and menu navigation
 
 #### ✅ CCR Command Tests
+
 - **File**: `tests/commands/ccr.test.ts`, `ccr.edge.test.ts`
 - **Function**: Claude Code Router configuration
 - **Edge**: Installation failures and configuration errors
 
-#### ✅ CCU Command Tests  
+#### ✅ CCU Command Tests
+
 - **File**: `tests/commands/ccu.test.ts`, `ccu.edge.test.ts`
 - **Function**: CCusage tool integration
 - **Edge**: Command execution failures
 
 #### ✅ Update Command Tests
+
 - **File**: `test/unit/commands/update.test.ts` (24 line configuration)
 - **Function**: Workflow update mechanism
 
 ### Utility Layer Test Coverage
 
 #### ✅ Configuration Management Tests
+
 - **File**: `test/unit/utils/config.test.ts` (10 line reference)
 - **Function**: Configuration read/write, backup, merge
 - **Mock**: File system operations
 
 #### ✅ MCP Service Tests
+
 - **File**: `test/unit/utils/mcp.test.ts` (9 line reference)
 - **Function**: MCP service configuration and management
 - **Platform**: Windows special handling
 
 #### ✅ Platform Compatibility Tests
+
 - **File**: `test/unit/utils/platform.test.ts`
 - **Function**: Cross-platform detection and handling
 - **Mock**: Operating system environment
 
 #### ✅ Workflow Installation Tests
+
 - **File**: `test/unit/utils/workflow-installer.test.ts` (20 line configuration)
 - **Function**: Workflow installation and dependency resolution
 
 #### ✅ CCR Toolset Tests
+
 - **Directory**: `tests/utils/ccr/`
 - **Files**: `config.test.ts`, `installer.test.ts`, `presets.test.ts`
 - **Edge**: Corresponding `.edge.test.ts` files
 
 #### ✅ Cometix Toolset Tests
+
 - **Directory**: `tests/utils/cometix/`
 - **Files**: `installer.test.ts`, `menu.test.ts`, `commands.test.ts`
 - **Function**: CCometixLine statusbar tool
@@ -158,15 +173,18 @@ export function validateWorkflowInstallation(result: WorkflowInstallResult): boo
 ### System-Level Test Coverage
 
 #### ✅ Internationalization Tests
+
 - **File**: `tests/i18n/locales/workflow.test.ts`
 - **Function**: Translation completeness and consistency verification
 
 #### ✅ Workflow Configuration Tests
+
 - **File**: `tests/config/workflows.test.ts`
 - **Edge**: `test/unit/config/workflows.edge.test.ts`
 - **Function**: Workflow configuration validation
 
 #### ✅ Template Validation Tests
+
 - **File**: `tests/templates/chinese-templates.test.ts`
 - **Function**: Chinese template completeness verification
 
@@ -176,12 +194,13 @@ export function validateWorkflowInstallation(result: WorkflowInstallResult): boo
 
 - **Line Coverage**: 80%+ (configured in vitest.config.ts)
 - **Function Coverage**: 80%+
-- **Branch Coverage**: 80%+  
+- **Branch Coverage**: 80%+
 - **Statement Coverage**: 80%+
 
 ### Mock Strategy
 
 #### ✅ File System Mock
+
 ```typescript
 // Mock file operations
 vi.mock('node:fs', () => ({
@@ -192,6 +211,7 @@ vi.mock('node:fs', () => ({
 ```
 
 #### ✅ Command Execution Mock
+
 ```typescript
 // Mock external commands
 vi.mock('tinyexec', () => ({
@@ -200,6 +220,7 @@ vi.mock('tinyexec', () => ({
 ```
 
 #### ✅ User Input Mock
+
 ```typescript
 // Mock interactive prompts
 vi.mock('inquirer', () => ({
@@ -208,6 +229,7 @@ vi.mock('inquirer', () => ({
 ```
 
 #### ✅ Platform Detection Mock
+
 ```typescript
 // Mock platform environment
 vi.mock('../utils/platform', () => ({
@@ -260,7 +282,7 @@ Use `async/await` and Vitest's async test support, ensuring async operations com
 ### Q: How to choose Mock strategy?
 
 - File system operations must be mocked
-- External command execution must be mocked  
+- External command execution must be mocked
 - User interaction must be mocked
 - Platform detection can be mocked for multi-platform testing
 
@@ -276,12 +298,14 @@ Use `async/await` and Vitest's async test support, ensuring async operations com
 ### Core Test Suites
 
 #### Unit Tests (`test/unit/`)
+
 - `commands/` - Command layer unit tests (8 files)
 - `utils/` - Utility layer unit tests (25 files)
 - `config/` - Configuration system tests (3 files)
 - `cli-*.test.ts` - CLI system tests (3 files)
 
 #### New Test Suite (`tests/`)
+
 - `commands/` - Command tests (4 files)
 - `utils/ccr/` - CCR tool tests (6 files)
 - `utils/cometix/` - Cometix tests (3 files)
@@ -291,24 +315,27 @@ Use `async/await` and Vitest's async test support, ensuring async operations com
 - `templates/` - Template tests (1 file)
 
 #### Integration Tests (`test/integration/`)
+
 - `statusline-config.test.ts` - Statusbar configuration integration
 - `test-helpers.ts` - Integration test helpers
 
 #### Test Helpers (`test/helpers/`)
+
 - `statusline-helpers.ts` - Statusbar test helpers
 
 ### Statistics
 
 - **Total Test Files**: 60+ files
-- **Test Distribution**: 
+- **Test Distribution**:
   - Unit tests: 80%
-  - Integration tests: 10% 
+  - Integration tests: 10%
   - Edge tests: 10%
 - **Platform Coverage**: Windows/macOS/Linux/Termux
 
 ## Changelog
 
 ### 2025-08-20
+
 - **Module Documentation Created**: Completed comprehensive documentation of tests module
 - **Test Architecture Analysis**: Detailed analysis of 60+ test files' organizational structure
 - **Coverage Assessment**: Confirmed 80%+ high coverage target

@@ -8,7 +8,6 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
-      '**/.zcf/**',
     ],
     coverage: {
       provider: 'v8',
@@ -18,7 +17,6 @@ export default defineConfig({
         'dist',
         'bin',
         'templates',
-        '.zcf',
         '*.config.ts',
         '*.config.mjs',
         'tests/**',

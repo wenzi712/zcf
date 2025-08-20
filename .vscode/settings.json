@@ -33,8 +33,7 @@
     "**/node_modules/**": true,
     "**/tmp/**": true,
     "**/dist/**": true,
-    "**/yarn.lock": true,
-    ".zcf/**": true
+    "**/yarn.lock": true
   },
 
   // search
@@ -62,8 +61,7 @@
     "dist": true,
     "node_modules": true,
     "CHANGELOG.md": true,
-    "**/pnpm-lock.yaml": true,
-    "**/.zcf": true
+    "**/pnpm-lock.yaml": true
   },
 
   // Control the display of nested files.

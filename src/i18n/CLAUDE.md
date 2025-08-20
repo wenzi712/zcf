@@ -32,21 +32,21 @@ export type SupportedLang = 'zh-CN' | 'en'
 
 ```typescript
 interface TranslationStructure {
-  common: CommonTranslations         // Common translations
-  api: ApiTranslations              // API related
-  cli: CliTranslations              // CLI interface
-  menu: MenuTranslations            // Menu system
-  installation: InstallationTranslations  // Installation related
+  common: CommonTranslations // Common translations
+  api: ApiTranslations // API related
+  cli: CliTranslations // CLI interface
+  menu: MenuTranslations // Menu system
+  installation: InstallationTranslations // Installation related
   configuration: ConfigurationTranslations // Configuration related
-  mcp: McpTranslations             // MCP services
-  ccr: CcrTranslations             // CCR related
-  cometix: CometixTranslations     // Cometix tools
-  workflow: WorkflowTranslations   // Workflows
-  bmad: BmadTranslations          // BMad workflow
-  errors: ErrorTranslations        // Error messages
-  tools: ToolsTranslations         // Tool integration
-  updater: UpdaterTranslations     // Updater
-  language: LanguageTranslations   // Language selection
+  mcp: McpTranslations // MCP services
+  ccr: CcrTranslations // CCR related
+  cometix: CometixTranslations // Cometix tools
+  workflow: WorkflowTranslations // Workflows
+  bmad: BmadTranslations // BMad workflow
+  errors: ErrorTranslations // Error messages
+  tools: ToolsTranslations // Tool integration
+  updater: UpdaterTranslations // Updater
+  language: LanguageTranslations // Language selection
 }
 ```
 
@@ -98,6 +98,7 @@ interface ApiTranslations {
 ### Language File Organization
 
 #### Chinese Translations (`locales/zh-CN/`)
+
 - `common.ts` - Common terms and operations
 - `api.ts` - API configuration related
 - `cli.ts` - CLI command line interface
@@ -115,6 +116,7 @@ interface ApiTranslations {
 - `language.ts` - Language selection
 
 #### English Translations (`locales/en/`)
+
 - Completely corresponds to Chinese directory structure
 - Provides English translations for all features
 - Maintains API interface consistency
@@ -131,17 +133,20 @@ interface ApiTranslations {
 ### Test Coverage
 
 #### ✅ Translation Completeness
+
 - Chinese-English translation key correspondence verification
 - Missing translation detection
 - Invalid key reference checking
 
 #### ✅ Functional Module Coverage
+
 - 15 translation modules fully covered
 - CLI interface localization
 - Error message internationalization
 - Workflow description multilingual support
 
 #### ✅ String Processing
+
 - Template interpolation functionality
 - Special character handling
 - Long text formatting
@@ -216,6 +221,7 @@ Automated tests ensure all language files have consistent key structures, missin
 ## Changelog
 
 ### 2025-08-20
+
 - **Module Documentation Created**: Completed detailed documentation of i18n module
 - **Translation Architecture Analysis**: Confirmed complete structure of 15 translation modules
 - **Quality Assessment**: Verified 100% translation coverage and complete Chinese-English correspondence

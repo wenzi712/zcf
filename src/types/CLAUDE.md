@@ -10,7 +10,7 @@ TypeScript type definition module providing complete type system support for the
 
 - **Main Entry Points**:
   - `workflow.ts` - Workflow-related type definitions
-  - `config.ts` - Configuration-related type definitions  
+  - `config.ts` - Configuration-related type definitions
   - `ccr.ts` - Claude Code Router type definitions
 
 ## External Interfaces
@@ -22,11 +22,11 @@ TypeScript type definition module providing complete type system support for the
 export type WorkflowType = 'commonTools' | 'sixStepsWorkflow' | 'featPlanUx' | 'bmadWorkflow' | 'gitWorkflow'
 
 // Agent type enumeration
-export type AgentType = 
-  | 'init-architect'
-  | 'get-current-datetime'
-  | 'planner'
-  | 'ui-ux-designer'
+export type AgentType
+  = | 'init-architect'
+    | 'get-current-datetime'
+    | 'planner'
+    | 'ui-ux-designer'
 
 // Workflow configuration interface
 export interface WorkflowConfig {
@@ -123,6 +123,7 @@ export interface CcrOptions {
 ### Core Type Classifications
 
 #### 1. Workflow Types (`workflow.ts`)
+
 - **WorkflowType**: Supported workflow type enumeration
 - **AgentType**: AI agent type enumeration
 - **WorkflowConfig**: Workflow configuration structure
@@ -130,11 +131,13 @@ export interface CcrOptions {
 - **WorkflowInstallResult**: Installation result type
 
 #### 2. Configuration Types (`config.ts`)
+
 - **McpService**: MCP service definition
 - **McpServerConfig**: MCP server configuration
 - **ClaudeConfiguration**: Claude complete configuration
 
 #### 3. CCR Types (`ccr.ts`)
+
 - **CcrConfig**: Claude Code Router configuration
 - **CcrOptions**: CCR operation options
 
@@ -144,7 +147,7 @@ export interface CcrOptions {
 Types Module
 ├── Workflow Types
 │   ├── WorkflowType (5 types)
-│   ├── AgentType (11 types)  
+│   ├── AgentType (11 types)
 │   ├── WorkflowConfig
 │   ├── WorkflowAgent
 │   └── WorkflowInstallResult
@@ -169,18 +172,21 @@ Types Module
 ### Type Coverage
 
 #### ✅ Workflow Type System
+
 - 5 workflow types fully defined
 - 11 AI agent types supported
 - Complete workflow configuration interface
 - Installation result type definition
 
 #### ✅ Configuration Type System
+
 - Complete MCP service type definition
 - Multi-language description support
 - Optional API key configuration
 - Complete Claude configuration structure
 
 #### ✅ Integration Type Support
+
 - CCR proxy configuration types
 - CLI option type definitions
 - Error handling type support
@@ -246,6 +252,7 @@ Use TypeScript's optional property syntax (`?:`), and clearly document default v
 ## Changelog
 
 ### 2025-08-20
+
 - **Module Documentation Created**: Completed comprehensive documentation of types module
 - **Type Architecture Analysis**: Detailed organization of workflow, configuration, and CCR three major type systems
 - **Interface Completeness Confirmation**: Verified type coverage for all core business logic

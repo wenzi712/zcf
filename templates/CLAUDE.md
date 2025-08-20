@@ -36,17 +36,17 @@ templates/
 // Template categories
 interface TemplateCategories {
   memory: {
-    'mcp.md': string              // MCP service guidance
+    'mcp.md': string // MCP service guidance
     'technical-guides.md': string // Technical implementation guides
-    'personality.md': string      // AI personality configuration
-    'rules.md': string           // Core programming principles
+    'personality.md': string // AI personality configuration
+    'rules.md': string // Core programming principles
   }
   workflow: {
-    common: WorkflowCommands      // Common tools workflow
-    plan: WorkflowCommands        // Feature planning workflow
-    sixStep: WorkflowCommands     // Six-step development workflow
-    bmad: WorkflowCommands        // BMad enterprise workflow
-    git: WorkflowCommands         // Git operation workflow
+    common: WorkflowCommands // Common tools workflow
+    plan: WorkflowCommands // Feature planning workflow
+    sixStep: WorkflowCommands // Six-step development workflow
+    bmad: WorkflowCommands // BMad enterprise workflow
+    git: WorkflowCommands // Git operation workflow
   }
 }
 ```
@@ -71,28 +71,34 @@ interface TemplateCategories {
 ### Workflow Template Structure
 
 #### Common Tools Workflow (`common/`)
+
 - **Commands**: `init-project.md` - Project initialization command
 - **Agents**: `init-architect.md`, `get-current-datetime.md` - Core utility agents
 
 #### Feature Planning Workflow (`plan/`)
+
 - **Commands**: `feat.md` - Feature development command
 - **Agents**: `planner.md`, `ui-ux-designer.md` - Planning and design agents
 
 #### Six-Step Development Workflow (`sixStep/`)
+
 - **Commands**: `workflow.md` - Six-step development process
 - **Agents**: None - Process-oriented workflow
 
 #### BMad Enterprise Workflow (`bmad/`)
+
 - **Commands**: `bmad-init.md` - BMad initialization
 - **Agents**: Complete enterprise development team simulation
 
 #### Git Workflow (`git/`)
+
 - **Commands**: `git-commit.md`, `git-worktree.md`, `git-cleanBranches.md`, `git-rollback.md`
 - **Agents**: None - Git operation commands
 
 ### Memory Template Structure
 
 #### AI Memory Templates
+
 - **mcp.md**: MCP service usage guidelines and best practices
 - **technical-guides.md**: Technical execution guidelines and standards
 - **personality.md**: AI assistant behavior and personality configuration
@@ -101,12 +107,14 @@ interface TemplateCategories {
 ### Template Language Support
 
 #### Chinese Templates (`zh-CN/`)
+
 - Complete Chinese localization for all templates
 - Chinese AI interaction patterns
 - Chinese technical documentation standards
 - Chinese workflow descriptions
 
 #### English Templates (`en/`)
+
 - Complete English localization for all templates
 - English AI interaction patterns
 - English technical documentation standards
@@ -124,18 +132,21 @@ interface TemplateCategories {
 ### Quality Metrics
 
 #### ✅ Template Completeness
+
 - Chinese-English template parity: **100%**
 - Workflow category coverage: **5/5 categories**
 - Memory template coverage: **4/4 templates**
 - Command template coverage: **Complete**
 
 #### ✅ Language Support
+
 - Chinese localization: **Complete**
 - English localization: **Complete**
 - Template structure consistency: **Validated**
 - Content accuracy: **Verified**
 
 #### ✅ Installation Testing
+
 - Template copying mechanism: **Tested**
 - Language selection logic: **Verified**
 - Template merging: **Functional**
@@ -184,12 +195,14 @@ Templates are copied from the package to `~/.claude/` directory based on user's 
 ### Chinese Templates (`zh-CN/`)
 
 #### Memory Templates
+
 - `memory/mcp.md` - MCP服务使用指南
 - `memory/technical-guides.md` - 技术执行准则
 - `memory/personality.md` - AI助手个性配置
 - `memory/rules.md` - 核心编程原则
 
 #### Workflow Templates
+
 - `workflow/common/commands/init-project.md` - 项目初始化命令
 - `workflow/common/agents/init-architect.md` - 初始化架构师
 - `workflow/common/agents/get-current-datetime.md` - 时间工具
@@ -203,12 +216,14 @@ Templates are copied from the package to `~/.claude/` directory based on user's 
 ### English Templates (`en/`)
 
 #### Memory Templates
+
 - `memory/mcp.md` - MCP Services Usage Guide
 - `memory/technical-guides.md` - Technical Execution Guidelines
 - `memory/personality.md` - AI Assistant Personality Configuration
 - `memory/rules.md` - Core Programming Principles
 
 #### Workflow Templates
+
 - `workflow/common/commands/init-project.md` - Project initialization command
 - `workflow/common/agents/init-architect.md` - Initialization architect
 - `workflow/common/agents/get-current-datetime.md` - DateTime utility
@@ -227,6 +242,7 @@ Templates are copied from the package to `~/.claude/` directory based on user's 
 ## Changelog
 
 ### 2025-08-20
+
 - **Module Documentation Created**: Completed comprehensive documentation of templates module
 - **Template Architecture Analysis**: Detailed analysis of bilingual template structure and workflow organization
 - **Quality Assessment**: Verified complete Chinese-English template parity and coverage

@@ -5,8 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Change Log (Changelog)
 
 ### 2025-08-20
+
 - **AI Context Initialization**: Completed comprehensive repository analysis and documentation generation
-- **Module Structure Mapping**: Identified 6 core modules with detailed architecture documentation  
+- **Module Structure Mapping**: Identified 6 core modules with detailed architecture documentation
 - **Coverage Analysis**: Achieved 63.2% file coverage (158/250 files) with focus on critical paths
 - **Documentation Enhancement**: Added Mermaid diagrams and module navigation structure
 - **Templates Module Documentation**: Created comprehensive documentation for templates module
@@ -30,14 +31,14 @@ graph TD
     A --> E[src/types];
     A --> F[templates];
     A --> G[tests];
-    
+
     B --> B1[init.ts - Full initialization];
     B --> B2[menu.ts - Interactive UI];
     B --> B3[update.ts - Workflow updates];
     B --> B4[ccr.ts - Router management];
     B --> B5[ccu.ts - Usage analysis];
     B --> B6[check-updates.ts - Tool updates];
-    
+
     C --> C1[config.ts - Configuration management];
     C --> C2[installer.ts - Claude Code installation];
     C --> C3[mcp.ts - MCP services];
@@ -45,23 +46,23 @@ graph TD
     C --> C5[workflow-installer.ts - Workflow management];
     C --> C6[ccr/ - CCR integration];
     C --> C7[cometix/ - Status line tools];
-    
+
     D --> D1[locales/zh-CN - Chinese translations];
     D --> D2[locales/en - English translations];
     D --> D3[types.ts - Translation interfaces];
-    
+
     E --> E1[workflow.ts - Workflow types];
     E --> E2[config.ts - Configuration types];
     E --> E3[ccr.ts - CCR types];
-    
+
     F --> F1[zh-CN/ - Chinese templates];
     F --> F2[en/ - English templates];
     F --> F3[common/ - Shared configuration];
-    
+
     G --> G1[unit/ - Unit tests];
     G --> G2[integration/ - Integration tests];
     G --> G3[edge/ - Edge case tests];
-    
+
     click B1 "./src/commands/CLAUDE.md" "View commands module"
     click C1 "./src/utils/CLAUDE.md" "View utils module"
     click D1 "./src/i18n/CLAUDE.md" "View i18n module"
@@ -72,14 +73,14 @@ graph TD
 
 ## Module Index
 
-| Module | Path | Description | Entry Points | Test Coverage |
-|--------|------|-------------|--------------|---------------|
-| **Commands** | `src/commands/` | CLI command implementations | init.ts, menu.ts, update.ts, ccr.ts, ccu.ts, check-updates.ts | High - dedicated suites |
-| **Utilities** | `src/utils/` | Core functionality and platform support | config.ts, installer.ts, mcp.ts, platform.ts, workflow-installer.ts | High - comprehensive unit tests |
-| **Internationalization** | `src/i18n/` | Multilingual support (zh-CN/en) | index.ts, types.ts | Medium - translation validation |
-| **Types** | `src/types/` | TypeScript type definitions | workflow.ts, config.ts, ccr.ts | Implicit through usage |
-| **Templates** | `templates/` | Configuration templates and workflows | common/, zh-CN/, en/ | Medium - template tests |
-| **Testing** | `tests/` | Test suites with core and edge coverage | Unit, integration, edge test files | Self-testing module |
+| Module                   | Path            | Description                             | Entry Points                                                        | Test Coverage                   |
+| ------------------------ | --------------- | --------------------------------------- | ------------------------------------------------------------------- | ------------------------------- |
+| **Commands**             | `src/commands/` | CLI command implementations             | init.ts, menu.ts, update.ts, ccr.ts, ccu.ts, check-updates.ts       | High - dedicated suites         |
+| **Utilities**            | `src/utils/`    | Core functionality and platform support | config.ts, installer.ts, mcp.ts, platform.ts, workflow-installer.ts | High - comprehensive unit tests |
+| **Internationalization** | `src/i18n/`     | Multilingual support (zh-CN/en)         | index.ts, types.ts                                                  | Medium - translation validation |
+| **Types**                | `src/types/`    | TypeScript type definitions             | workflow.ts, config.ts, ccr.ts                                      | Implicit through usage          |
+| **Templates**            | `templates/`    | Configuration templates and workflows   | common/, zh-CN/, en/                                                | Medium - template tests         |
+| **Testing**              | `tests/`        | Test suites with core and edge coverage | Unit, integration, edge test files                                  | Self-testing module             |
 
 ## CLI Usage
 
@@ -148,6 +149,7 @@ pnpm vitest --grep "should handle"
 ```
 
 The project uses Vitest with a layered testing approach:
+
 1. **Core Tests** (`*.test.ts`) - Basic functionality and main flows
 2. **Edge Tests** (`*.edge.test.ts`) - Boundary conditions and error scenarios
 3. **Coverage Goals**: 80% minimum across lines, functions, branches, and statements
@@ -158,7 +160,7 @@ The project uses Vitest with a layered testing approach:
 
 - **Documentation Language**: Except for README_zh-CN, all code comments and documentation should be written in English
   - Code comments must be in English
-  - All documentation files (*.md) must be in English except README_zh-CN
+  - All documentation files (\*.md) must be in English except README_zh-CN
   - API documentation and inline documentation must use English
   - Git commit messages should be in English
 
@@ -228,6 +230,7 @@ pnpm release
 ---
 
 **Important Reminders**:
+
 - Do what has been asked; nothing more, nothing less
 - NEVER create files unless absolutely necessary for achieving your goal
 - ALWAYS prefer editing an existing file to creating a new one

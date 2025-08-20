@@ -10,7 +10,7 @@ Core utility module providing configuration management, platform compatibility, 
 
 - **Main Entry Points**:
   - `config.ts` - Configuration file management
-  - `installer.ts` - Claude Code installation logic  
+  - `installer.ts` - Claude Code installation logic
   - `mcp.ts` - MCP service configuration
   - `platform.ts` - Cross-platform support
   - `workflow-installer.ts` - Workflow installation management
@@ -158,24 +158,28 @@ interface WorkflowConfig {
 ### Covered Functional Modules
 
 #### ✅ Configuration Management
+
 - Configuration file read/write operations
 - Backup and recovery mechanisms
 - Configuration merge strategies
 - API configuration validation
 
 #### ✅ Platform Compatibility
+
 - Windows path handling
 - Termux environment detection
 - Command availability checking
 - Cross-platform execution wrapping
 
 #### ✅ MCP Services
+
 - Service configuration generation
 - Windows special handling
 - Service merge logic
 - Environment variable processing
 
 #### ✅ Workflow System
+
 - Template file installation
 - Dependency resolution
 - Multi-language template support
@@ -241,6 +245,7 @@ All configuration modifications automatically create timestamped backups in the 
 ## Changelog
 
 ### 2025-08-20
+
 - **Module Documentation Created**: Completed comprehensive documentation of utils module
 - **Architecture Organization**: Detailed analysis of 30+ utility functions' functionality and dependencies
 - **Submodule Identification**: Confirmed CCR, Cometix, Tools three major submodules
