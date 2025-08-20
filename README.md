@@ -168,7 +168,7 @@ Full initialization (`npx zcf`) will automatically:
 
 After configuration:
 
-- **For first-time project use, strongly recommend running `/init` to generate CLAUDE.md for better AI understanding of project architecture**
+- **For first-time project use, strongly recommend running `/init-project` to generate CLAUDE.md for better AI understanding of project architecture**
 - `<task description>` - Execute directly without workflow, following SOLID, KISS, DRY, and YAGNI principles, suitable for small tasks like bug fixes
 - `/feat <task description>` - Start new feature development, divided into plan and UI phases
 - `/workflow <task description>` - Execute complete development workflow, not automated, starts with multiple solution options, asks for user feedback at each step, allows plan modifications, maximum control
