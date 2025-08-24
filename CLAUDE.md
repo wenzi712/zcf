@@ -4,6 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Change Log (Changelog)
 
+### 2025-08-24
+
+- **Project Version Update**: Updated to v2.11.0 with intelligent IDE detection and common tools workflow
+- **Test Directory Reorganization**: Migrated from `test/` to `tests/` for consistency and improved structure
+- **ESLint Integration**: Added comprehensive ESLint configuration with @antfu/eslint-config
+- **Documentation Synchronization**: Updated documentation to reflect latest code changes and architectural improvements
+- **Coverage Analysis Update**: Maintained 63.2% file coverage (158/250 files) with enhanced focus on critical paths
+
 ### 2025-08-20
 
 - **AI Context Initialization**: Completed comprehensive repository analysis and documentation generation
@@ -187,6 +195,8 @@ The project uses Vitest with a layered testing approach:
 - **TypeScript**: Strict TypeScript with explicit type definitions
 - **Error Handling**: Graceful error handling with user-friendly messages
 - **Cross-Platform Support**: Special handling for Windows paths and Termux environment
+- **Code Formatting**: Uses @antfu/eslint-config for consistent code style
+- **Testing Organization**: Tests organized in `tests/` directory with unit/integration/edge structure
 
 ## AI Usage Guidelines
 
@@ -197,6 +207,7 @@ The project uses Vitest with a layered testing approach:
 3. **Configuration Merging**: Smart config merging to preserve user customizations
 4. **Cross-Platform Support**: Windows/macOS/Linux/Termux compatibility
 5. **Template System**: Language-specific templates with workflow categorization
+6. **IDE Integration**: Intelligent IDE detection and auto-open functionality for git-worktree
 
 ### Important Implementation Details
 
@@ -206,6 +217,7 @@ The project uses Vitest with a layered testing approach:
 4. **Workflow System**: Modular workflow installation with dependency resolution
 5. **CCR Integration**: Claude Code Router proxy management
 6. **Auto-Update System**: Automated tool updating for Claude Code, CCR, and CCometixLine
+7. **Common Tools Workflow**: New workflow category with init-project command and related agents
 
 ### Testing Philosophy
 
@@ -213,6 +225,7 @@ The project uses Vitest with a layered testing approach:
 - Cross-platform testing with platform detection mocks
 - Comprehensive edge case testing for boundary conditions and error scenarios
 - 80% minimum coverage across all metrics
+- Tests organized in dedicated `tests/` directory with clear categorization
 
 ## Release & Publishing
 
