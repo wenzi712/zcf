@@ -116,6 +116,52 @@ ABSOLUTE_WORKTREE_PATH="$WORKTREE_BASE/<path>"
    - **删除时自动清理**: 同时清理目录和 git 引用
    - **清晰的状态报告**: 显示 worktree 位置和分支状态
 
+7. **环境文件处理**
+   - **自动检测**: 扫描 `.gitignore` 文件中的环境变量文件模式
+   - **智能复制**: 复制 `.gitignore` 中列出的 `.env` 和 `.env.*` 文件
+   - **排除逻辑**: 跳过 `.env.example` 等模板文件
+   - **权限保护**: 保持原始文件权限和时间戳
+   - **用户反馈**: 提供已复制环境文件的清晰状态信息
+
+```bash
+# 环境文件复制实现
+copy_environment_files() {
+    local main_repo="$MAIN_REPO_PATH"
+    local target_worktree="$ABSOLUTE_WORKTREE_PATH"
+    local gitignore_file="$main_repo/.gitignore"
+    
+    # 检查 .gitignore 是否存在
+    if [[ ! -f "$gitignore_file" ]]; then
+        return 0
+    fi
+    
+    local copied_count=0
+    
+    # 检测 .env 文件
+    if [[ -f "$main_repo/.env" ]] && grep -q "^\.env$" "$gitignore_file"; then
+        cp "$main_repo/.env" "$target_worktree/.env"
+        echo "✅ 已复制 .env"
+        ((copied_count++))
+    fi
+    
+    # 检测 .env.* 模式文件（排除 .env.example）
+    for env_file in "$main_repo"/.env.*; do
+        if [[ -f "$env_file" ]] && [[ "$(basename "$env_file")" != ".env.example" ]]; then
+            local filename=$(basename "$env_file")
+            if grep -q "^\.env\.\*$" "$gitignore_file"; then
+                cp "$env_file" "$target_worktree/$filename"
+                echo "✅ 已复制 $filename"
+                ((copied_count++))
+            fi
+        fi
+    done
+    
+    if [[ $copied_count -gt 0 ]]; then
+        echo "📋 已从 .gitignore 复制 $copied_count 个环境文件"
+    fi
+}
+```
+
 ---
 
 ## Enhanced Features
@@ -171,6 +217,9 @@ ABSOLUTE_WORKTREE_PATH="$WORKTREE_BASE/<path>"
 
 ```
 ✅ Worktree created at ../.zcf/项目名/feature-ui
+✅ 已复制 .env
+✅ 已复制 .env.local
+📋 已从 .gitignore 复制 2 个环境文件
 🖥️ 是否在 IDE 中打开 ../.zcf/项目名/feature-ui？[y/n]: y
 🚀 正在用 VS Code 打开 ../.zcf/项目名/feature-ui...
 ```
@@ -221,5 +270,7 @@ git config worktree.ide.autodetect true  # 默认
 - **迁移**: 仅限未提交改动；已提交内容需使用 `git cherry-pick`
 - **IDE 要求**: 命令行工具必须在 PATH 中
 - **跨平台**: 支持 Windows、macOS、Linux
+- **环境文件**: 自动复制 `.gitignore` 中列出的环境文件到新 worktree
+- **文件排除**: 模板文件如 `.env.example` 仅保留在主仓库中
 
 ---

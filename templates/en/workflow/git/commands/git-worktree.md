@@ -116,6 +116,52 @@ ABSOLUTE_WORKTREE_PATH="$WORKTREE_BASE/<path>"
    - **Auto-cleanup on removal**: Clean both directory and git references
    - **Clear status reporting**: Display worktree locations and branch status
 
+7. **Environment File Handling**
+   - **Auto-detection**: Scan `.gitignore` for environment variable file patterns
+   - **Smart copying**: Copy `.env` and `.env.*` files that are listed in `.gitignore`
+   - **Exclusion logic**: Skip `.env.example` and other template files
+   - **Permission preservation**: Maintain original file permissions and timestamps
+   - **User feedback**: Provide clear status on copied environment files
+
+```bash
+# Environment file copying implementation
+copy_environment_files() {
+    local main_repo="$MAIN_REPO_PATH"
+    local target_worktree="$ABSOLUTE_WORKTREE_PATH"
+    local gitignore_file="$main_repo/.gitignore"
+    
+    # Check if .gitignore exists
+    if [[ ! -f "$gitignore_file" ]]; then
+        return 0
+    fi
+    
+    local copied_count=0
+    
+    # Detect .env file
+    if [[ -f "$main_repo/.env" ]] && grep -q "^\.env$" "$gitignore_file"; then
+        cp "$main_repo/.env" "$target_worktree/.env"
+        echo "✅ Copied .env"
+        ((copied_count++))
+    fi
+    
+    # Detect .env.* pattern files (excluding .env.example)
+    for env_file in "$main_repo"/.env.*; do
+        if [[ -f "$env_file" ]] && [[ "$(basename "$env_file")" != ".env.example" ]]; then
+            local filename=$(basename "$env_file")
+            if grep -q "^\.env\.\*$" "$gitignore_file"; then
+                cp "$env_file" "$target_worktree/$filename"
+                echo "✅ Copied $filename"
+                ((copied_count++))
+            fi
+        fi
+    done
+    
+    if [[ $copied_count -gt 0 ]]; then
+        echo "📋 Copied $copied_count environment file(s) from .gitignore"
+    fi
+}
+```
+
 ---
 
 ## Enhanced Features
@@ -171,6 +217,9 @@ ABSOLUTE_WORKTREE_PATH="$WORKTREE_BASE/<path>"
 
 ```
 ✅ Worktree created at ../.zcf/project-name/feature-ui
+✅ Copied .env
+✅ Copied .env.local
+📋 Copied 2 environment file(s) from .gitignore
 🖥️ Open ../.zcf/project-name/feature-ui in IDE? [y/n]: y
 🚀 Opening ../.zcf/project-name/feature-ui in VS Code...
 ```
@@ -221,5 +270,7 @@ git config worktree.ide.autodetect true  # default
 - **Migration**: Only uncommitted changes; use `git cherry-pick` for commits
 - **IDE requirement**: Command-line tools must be in PATH
 - **Cross-platform**: Supports Windows, macOS, Linux
+- **Environment files**: Automatically copies environment files listed in `.gitignore` to new worktrees
+- **File exclusions**: Template files like `.env.example` are preserved in main repo only
 
 ---
