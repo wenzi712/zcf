@@ -24,7 +24,7 @@ npx zcf          # 打开交互式菜单，根据你的需求选择操作
 
 - `1` 完整初始化（等同于 `zcf i`）
 - `2` 导入工作流（等同于 `zcf u`）
-- `3-7` 配置管理（API/CCR、MCP、模型设置、AI 个性等）
+- `3-7` 配置管理（API/CCR、MCP、模型设置、AI 输出样式、环境权限等）
 - `R` Claude Code Router 管理（v2.8.1 增强）
 - `U` ccusage - Claude Code 用量分析
 - `L` CCometixLine - 基于 Rust 的高性能状态栏工具，集成 Git 信息和实时使用量跟踪（v2.9.9+ 新增）
@@ -61,10 +61,10 @@ npx zcf → 选择 2  # 通过菜单执行工作流更新
 
 ```bash
 # 缩写版
-npx zcf i -s -g zh-CN -t api_key -k "sk-xxx" -u "https://xxx.xxx"
+npx zcf i -s -g zh-CN -t api_key -k "sk-xxx" -u "https://xxx.xxx" -o "nekomata-engineer" -d "nekomata-engineer"
 
 # 完整版
-npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" --api-url "https://xxx.xxx"
+npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" --api-url "https://xxx.xxx" --output-styles "nekomata-engineer" --default-output-style "nekomata-engineer"
 ```
 
 #### 非交互模式参数说明
@@ -78,14 +78,31 @@ npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" -
 | `--config-lang, -c`          | 配置文件语言                            | `zh-CN`, `en`                                                                                          | 否                            | `en`                                                                                   |
 | `--ai-output-lang, -a`       | AI 输出语言                             | `zh-CN`, `en`, 自定义字符串                                                                            | 否                            | `en`                                                                                   |
 | `--all-lang, -g`             | 统一设置所有语言参数                    | `zh-CN`, `en`, 自定义字符串                                                                            | 否                            | -（会覆盖上述 3 个参数。当为自定义字符串时，AI 输出语言为自定义，交互和配置语言为 en） |
-| `--config-action, -o`        | 配置处理方式                            | `new`, `backup`, `merge`, `docs-only`, `skip`                                                          | 否                            | `backup`                                                                               |
+| `--config-action, -r`        | 配置处理方式                            | `new`, `backup`, `merge`, `docs-only`, `skip`                                                          | 否                            | `backup`                                                                               |
 | `--api-type, -t`             | API 配置类型                            | `auth_token`, `api_key`, `ccr_proxy`, `skip`                                                           | 否                            | `skip`                                                                                 |
 | `--api-key, -k`              | API 密钥（用于 API 密钥和认证令牌类型） | 字符串                                                                                                 | `api-type` 不为 `skip` 时必需 | -                                                                                      |
 | `--api-url, -u`              | 自定义 API URL                          | URL 字符串                                                                                             | 否                            | 官方 API                                                                               |
 | `--mcp-services, -m`         | 要安装的 MCP 服务（多选，逗号分隔）     | `context7`, `mcp-deepwiki`, `Playwright`, `exa`, 或 `skip` 表示跳过全部                                | 否                            | `all`                                                                                  |
 | `--workflows, -w`            | 要安装的工作流（多选，逗号分隔）        | `commonTools`, `sixStepsWorkflow`, `featPlanUx`, `gitWorkflow`, `bmadWorkflow`, 或 `skip` 表示跳过全部 | 否                            | `all`                                                                                  |
-| `--ai-personality, -p`       | AI 个性类型                             | `professional`, `catgirl`, `friendly`, `mentor`, `custom`                                              | 否                            | `professional`                                                                         |
+| `--output-styles, -o`        | 要安装的输出样式（多选，逗号分隔）           | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`，或 `skip` 表示不安装                     | 否                            | `all`                                                                                  |
+| `--default-output-style, -d`  | 默认输出样式                           | 同输出样式选项，还包括内置样式：`default`, `explanatory`, `learning`                                           | 否                            | `engineer-professional`                                                               |
 | `--install-cometix-line, -x` | 安装 CCometixLine 状态栏工具            | `true`, `false`                                                                                        | 否                            | `true`                                                                                 |
+
+#### 🎨 AI 输出样式（v2.12+ 新功能）
+
+ZCF 现在支持可定制的 AI 输出样式，个性化你的 Claude Code 体验：
+
+**可用的输出样式：**
+- `engineer-professional`：专业软件工程师，遵循 SOLID、KISS、DRY、YAGNI 原则
+- `nekomata-engineer`：专业猫娘工程师 Nova，结合严谨工程技术与可爱猫娘特质
+- `laowang-engineer`：老王暴脾气技术流，绝不容忍代码错误和不规范代码
+- 内置样式：`default`、`explanatory`、`learning`（始终可用）
+
+**功能特性：**
+- 安装多个样式并在它们之间切换
+- 为所有项目设置全局默认样式
+- 自动清理旧版个性化配置文件
+- 基于模板的自定义系统
 
 #### 🎯 BMad 工作流（v2.7 新功能）
 

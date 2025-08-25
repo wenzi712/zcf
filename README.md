@@ -24,7 +24,7 @@ Menu options include:
 
 - `1` Full initialization (equivalent to `zcf i`)
 - `2` Import workflows (equivalent to `zcf u`)
-- `3-7` Configuration management (API/CCR, MCP, Model settings, AI personality, etc.)
+- `3-7` Configuration management (API/CCR, MCP, Model settings, AI output style, environment permissions, etc.)
 - `R` Claude Code Router management (enhanced in v2.8.1)
 - `U` ccusage - Claude Code usage analysis
 - `L` CCometixLine - High-performance statusline tool with Git integration and real-time usage tracking (v2.9.9+ new)
@@ -78,14 +78,31 @@ When using `--skip-prompt`, the following parameters are available:
 | `--config-lang, -c`          | Configuration language                                  | `zh-CN`, `en`                                                                                      | No                                     | `en`                                                                                                                             |
 | `--ai-output-lang, -a`       | AI output language                                      | `zh-CN`, `en`, custom string                                                                       | No                                     | `en`                                                                                                                             |
 | `--all-lang, -g`             | Set all language parameters to this value               | `zh-CN`, `en`, custom string                                                                       | No                                     | - (overrides above 3 params. Custom string sets AI output language to custom while interaction and config languages remain 'en') |
-| `--config-action, -o`        | Config handling                                         | `new`, `backup`, `merge`, `docs-only`, `skip`                                                      | No                                     | `backup`                                                                                                                         |
+| `--config-action, -r`        | Config handling                                         | `new`, `backup`, `merge`, `docs-only`, `skip`                                                      | No                                     | `backup`                                                                                                                         |
 | `--api-type, -t`             | API configuration type                                  | `auth_token`, `api_key`, `ccr_proxy`, `skip`                                                       | No                                     | `skip`                                                                                                                           |
 | `--api-key, -k`              | API key (for both API key and auth token types)         | string                                                                                             | Required when `api-type` is not `skip` | -                                                                                                                                |
 | `--api-url, -u`              | Custom API URL                                          | URL string                                                                                         | No                                     | official API                                                                                                                     |
 | `--mcp-services, -m`         | MCP services to install (multi-select, comma-separated) | `context7`, `mcp-deepwiki`, `Playwright`, `exa`, or `skip` for none                                | No                                     | `all`                                                                                                                            |
 | `--workflows, -w`            | Workflows to install (multi-select, comma-separated)    | `commonTools`, `sixStepsWorkflow`, `featPlanUx`, `gitWorkflow`, `bmadWorkflow`, or `skip` for none | No                                     | `all`                                                                                                                            |
-| `--ai-personality, -p`       | AI personality type                                     | `professional`, `catgirl`, `friendly`, `mentor`, `custom`                                          | No                                     | `professional`                                                                                                                   |
+| `--output-styles, -o`        | Output styles to install (multi-select, comma-separated) | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`, or `skip` for none              | No                                     | `all`                                                                                                                            |
+| `--default-output-style, -d`  | Default output style                                    | Same as output styles plus built-in: `default`, `explanatory`, `learning`                         | No                                     | `engineer-professional`                                                                                                         |
 | `--install-cometix-line, -x` | Install CCometixLine statusline tool                    | `true`, `false`                                                                                    | No                                     | `true`                                                                                                                           |
+
+#### 🎨 AI Output Styles (v2.12+ New Feature)
+
+ZCF now supports customizable AI output styles to personalize your Claude Code experience:
+
+**Available Output Styles:**
+- `engineer-professional`: Professional software engineer following SOLID, KISS, DRY, YAGNI principles
+- `nekomata-engineer`: Professional catgirl engineer Nova, combining rigorous engineering with cute catgirl traits  
+- `laowang-engineer`: Laowang grumpy tech style, never tolerates code errors and non-standard code
+- Built-in styles: `default`, `explanatory`, `learning` (always available)
+
+**Features:**
+- Install multiple styles and switch between them
+- Set global default style for all projects
+- Automatic cleanup of legacy personality files
+- Template-based customization system
 
 #### 🎯 BMad Workflow (v2.7 New Feature)
 
