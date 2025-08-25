@@ -329,7 +329,7 @@ Enter your choice: _
   ❯ Engineer Professional - Professional software engineer following SOLID, KISS, DRY, YAGNI principles
     Nekomata Engineer - Professional catgirl engineer Nova, combining rigorous engineering with cute catgirl traits
     Laowang Grumpy Tech - Laowang grumpy tech style, never tolerates code errors and non-standard code
-    
+
 ? Select global default output style:
   ❯ Engineer Professional
 
@@ -357,22 +357,22 @@ Enter your choice: _
 ✔ Config files copied to ~/.claude
 
 ? Select workflows to install (space to select, enter to confirm)
-  ❯ ◉ Common Tools (init-project + init-architect + get-current-datetime) - Essential project initialization and utility commands
-    ◉ Six Steps Workflow (workflow) - Complete 6-phase development process
-    ◉ Feature Planning and UX Design (feat + planner + ui-ux-designer) - Structured feature development
-    ◉ Git Commands (commit + rollback + cleanBranches + worktree) - Streamlined Git operations
-    ◉ BMAD-Method Extension Installer - Enterprise agile development workflow
+❯ ◉ Common Tools (init-project + init-architect + get-current-datetime) - Essential project initialization and utility commands
+◉ Six Steps Workflow (workflow) - Complete 6-phase development process
+◉ Feature Planning and UX Design (feat + planner + ui-ux-designer) - Structured feature development
+◉ Git Commands (commit + rollback + cleanBranches + worktree) - Streamlined Git operations
+◉ BMAD-Method Extension Installer - Enterprise agile development workflow
 
 ✔ Installing workflows...
-  ✔ Installed command: zcf/workflow.md
-  ✔ Installed command: zcf/feat.md
-  ✔ Installed agent: zcf/plan/planner.md
-  ✔ Installed agent: zcf/plan/ui-ux-designer.md
-  ✔ Installed command: zcf/git/git-commit.md
-  ✔ Installed command: zcf/git/git-rollback.md
-  ✔ Installed command: zcf/git/git-cleanBranches.md
-  ✔ Installed command: zcf/git/git-worktree.md
-  ✔ Installed command: zcf/bmad-init.md
+✔ Installed command: zcf/workflow.md
+✔ Installed command: zcf/feat.md
+✔ Installed agent: zcf/plan/planner.md
+✔ Installed agent: zcf/plan/ui-ux-designer.md
+✔ Installed command: zcf/git/git-commit.md
+✔ Installed command: zcf/git/git-rollback.md
+✔ Installed command: zcf/git/git-cleanBranches.md
+✔ Installed command: zcf/git/git-worktree.md
+✔ Installed command: zcf/bmad-init.md
 ✔ Workflow installation successful
 
 ✔ API configured
@@ -380,18 +380,19 @@ Enter your choice: _
 ? Configure MCP services? (Y/n)
 
 ? Select MCP services to install (space to select, enter to confirm)
-  ❯ ◯ Install all
-    ◯ Context7 Documentation Query - Query latest library docs and code examples
-    ◯ DeepWiki - Query GitHub repository docs and examples
-    ◯ Playwright Browser Control - Direct browser automation control
-    ◯ Exa AI Search - Web search using Exa AI
+❯ ◯ Install all
+◯ Context7 Documentation Query - Query latest library docs and code examples
+◯ DeepWiki - Query GitHub repository docs and examples
+◯ Playwright Browser Control - Direct browser automation control
+◯ Exa AI Search - Web search using Exa AI
 
 ? Enter Exa API Key (get from https://dashboard.exa.ai/api-keys)
 
 ✔ MCP services configured
 
 🎉 Setup complete! Use 'claude' command to start.
-```
+
+````
 
 ### Command Line Options
 
@@ -428,7 +429,7 @@ npx zcf -h
 # Show version
 npx zcf --version
 npx zcf -v
-```
+````
 
 #### Usage Examples
 

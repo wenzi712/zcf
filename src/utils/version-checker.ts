@@ -1,7 +1,7 @@
+import type { SupportedLang } from '../constants'
 import { exec } from 'node:child_process'
 import { promisify } from 'node:util'
 import semver from 'semver'
-import type { SupportedLang } from '../constants'
 
 const execAsync = promisify(exec)
 
@@ -105,10 +105,10 @@ export async function checkCometixLineVersion(): Promise<{
 
 /**
  * Check Claude Code version and prompt for update if needed
- * 
+ *
  * @param scriptLang - Display language for UI messages ('zh-CN' | 'en')
  * @param skipPrompt - Whether to auto-update without user prompt (default: false)
- * 
+ *
  * Behavior:
  * - Interactive mode (skipPrompt=false): Checks version and prompts user for confirmation
  * - Skip-prompt mode (skipPrompt=true): Checks version and auto-updates without prompting
@@ -116,24 +116,25 @@ export async function checkCometixLineVersion(): Promise<{
  */
 export async function checkClaudeCodeVersionAndPrompt(
   scriptLang: SupportedLang,
-  skipPrompt: boolean = false
+  skipPrompt: boolean = false,
 ): Promise<void> {
   try {
     // Check Claude Code version status
     const versionInfo = await checkClaudeCodeVersion()
-    
+
     // Early return if no update is needed
     if (!versionInfo.needsUpdate) {
       return
     }
 
     // Lazy import to avoid circular dependencies and improve performance
-    const { updateClaudeCode } = require('./auto-updater')
-    
+    const { updateClaudeCode } = await import('./auto-updater')
+
     // Choose update strategy based on mode
     const forceUpdate = skipPrompt // skip-prompt mode forces update without confirmation
     await updateClaudeCode(scriptLang, forceUpdate)
-  } catch (error) {
+  }
+  catch (error) {
     // Graceful error handling - log warning but don't interrupt main flow
     const errorMessage = error instanceof Error ? error.message : String(error)
     console.warn(`Claude Code version check failed: ${errorMessage}`)

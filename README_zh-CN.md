@@ -327,16 +327,16 @@ $ npx zcf
 
 ? 选择要安装的输出风格:
   ❯ 工程师专业版 - 专业的软件工程师，严格遵循SOLID、KISS、DRY、YAGNI原则
-    猫娘工程师 - 专业的猫娘工程师Nova，结合严谨工程师素养与可爱猫娘特质  
+    猫娘工程师 - 专业的猫娘工程师Nova，结合严谨工程师素养与可爱猫娘特质
     老王暴躁技术流 - 老王暴躁技术流，绝不容忍代码报错和不规范的代码
-    
+
 ? 选择全局默认输出风格:
   ❯ 工程师专业版
 
 ? 是否配置 MCP 服务？(Y/n)
 
 ? 选择要安装的 MCP 服务:
-  ❯ context7 - 获取最新的库和框架文档 
+  ❯ context7 - 获取最新的库和框架文档
     mcp-deepwiki - 访问 deepwiki.com 的知识库
     Playwright - 浏览器自动化和网页测试
     exa - 高级搜索和企业级研究工具
@@ -357,22 +357,22 @@ $ npx zcf
 ✔ 配置文件已复制到 ~/.claude
 
 ? 选择要安装的工作流（空格选择，回车确认）
-  ❯ ◉ 通用工具 (init-project + init-architect + get-current-datetime) - 基础项目初始化和实用命令
-    ◉ 六步工作流 (workflow) - 完整的六阶段开发流程
-    ◉ 功能规划和 UX 设计 (feat + planner + ui-ux-designer) - 结构化新功能开发
-    ◉ Git 指令 (commit + rollback + cleanBranches + worktree) - 简化的 Git 操作
-    ◉ BMAD-Method 扩展安装器 - 企业级敏捷开发工作流
+❯ ◉ 通用工具 (init-project + init-architect + get-current-datetime) - 基础项目初始化和实用命令
+◉ 六步工作流 (workflow) - 完整的六阶段开发流程
+◉ 功能规划和 UX 设计 (feat + planner + ui-ux-designer) - 结构化新功能开发
+◉ Git 指令 (commit + rollback + cleanBranches + worktree) - 简化的 Git 操作
+◉ BMAD-Method 扩展安装器 - 企业级敏捷开发工作流
 
 ✔ 正在安装工作流...
-  ✔ 已安装命令: zcf/workflow.md
-  ✔ 已安装命令: zcf/feat.md
-  ✔ 已安装代理: zcf/plan/planner.md
-  ✔ 已安装代理: zcf/plan/ui-ux-designer.md
-  ✔ 已安装命令: zcf/git/git-commit.md
-  ✔ 已安装命令: zcf/git/git-rollback.md
-  ✔ 已安装命令: zcf/git/git-cleanBranches.md
-  ✔ 已安装命令: zcf/git/git-worktree.md
-  ✔ 已安装命令: zcf/bmad-init.md
+✔ 已安装命令: zcf/workflow.md
+✔ 已安装命令: zcf/feat.md
+✔ 已安装代理: zcf/plan/planner.md
+✔ 已安装代理: zcf/plan/ui-ux-designer.md
+✔ 已安装命令: zcf/git/git-commit.md
+✔ 已安装命令: zcf/git/git-rollback.md
+✔ 已安装命令: zcf/git/git-cleanBranches.md
+✔ 已安装命令: zcf/git/git-worktree.md
+✔ 已安装命令: zcf/bmad-init.md
 ✔ 工作流安装成功
 
 ✔ API 配置完成
@@ -380,18 +380,19 @@ $ npx zcf
 ? 是否配置 MCP 服务？(Y/n)
 
 ? 选择要安装的 MCP 服务（空格选择，回车确认）
-  ❯ ◯ 全部安装
-    ◯ Context7 文档查询 - 查询最新的库文档和代码示例
-    ◯ DeepWiki - 查询 GitHub 仓库文档和示例
-    ◯ Playwright 浏览器控制 - 直接控制浏览器进行自动化操作
-    ◯ Exa AI 搜索 - 使用 Exa AI 进行网页搜索
+❯ ◯ 全部安装
+◯ Context7 文档查询 - 查询最新的库文档和代码示例
+◯ DeepWiki - 查询 GitHub 仓库文档和示例
+◯ Playwright 浏览器控制 - 直接控制浏览器进行自动化操作
+◯ Exa AI 搜索 - 使用 Exa AI 进行网页搜索
 
 ? 请输入 Exa API Key（可从 https://dashboard.exa.ai/api-keys 获取）
 
 ✔ MCP 服务已配置
 
 🎉 配置完成！使用 'claude' 命令开始体验。
-```
+
+````
 
 ### 命令行参数
 
@@ -428,7 +429,7 @@ npx zcf -h
 # 查看版本
 npx zcf --version
 npx zcf -v
-```
+````
 
 #### 使用示例
 

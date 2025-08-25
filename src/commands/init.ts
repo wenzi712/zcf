@@ -22,7 +22,6 @@ import {
 import { configureApiCompletely, modifyApiConfigPartially } from '../utils/config-operations'
 import { handleExitPromptError, handleGeneralError } from '../utils/error-handler'
 import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer'
-import { checkClaudeCodeVersionAndPrompt } from '../utils/version-checker'
 import {
   addCompletedOnboarding,
   backupMcpConfig,
@@ -38,6 +37,7 @@ import { isTermux, isWindows } from '../utils/platform'
 import { addNumbersToChoices } from '../utils/prompt-helpers'
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts'
 import { formatApiKeyDisplay } from '../utils/validator'
+import { checkClaudeCodeVersionAndPrompt } from '../utils/version-checker'
 import { selectAndInstallWorkflows } from '../utils/workflow-installer'
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config'
 
@@ -302,7 +302,7 @@ export async function init(options: InitOptions = {}) {
     }
     else {
       console.log(ansis.green(`✔ ${i18n.installation.alreadyInstalled}`))
-      
+
       // Step 4.5: Check for Claude Code updates (only if already installed)
       // Skip version check if Claude Code was just installed (it's already latest)
       await checkClaudeCodeVersionAndPrompt(scriptLang, options.skipPrompt)
