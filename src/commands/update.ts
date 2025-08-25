@@ -7,6 +7,7 @@ import { I18N, LANG_LABELS, SUPPORTED_LANGS } from '../constants'
 import { displayBanner } from '../utils/banner'
 import { updatePromptOnly } from '../utils/config-operations'
 import { handleExitPromptError, handleGeneralError } from '../utils/error-handler'
+import { checkClaudeCodeVersionAndPrompt } from '../utils/version-checker'
 import { addNumbersToChoices } from '../utils/prompt-helpers'
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts'
 import { selectAndInstallWorkflows } from '../utils/workflow-installer'
@@ -63,6 +64,9 @@ export async function update(options: UpdateOptions = {}) {
 
     // Select and install workflows
     await selectAndInstallWorkflows(configLang, scriptLang)
+
+    // Check for Claude Code updates (update command always checks interactively)
+    await checkClaudeCodeVersionAndPrompt(scriptLang, false)
 
     // Update zcf config with new version and AI language preference
     updateZcfConfig({

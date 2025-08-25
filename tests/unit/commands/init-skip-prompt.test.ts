@@ -288,7 +288,7 @@ describe('init command with simplified parameters', () => {
         'en', // display language
         'en', // config language
         ['engineer-professional', 'nekomata-engineer', 'laowang-engineer'], // default output styles
-        'engineer-professional' // default output style
+        'engineer-professional', // default output style
       )
     })
   })

@@ -29,7 +29,7 @@ export const menu = {
     configureApi: '配置 API URL 和认证信息',
     configureMcp: '配置 MCP 服务（含 Windows 修复）',
     configureModel: '设置默认模型（opus/sonnet）',
-    configureAiMemory: '配置 AI 输出语言和角色风格',
+    configureAiMemory: '配置 AI 输出语言和输出风格',
     configureEnvPermission: '导入隐私保护环境变量和系统权限配置',
     configureCcr: '配置 Claude Code Router 以使用多个 AI 模型',
     ccrManagement: '配置 Claude Code Router 以使用多个 AI 模型',

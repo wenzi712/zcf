@@ -54,7 +54,7 @@ export const configuration = {
   legacyFilesDetected: '检测到旧版个性配置文件',
   cleanupLegacyFiles: '是否清理旧版配置文件？',
   legacyFilesRemoved: '旧版配置文件已清理',
-  
+
   // Output style names and descriptions
   outputStyles: {
     'engineer-professional': {
@@ -99,6 +99,14 @@ export const configuration = {
   envImportSuccess: '环境变量已导入',
   permissionsImportSuccess: '权限配置已导入',
   openingSettingsJson: '正在打开 settings.json...',
+
+  // Version check related
+  claudeCodeVersionCheck: '正在检查 Claude Code 版本...',
+  claudeCodeVersionCheckSkipped: '跳过 Claude Code 版本检查（刚安装完成）',
+  claudeCodeAutoUpdating: '正在自动更新 Claude Code...',
+  claudeCodeVersionCheckFailed: 'Claude Code 版本检查失败',
+  claudeCodeVersionCheckSuccess: 'Claude Code 版本检查完成',
+  claudeCodeNoUpdateNeeded: 'Claude Code 已是最新版本',
 
   // JSON config related
   invalidConfiguration: '配置无效',

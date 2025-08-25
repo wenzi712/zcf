@@ -82,7 +82,7 @@ export async function copyOutputStyles(selectedStyles: string[], lang: Supported
 
 export function setGlobalDefaultOutputStyle(styleId: string): void {
   const existingSettings = readJsonConfig<ClaudeSettings>(SETTINGS_FILE) || {}
-  
+
   const updatedSettings: ClaudeSettings = {
     ...existingSettings,
     outputStyle: styleId,
@@ -96,7 +96,7 @@ export function hasLegacyPersonalityFiles(): boolean {
 }
 
 export function cleanupLegacyPersonalityFiles(): void {
-  LEGACY_FILES.forEach(filename => {
+  LEGACY_FILES.forEach((filename) => {
     const filePath = join(CLAUDE_DIR, filename)
     if (exists(filePath)) {
       removeFile(filePath)
@@ -108,7 +108,7 @@ export async function configureOutputStyle(
   displayLang: SupportedLang,
   configLang: SupportedLang,
   preselectedStyles?: string[],
-  preselectedDefault?: string
+  preselectedDefault?: string,
 ): Promise<void> {
   const i18n = getTranslation(displayLang)
   const availableStyles = getAvailableOutputStyles()
@@ -116,7 +116,7 @@ export async function configureOutputStyle(
   // Check for legacy files
   if (hasLegacyPersonalityFiles() && !preselectedStyles) {
     console.log(ansis.yellow(`⚠️  ${i18n.configuration.legacyFilesDetected}`))
-    
+
     const { cleanupLegacy } = await inquirer.prompt<{ cleanupLegacy: boolean }>({
       type: 'confirm',
       name: 'cleanupLegacy',
@@ -128,7 +128,8 @@ export async function configureOutputStyle(
       cleanupLegacyPersonalityFiles()
       console.log(ansis.green(`✔ ${i18n.configuration.legacyFilesRemoved}`))
     }
-  } else if (hasLegacyPersonalityFiles() && preselectedStyles) {
+  }
+  else if (hasLegacyPersonalityFiles() && preselectedStyles) {
     // Auto cleanup in non-interactive mode
     cleanupLegacyPersonalityFiles()
   }
@@ -140,7 +141,8 @@ export async function configureOutputStyle(
     // Non-interactive mode
     selectedStyles = preselectedStyles
     defaultStyle = preselectedDefault
-  } else {
+  }
+  else {
     // Interactive mode - only show custom styles for installation
     const customStyles = availableStyles.filter(style => style.isCustom)
     const { selectedStyles: promptedStyles } = await inquirer.prompt<{ selectedStyles: string[] }>({
@@ -152,7 +154,7 @@ export async function configureOutputStyle(
         value: style.id,
         checked: true, // Default select all custom styles
       }))),
-      validate: (input) => input.length > 0 || i18n.configuration.selectAtLeastOne,
+      validate: input => input.length > 0 || i18n.configuration.selectAtLeastOne,
     })
 
     if (!promptedStyles || promptedStyles.length === 0) {
@@ -168,7 +170,7 @@ export async function configureOutputStyle(
       message: i18n.configuration.selectDefaultOutputStyle,
       choices: addNumbersToChoices([
         // Show selected custom styles first (only what user actually installed)
-        ...selectedStyles.map(styleId => {
+        ...selectedStyles.map((styleId) => {
           return {
             name: `${i18n.configuration.outputStyles[styleId]?.name || styleId} - ${ansis.gray(i18n.configuration.outputStyles[styleId]?.description || '')}`,
             value: styleId,
@@ -202,7 +204,7 @@ export async function configureOutputStyle(
   setGlobalDefaultOutputStyle(defaultStyle)
 
   // Update ZCF config
-  updateZcfConfig({ 
+  updateZcfConfig({
     outputStyles: selectedStyles,
     defaultOutputStyle: defaultStyle,
   })

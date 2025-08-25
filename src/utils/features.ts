@@ -5,7 +5,6 @@ import ansis from 'ansis'
 import inquirer from 'inquirer'
 import { LANG_LABELS, MCP_SERVICES, SUPPORTED_LANGS, ZCF_CONFIG_FILE } from '../constants'
 import { getTranslation } from '../i18n'
-import { configureOutputStyle } from './output-style'
 import { setupCcrConfiguration } from './ccr/config'
 import { installCcr, isCcrInstalled } from './ccr/installer'
 import {
@@ -26,6 +25,7 @@ import {
   writeMcpConfig,
 } from './mcp'
 import { selectMcpServices } from './mcp-selector'
+import { configureOutputStyle } from './output-style'
 import { isWindows } from './platform'
 import { addNumbersToChoices } from './prompt-helpers'
 import { importRecommendedEnv, importRecommendedPermissions, openSettingsJson } from './simple-config'

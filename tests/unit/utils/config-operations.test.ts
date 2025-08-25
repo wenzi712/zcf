@@ -2,13 +2,13 @@ import type { ApiConfig } from '../../../src/types/config'
 import inquirer from 'inquirer'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getTranslation } from '../../../src/i18n'
-import * as outputStyle from '../../../src/utils/output-style'
 import * as config from '../../../src/utils/config'
 import {
   configureApiCompletely,
   modifyApiConfigPartially,
   updatePromptOnly,
 } from '../../../src/utils/config-operations'
+import * as outputStyle from '../../../src/utils/output-style'
 import * as validator from '../../../src/utils/validator'
 
 vi.mock('inquirer')

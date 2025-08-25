@@ -63,7 +63,7 @@ export function copyConfigFiles(onlyMd: boolean = false) {
       mergeSettingsFile(baseSettingsPath, destSettingsPath)
     }
   }
-  
+
   // Note: CLAUDE.md is generated via output-style system when AI output language is selected
 }
 

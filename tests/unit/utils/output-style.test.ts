@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { SupportedLang } from '../../../src/constants'
-import { CLAUDE_DIR } from '../../../src/constants'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   cleanupLegacyPersonalityFiles,
   configureOutputStyle,
@@ -76,7 +75,7 @@ describe('output-style', () => {
             description: 'Professional software engineer following SOLID, KISS, DRY, YAGNI principles',
           },
           'nekomata-engineer': {
-            name: 'Nekomata Engineer', 
+            name: 'Nekomata Engineer',
             description: 'Professional catgirl engineer Nova, combining rigorous engineering with cute catgirl traits',
           },
           'laowang-engineer': {
@@ -107,11 +106,11 @@ describe('output-style', () => {
   describe('getAvailableOutputStyles', () => {
     it('should return all available output styles', () => {
       const styles = getAvailableOutputStyles()
-      
+
       expect(styles).toHaveLength(6)
       expect(styles.map(s => s.id)).toEqual([
         'engineer-professional',
-        'nekomata-engineer', 
+        'nekomata-engineer',
         'laowang-engineer',
         'default',
         'explanatory',
@@ -122,9 +121,9 @@ describe('output-style', () => {
     it('should have correct custom styles with file paths', () => {
       const styles = getAvailableOutputStyles()
       const customStyles = styles.filter(s => s.isCustom)
-      
+
       expect(customStyles).toHaveLength(3)
-      customStyles.forEach(style => {
+      customStyles.forEach((style) => {
         expect(style.filePath).toBeDefined()
         expect(style.filePath).toContain('.md')
       })
@@ -133,9 +132,9 @@ describe('output-style', () => {
     it('should have correct built-in styles without file paths', () => {
       const styles = getAvailableOutputStyles()
       const builtinStyles = styles.filter(s => !s.isCustom)
-      
+
       expect(builtinStyles).toHaveLength(3)
-      builtinStyles.forEach(style => {
+      builtinStyles.forEach((style) => {
         expect(style.filePath).toBeUndefined()
       })
     })
@@ -145,15 +144,15 @@ describe('output-style', () => {
     it('should copy selected styles to claude directory', async () => {
       const selectedStyles = ['engineer-professional', 'nekomata-engineer']
       const lang: SupportedLang = 'zh-CN'
-      
+
       mockFsOperations.ensureDir = vi.fn()
       mockFsOperations.copyFile = vi.fn()
       mockFsOperations.exists = vi.fn(() => true)
-      
+
       await copyOutputStyles(selectedStyles, lang)
-      
+
       expect(mockFsOperations.ensureDir).toHaveBeenCalledWith(
-        expect.stringContaining('output-styles')
+        expect.stringContaining('output-styles'),
       )
       expect(mockFsOperations.copyFile).toHaveBeenCalledTimes(2)
     })
@@ -161,26 +160,26 @@ describe('output-style', () => {
     it('should skip non-existent template files', async () => {
       const selectedStyles = ['engineer-professional']
       const lang: SupportedLang = 'zh-CN'
-      
+
       mockFsOperations.ensureDir = vi.fn()
       mockFsOperations.copyFile = vi.fn()
       mockFsOperations.exists = vi.fn(() => false) // Template doesn't exist
-      
+
       await copyOutputStyles(selectedStyles, lang)
-      
+
       expect(mockFsOperations.copyFile).not.toHaveBeenCalled()
     })
 
     it('should only copy custom styles (built-in styles have no files)', async () => {
       const selectedStyles = ['engineer-professional', 'default', 'explanatory']
       const lang: SupportedLang = 'zh-CN'
-      
+
       mockFsOperations.ensureDir = vi.fn()
       mockFsOperations.copyFile = vi.fn()
       mockFsOperations.exists = vi.fn(() => true)
-      
+
       await copyOutputStyles(selectedStyles, lang)
-      
+
       // Only engineer-professional should be copied (custom style)
       expect(mockFsOperations.copyFile).toHaveBeenCalledTimes(1)
     })
@@ -191,14 +190,14 @@ describe('output-style', () => {
       const existingSettings = { env: {} }
       mockJsonConfig.readJsonConfig = vi.fn(() => existingSettings)
       mockJsonConfig.writeJsonConfig = vi.fn()
-      
+
       setGlobalDefaultOutputStyle('engineer-professional')
-      
+
       expect(mockJsonConfig.writeJsonConfig).toHaveBeenCalledWith(
         expect.stringContaining('settings.json'),
         expect.objectContaining({
           outputStyle: 'engineer-professional',
-        })
+        }),
       )
     })
 
@@ -209,16 +208,16 @@ describe('output-style', () => {
       }
       mockJsonConfig.readJsonConfig = vi.fn(() => existingSettings)
       mockJsonConfig.writeJsonConfig = vi.fn()
-      
+
       setGlobalDefaultOutputStyle('nekomata-engineer')
-      
+
       expect(mockJsonConfig.writeJsonConfig).toHaveBeenCalledWith(
         expect.stringContaining('settings.json'),
         expect.objectContaining({
           env: { ANTHROPIC_API_KEY: 'test-key' },
           model: 'opus',
           outputStyle: 'nekomata-engineer',
-        })
+        }),
       )
     })
   })
@@ -226,20 +225,20 @@ describe('output-style', () => {
   describe('hasLegacyPersonalityFiles', () => {
     it('should detect legacy personality files', () => {
       mockFsOperations.exists = vi.fn((path) => {
-        return path.includes('personality.md') || 
-               path.includes('rules.md') ||
-               path.includes('technical-guides.md') ||
-               path.includes('mcp.md') ||
-               path.includes('language.md')
+        return path.includes('personality.md')
+          || path.includes('rules.md')
+          || path.includes('technical-guides.md')
+          || path.includes('mcp.md')
+          || path.includes('language.md')
       })
-      
+
       const hasLegacy = hasLegacyPersonalityFiles()
       expect(hasLegacy).toBe(true)
     })
 
     it('should return false when no legacy files exist', () => {
       mockFsOperations.exists = vi.fn(() => false)
-      
+
       const hasLegacy = hasLegacyPersonalityFiles()
       expect(hasLegacy).toBe(false)
     })
@@ -249,35 +248,35 @@ describe('output-style', () => {
     it('should remove legacy personality files', () => {
       mockFsOperations.exists = vi.fn(() => true)
       mockFsOperations.removeFile = vi.fn()
-      
+
       cleanupLegacyPersonalityFiles()
-      
+
       expect(mockFsOperations.removeFile).toHaveBeenCalledWith(
-        expect.stringContaining('personality.md')
+        expect.stringContaining('personality.md'),
       )
       expect(mockFsOperations.removeFile).toHaveBeenCalledWith(
-        expect.stringContaining('rules.md')
+        expect.stringContaining('rules.md'),
       )
       expect(mockFsOperations.removeFile).toHaveBeenCalledWith(
-        expect.stringContaining('technical-guides.md')
+        expect.stringContaining('technical-guides.md'),
       )
       expect(mockFsOperations.removeFile).toHaveBeenCalledWith(
-        expect.stringContaining('mcp.md')
+        expect.stringContaining('mcp.md'),
       )
       expect(mockFsOperations.removeFile).toHaveBeenCalledWith(
-        expect.stringContaining('language.md')
+        expect.stringContaining('language.md'),
       )
     })
 
     it('should only remove files that exist', () => {
-      mockFsOperations.exists = vi.fn((path) => path.includes('personality.md'))
+      mockFsOperations.exists = vi.fn(path => path.includes('personality.md'))
       mockFsOperations.removeFile = vi.fn()
-      
+
       cleanupLegacyPersonalityFiles()
-      
+
       expect(mockFsOperations.removeFile).toHaveBeenCalledTimes(1)
       expect(mockFsOperations.removeFile).toHaveBeenCalledWith(
-        expect.stringContaining('personality.md')
+        expect.stringContaining('personality.md'),
       )
     })
   })
@@ -289,19 +288,19 @@ describe('output-style', () => {
         // Only return true for output-styles directory check, false for legacy files
         return path.includes('output-styles')
       })
-      
+
       mockInquirer.default.prompt = vi.fn()
         .mockResolvedValueOnce({ selectedStyles: ['engineer-professional', 'nekomata-engineer'] })
         .mockResolvedValueOnce({ defaultStyle: 'engineer-professional' })
-      
+
       mockFsOperations.ensureDir.mockImplementation(() => {})
       mockFsOperations.copyFile.mockImplementation(() => {})
       mockJsonConfig.readJsonConfig.mockReturnValue({})
       mockJsonConfig.writeJsonConfig.mockImplementation(() => {})
       mockZcfConfig.updateZcfConfig.mockImplementation(() => {})
-      
+
       await configureOutputStyle('zh-CN', 'zh-CN')
-      
+
       expect(mockInquirer.default.prompt).toHaveBeenCalledTimes(2)
       expect(mockFsOperations.copyFile).toHaveBeenCalledTimes(2)
       expect(mockJsonConfig.writeJsonConfig).toHaveBeenCalled()
@@ -315,14 +314,14 @@ describe('output-style', () => {
       mockJsonConfig.readJsonConfig = vi.fn(() => ({}))
       mockJsonConfig.writeJsonConfig = vi.fn()
       mockZcfConfig.updateZcfConfig = vi.fn()
-      
+
       await configureOutputStyle(
         'zh-CN', // displayLang
         'zh-CN', // configLang
-        ['engineer-professional', 'default'], 
-        'engineer-professional'
+        ['engineer-professional', 'default'],
+        'engineer-professional',
       )
-      
+
       expect(mockInquirer.default.prompt).not.toHaveBeenCalled()
       expect(mockFsOperations.copyFile).toHaveBeenCalledTimes(1) // Only custom styles
       expect(mockJsonConfig.writeJsonConfig).toHaveBeenCalled()
@@ -331,7 +330,8 @@ describe('output-style', () => {
 
     it('should detect and handle legacy files', async () => {
       mockFsOperations.exists = vi.fn((path) => {
-        if (path.includes('personality.md')) return true
+        if (path.includes('personality.md'))
+          return true
         return path.includes('output-styles')
       })
       mockFsOperations.removeFile = vi.fn()
@@ -339,27 +339,28 @@ describe('output-style', () => {
         .mockResolvedValueOnce({ cleanupLegacy: true })
         .mockResolvedValueOnce({ selectedStyles: ['engineer-professional'] })
         .mockResolvedValueOnce({ defaultStyle: 'engineer-professional' })
-      
+
       mockFsOperations.ensureDir = vi.fn()
       mockFsOperations.copyFile = vi.fn()
       mockJsonConfig.readJsonConfig = vi.fn(() => ({}))
       mockJsonConfig.writeJsonConfig = vi.fn()
       mockZcfConfig.updateZcfConfig = vi.fn()
-      
+
       await configureOutputStyle('zh-CN', 'zh-CN')
-      
+
       expect(mockFsOperations.removeFile).toHaveBeenCalled()
       expect(mockInquirer.default.prompt).toHaveBeenCalledWith(
         expect.objectContaining({
           name: 'cleanupLegacy',
           type: 'confirm',
-        })
+        }),
       )
     })
 
     it('should skip legacy cleanup if user declines', async () => {
       mockFsOperations.exists = vi.fn((path) => {
-        if (path.includes('personality.md')) return true
+        if (path.includes('personality.md'))
+          return true
         return path.includes('output-styles')
       })
       mockFsOperations.removeFile = vi.fn()
@@ -367,15 +368,15 @@ describe('output-style', () => {
         .mockResolvedValueOnce({ cleanupLegacy: false })
         .mockResolvedValueOnce({ selectedStyles: ['engineer-professional'] })
         .mockResolvedValueOnce({ defaultStyle: 'engineer-professional' })
-      
+
       mockFsOperations.ensureDir = vi.fn()
       mockFsOperations.copyFile = vi.fn()
       mockJsonConfig.readJsonConfig = vi.fn(() => ({}))
       mockJsonConfig.writeJsonConfig = vi.fn()
       mockZcfConfig.updateZcfConfig = vi.fn()
-      
+
       await configureOutputStyle('zh-CN', 'zh-CN')
-      
+
       expect(mockFsOperations.removeFile).not.toHaveBeenCalled()
     })
   })

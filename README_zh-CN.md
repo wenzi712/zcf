@@ -84,8 +84,8 @@ npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" -
 | `--api-url, -u`              | 自定义 API URL                          | URL 字符串                                                                                             | 否                            | 官方 API                                                                               |
 | `--mcp-services, -m`         | 要安装的 MCP 服务（多选，逗号分隔）     | `context7`, `mcp-deepwiki`, `Playwright`, `exa`, 或 `skip` 表示跳过全部                                | 否                            | `all`                                                                                  |
 | `--workflows, -w`            | 要安装的工作流（多选，逗号分隔）        | `commonTools`, `sixStepsWorkflow`, `featPlanUx`, `gitWorkflow`, `bmadWorkflow`, 或 `skip` 表示跳过全部 | 否                            | `all`                                                                                  |
-| `--output-styles, -o`        | 要安装的输出风格（多选，逗号分隔）           | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`，或 `skip` 表示不安装                     | 否                            | `all`                                                                                  |
-| `--default-output-style, -d`  | 默认输出风格                           | 同输出风格选项，还包括内置风格：`default`, `explanatory`, `learning`                                           | 否                            | `engineer-professional`                                                               |
+| `--output-styles, -o`        | 要安装的输出风格（多选，逗号分隔）      | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`，或 `skip` 表示不安装                 | 否                            | `all`                                                                                  |
+| `--default-output-style, -d` | 默认输出风格                            | 同输出风格选项，还包括内置风格：`default`, `explanatory`, `learning`                                   | 否                            | `engineer-professional`                                                                |
 | `--install-cometix-line, -x` | 安装 CCometixLine 状态栏工具            | `true`, `false`                                                                                        | 否                            | `true`                                                                                 |
 
 #### 🎨 AI 输出风格（v2.12+ 新功能）
@@ -93,22 +93,26 @@ npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" -
 ZCF 现在支持可定制的 AI 输出风格，个性化你的 Claude Code 体验：
 
 **可用的输出风格：**
+
 - `engineer-professional`：专业软件工程师，遵循 SOLID、KISS、DRY、YAGNI 原则
 - `nekomata-engineer`：专业猫娘工程师 Nova，结合严谨工程技术与可爱猫娘特质
 - `laowang-engineer`：老王暴脾气技术流，绝不容忍代码错误和不规范代码
 - 内置样式：`default`、`explanatory`、`learning`（始终可用）
 
 **功能特性：**
+
 - 安装多个样式并在它们之间切换
 - 为所有项目设置全局默认样式
 - 自动清理旧版个性化配置文件
 - 基于模板的自定义系统
 
 **使用提示：**
+
 - 可使用 `/output-style` 命令随时切换项目级的输出风格
 - 或在 ZCF 菜单第 6 项中修改全局输出风格
 
 **重要提示：**
+
 - Claude Code 版本需要大于 1.0.81 才支持 output-style，可使用 `npx zcf check` 进行更新。
 - 旧版的全局记忆规则已迁移到 `专业软件工程师` 输出风格中，解决了占用过多 token 以及 AI 容易忘记全局记忆的问题。
 
@@ -210,7 +214,7 @@ npx zcf → 选择 +
 - 脚本交互语言：控制安装过程的提示语言
 - 配置文件语言：决定安装哪套配置文件（zh-CN/en）
 - AI 输出语言：选择 AI 回复使用的语言（支持简体中文、English 及自定义语言）
-- AI 个性化：支持多种预设人格（专业助手、猫娘助手、友好助手、导师模式）或自定义
+- AI 输出风格：支持多种预设风格（专业工程师、猫娘工程师、老王工程师）个性化体验
 
 ### 🔧 智能安装
 
@@ -268,7 +272,7 @@ $ npx zcf
   3. 配置 API - 配置 API URL 和认证信息（支持 CCR 代理）
   4. 配置 MCP - 配置 MCP 服务（含 Windows 修复）
   5. 配置默认模型 - 设置默认模型（opus/sonnet）
-  6. 配置 Claude 全局记忆 - 配置 AI 输出语言和角色风格
+  6. 配置 Claude 全局记忆 - 配置 AI 输出语言和输出风格
   7. 导入推荐环境变量和权限配置 - 导入隐私保护环境变量和系统权限配置
 
   --------- 其他工具 ----------
@@ -299,16 +303,15 @@ $ npx zcf
     Custom
     （支持日语、法语、德语等多种语言）
 
-? 选择 AI 个性化设置:
-  ❯ 专业助手(默认)
-    猫娘助手
-    友好助手
-    导师模式
-    自定义
-
 ? 检测到 Claude Code 未安装，是否自动安装？(Y/n)
 
 ✔ Claude Code 安装成功
+
+? 检测到已有配置文件，如何处理？
+  ❯ 备份并覆盖 - 将现有配置备份到 ~/.claude/backup/
+    仅更新文档 - 只更新工作流和文档，保留现有API配置
+    合并配置 - 与现有配置合并，保留用户自定义内容
+    跳过 - 跳过配置更新
 
 ? 选择 API 认证方式
   ❯ 使用 Auth Token (OAuth 认证)
@@ -322,11 +325,33 @@ $ npx zcf
 ? 请输入 API URL: https://api.anthropic.com
 ? 请输入 Auth Token 或 API Key: xxx
 
-? 检测到已有配置文件，如何处理？
-  ❯ 备份并覆盖全部
-    仅更新工作流相关md并备份旧配置
-    合并配置
-    跳过
+? 选择要安装的输出风格:
+  ❯ 工程师专业版 - 专业的软件工程师，严格遵循SOLID、KISS、DRY、YAGNI原则
+    猫娘工程师 - 专业的猫娘工程师Nova，结合严谨工程师素养与可爱猫娘特质  
+    老王暴躁技术流 - 老王暴躁技术流，绝不容忍代码报错和不规范的代码
+    
+? 选择全局默认输出风格:
+  ❯ 工程师专业版
+
+? 是否配置 MCP 服务？(Y/n)
+
+? 选择要安装的 MCP 服务:
+  ❯ context7 - 获取最新的库和框架文档 
+    mcp-deepwiki - 访问 deepwiki.com 的知识库
+    Playwright - 浏览器自动化和网页测试
+    exa - 高级搜索和企业级研究工具
+
+? 选择要安装的工作流:
+  ❯ 通用工具工作流 - init-project 和相关代理
+    六步工作流 - 完整的六阶段开发流程
+    功能规划UX - 完整的功能开发生命周期
+    Git工作流 - Git操作和分支管理
+    BMad工作流 - AI驱动的敏捷开发方法论
+
+? 是否安装 CCometixLine 状态栏工具？(Y/n)
+
+✔ 配置完成！Claude Code 环境已就绪
+```
 
 ✔ 已备份所有配置文件到 ~/.claude/backup/xxx
 ✔ 配置文件已复制到 ~/.claude
@@ -449,7 +474,7 @@ zcf/
 │   ├── settings.json    # 基础配置（含隐私保护环境变量）
 │   ├── en/              # 英文版
 │   │   ├── rules.md     # 核心原则（原CLAUDE.md）
-│   │   ├── personality.md # AI个性化（v2.0新增）
+│   │   ├── output-styles/ # AI输出风格（v2.12+新增）
 │   │   ├── mcp.md       # MCP服务说明（v2.0新增）
 │   │   ├── agents/      # AI 代理
 │   │   └── commands/    # 命令定义
@@ -464,7 +489,7 @@ zcf/
 
 - **任务规划师**：将复杂任务拆解为可执行步骤
 - **UI/UX 设计师**：提供专业界面设计指导
-- **AI 个性化**：支持多种预设人格和自定义（v2.0 新增）
+- **AI 输出风格**：支持多种预设风格个性化体验（v2.12+ 新增）
 - **BMad 团队**（新增）：完整的敏捷开发团队，包括：
   - 产品负责人（PO）：需求挖掘和优先级排序
   - 项目经理（PM）：计划和协调

@@ -18,7 +18,6 @@ import {
 import * as presets from '../../../src/utils/ccr/presets'
 import * as config from '../../../src/utils/config'
 import * as jsonConfig from '../../../src/utils/json-config'
-import * as mcp from '../../../src/utils/mcp'
 
 vi.mock('node:fs')
 vi.mock('inquirer')

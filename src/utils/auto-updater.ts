@@ -178,7 +178,7 @@ export async function updateCometixLine(scriptLang: SupportedLang, force = false
 
     try {
       // Update the package
-      await execAsync('cargo install ccometix')
+      await execAsync('npm update -g @cometix/ccline')
       updateSpinner.succeed(format(i18n.updater.updateSuccess, { tool: 'CCometixLine' }))
       return true
     }

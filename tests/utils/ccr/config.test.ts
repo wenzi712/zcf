@@ -19,7 +19,6 @@ import {
 import * as presets from '../../../src/utils/ccr/presets'
 import * as config from '../../../src/utils/config'
 import * as jsonConfig from '../../../src/utils/json-config'
-import * as mcp from '../../../src/utils/mcp'
 
 vi.mock('node:fs')
 vi.mock('node:child_process')
@@ -367,7 +366,7 @@ describe('cCR config', () => {
     // due to high maintenance cost and low testing value.
     // The core functionality is already covered by unit tests of individual functions:
     // - selectCcrPreset, configureCcrWithPreset, configureCcrProxy, etc.
-    
+
     it('should keep existing configuration when not overwriting', async () => {
       const existingConfig: CcrConfig = {
         HOST: 'existing-host',

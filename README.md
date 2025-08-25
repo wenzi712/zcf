@@ -71,44 +71,48 @@ npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" -
 
 When using `--skip-prompt`, the following parameters are available:
 
-| Parameter                    | Description                                             | Values                                                                                             | Required                               | Default                                                                                                                          |
-| ---------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `--skip-prompt, -s`          | Skip all interactive prompts                            | -                                                                                                  | Yes (for non-interactive mode)         | -                                                                                                                                |
-| `--lang, -l`                 | ZCF display language                                    | `zh-CN`, `en`                                                                                      | No                                     | `en`                                                                                                                             |
-| `--config-lang, -c`          | Configuration language                                  | `zh-CN`, `en`                                                                                      | No                                     | `en`                                                                                                                             |
-| `--ai-output-lang, -a`       | AI output language                                      | `zh-CN`, `en`, custom string                                                                       | No                                     | `en`                                                                                                                             |
-| `--all-lang, -g`             | Set all language parameters to this value               | `zh-CN`, `en`, custom string                                                                       | No                                     | - (overrides above 3 params. Custom string sets AI output language to custom while interaction and config languages remain 'en') |
-| `--config-action, -r`        | Config handling                                         | `new`, `backup`, `merge`, `docs-only`, `skip`                                                      | No                                     | `backup`                                                                                                                         |
-| `--api-type, -t`             | API configuration type                                  | `auth_token`, `api_key`, `ccr_proxy`, `skip`                                                       | No                                     | `skip`                                                                                                                           |
-| `--api-key, -k`              | API key (for both API key and auth token types)         | string                                                                                             | Required when `api-type` is not `skip` | -                                                                                                                                |
-| `--api-url, -u`              | Custom API URL                                          | URL string                                                                                         | No                                     | official API                                                                                                                     |
-| `--mcp-services, -m`         | MCP services to install (multi-select, comma-separated) | `context7`, `mcp-deepwiki`, `Playwright`, `exa`, or `skip` for none                                | No                                     | `all`                                                                                                                            |
-| `--workflows, -w`            | Workflows to install (multi-select, comma-separated)    | `commonTools`, `sixStepsWorkflow`, `featPlanUx`, `gitWorkflow`, `bmadWorkflow`, or `skip` for none | No                                     | `all`                                                                                                                            |
-| `--output-styles, -o`        | Output styles to install (multi-select, comma-separated) | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`, or `skip` for none              | No                                     | `all`                                                                                                                            |
-| `--default-output-style, -d`  | Default output style                                    | Same as output styles plus built-in: `default`, `explanatory`, `learning`                         | No                                     | `engineer-professional`                                                                                                         |
-| `--install-cometix-line, -x` | Install CCometixLine statusline tool                    | `true`, `false`                                                                                    | No                                     | `true`                                                                                                                           |
+| Parameter                    | Description                                              | Values                                                                                             | Required                               | Default                                                                                                                          |
+| ---------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `--skip-prompt, -s`          | Skip all interactive prompts                             | -                                                                                                  | Yes (for non-interactive mode)         | -                                                                                                                                |
+| `--lang, -l`                 | ZCF display language                                     | `zh-CN`, `en`                                                                                      | No                                     | `en`                                                                                                                             |
+| `--config-lang, -c`          | Configuration language                                   | `zh-CN`, `en`                                                                                      | No                                     | `en`                                                                                                                             |
+| `--ai-output-lang, -a`       | AI output language                                       | `zh-CN`, `en`, custom string                                                                       | No                                     | `en`                                                                                                                             |
+| `--all-lang, -g`             | Set all language parameters to this value                | `zh-CN`, `en`, custom string                                                                       | No                                     | - (overrides above 3 params. Custom string sets AI output language to custom while interaction and config languages remain 'en') |
+| `--config-action, -r`        | Config handling                                          | `new`, `backup`, `merge`, `docs-only`, `skip`                                                      | No                                     | `backup`                                                                                                                         |
+| `--api-type, -t`             | API configuration type                                   | `auth_token`, `api_key`, `ccr_proxy`, `skip`                                                       | No                                     | `skip`                                                                                                                           |
+| `--api-key, -k`              | API key (for both API key and auth token types)          | string                                                                                             | Required when `api-type` is not `skip` | -                                                                                                                                |
+| `--api-url, -u`              | Custom API URL                                           | URL string                                                                                         | No                                     | official API                                                                                                                     |
+| `--mcp-services, -m`         | MCP services to install (multi-select, comma-separated)  | `context7`, `mcp-deepwiki`, `Playwright`, `exa`, or `skip` for none                                | No                                     | `all`                                                                                                                            |
+| `--workflows, -w`            | Workflows to install (multi-select, comma-separated)     | `commonTools`, `sixStepsWorkflow`, `featPlanUx`, `gitWorkflow`, `bmadWorkflow`, or `skip` for none | No                                     | `all`                                                                                                                            |
+| `--output-styles, -o`        | Output styles to install (multi-select, comma-separated) | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`, or `skip` for none               | No                                     | `all`                                                                                                                            |
+| `--default-output-style, -d` | Default output style                                     | Same as output styles plus built-in: `default`, `explanatory`, `learning`                          | No                                     | `engineer-professional`                                                                                                          |
+| `--install-cometix-line, -x` | Install CCometixLine statusline tool                     | `true`, `false`                                                                                    | No                                     | `true`                                                                                                                           |
 
 #### 🎨 AI Output Styles (v2.12+ New Feature)
 
 ZCF now supports customizable AI output styles to personalize your Claude Code experience:
 
 **Available Output Styles:**
+
 - `engineer-professional`: Professional software engineer following SOLID, KISS, DRY, YAGNI principles
-- `nekomata-engineer`: Professional catgirl engineer Nova, combining rigorous engineering with cute catgirl traits  
+- `nekomata-engineer`: Professional catgirl engineer Nova, combining rigorous engineering with cute catgirl traits
 - `laowang-engineer`: Laowang grumpy tech style, never tolerates code errors and non-standard code
 - Built-in styles: `default`, `explanatory`, `learning` (always available)
 
 **Features:**
+
 - Install multiple styles and switch between them
 - Set global default style for all projects
 - Automatic cleanup of legacy personality files
 - Template-based customization system
 
 **Usage Tips:**
+
 - Use `/output-style` command to switch project-level output styles anytime
 - Or modify global output styles in ZCF menu option 6
 
 **Important:**
+
 - Claude Code version must be greater than 1.0.81 to support output-style. Use `npx zcf check` to update.
 - Legacy global memory rules have been migrated to the `engineer-professional` output style, solving issues with excessive token usage and AI forgetting global memory.
 
@@ -210,7 +214,7 @@ After configuration:
 - Script interaction language: Controls installation prompts language
 - Configuration file language: Determines which configuration set to install (zh-CN/en)
 - AI output language: Choose the language for AI responses (supports Chinese, English, and custom languages)
-- AI personality: Support multiple preset personalities (Professional, Catgirl, Friendly, Mentor) or custom
+- AI output styles: Support multiple preset styles (Professional Engineer, Nekomata Engineer, Laowang Engineer) for customized experience
 
 ### 🔧 Smart Installation
 
@@ -268,7 +272,7 @@ Select function:
   3. Configure API - Configure API URL and authentication (supports CCR proxy)
   4. Configure MCP - Configure MCP services (includes Windows fix)
   5. Configure default model - Set default model (opus/sonnet)
-  6. Configure Claude global memory - Configure AI output language and personality
+  6. Configure Claude global memory - Configure AI output language and output styles
   7. Import recommended environment variables and permissions - Import privacy protection environment variables and system permissions
 
   --------- Other Tools ----------
@@ -299,16 +303,15 @@ Enter your choice: _
     Custom
     (Supports Japanese, French, German, and more)
 
-? Select AI personality:
-  ❯ Professional Assistant(Default)
-    Catgirl Assistant
-    Friendly Assistant
-    Mentor Mode
-    Custom
-
 ? Claude Code not found. Install automatically? (Y/n)
 
 ✔ Claude Code installed successfully
+
+? Existing config detected. How to proceed?
+  ❯ Backup and overwrite - Backup existing config to ~/.claude/backup/
+    Update docs only - Only update workflows and docs, keep existing API config
+    Merge config - Merge with existing config, preserve user customizations
+    Skip - Skip configuration update
 
 ? Select API authentication method
   ❯ Use Auth Token (OAuth authentication)
@@ -322,11 +325,33 @@ Enter your choice: _
 ? Enter API URL: https://api.anthropic.com
 ? Enter Auth Token or API Key: xxx
 
-? Existing config detected. How to proceed?
-  ❯ Backup and overwrite all
-    Update workflow-related md files only with backup
-    Merge config
-    Skip
+? Select output styles to install:
+  ❯ Engineer Professional - Professional software engineer following SOLID, KISS, DRY, YAGNI principles
+    Nekomata Engineer - Professional catgirl engineer Nova, combining rigorous engineering with cute catgirl traits
+    Laowang Grumpy Tech - Laowang grumpy tech style, never tolerates code errors and non-standard code
+    
+? Select global default output style:
+  ❯ Engineer Professional
+
+? Configure MCP services? (Y/n)
+
+? Select MCP services to install:
+  ❯ context7 - Get latest library and framework documentation
+    mcp-deepwiki - Access deepwiki.com knowledge base
+    Playwright - Browser automation and web testing
+    exa - Advanced search and enterprise research tools
+
+? Select workflows to install:
+  ❯ Common Tools Workflow - init-project and related agents
+    Six Steps Workflow - Complete six-stage development process
+    Feature Planning UX - Complete feature development lifecycle
+    Git Workflow - Git operations and branch management
+    BMad Workflow - AI-driven agile development methodology
+
+? Install CCometixLine statusline tool? (Y/n)
+
+✔ Setup complete! Claude Code environment is ready
+```
 
 ✔ All config files backed up to ~/.claude/backup/xxx
 ✔ Config files copied to ~/.claude
@@ -449,7 +474,7 @@ zcf/
 │   ├── settings.json    # Base configuration (with privacy env vars)
 │   ├── en/              # English version
 │   │   ├── rules.md     # Core principles (formerly CLAUDE.md)
-│   │   ├── personality.md # AI personality (v2.0 new)
+│   │   ├── output-styles/ # AI output styles (v2.12+ new)
 │   │   ├── mcp.md       # MCP services guide (v2.0 new)
 │   │   ├── agents/      # AI agents
 │   │   └── commands/    # Command definitions

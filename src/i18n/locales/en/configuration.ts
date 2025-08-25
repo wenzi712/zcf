@@ -54,7 +54,7 @@ export const configuration = {
   legacyFilesDetected: 'Legacy personality configuration files detected',
   cleanupLegacyFiles: 'Clean up legacy configuration files?',
   legacyFilesRemoved: 'Legacy configuration files removed',
-  
+
   // Output style names and descriptions
   outputStyles: {
     'engineer-professional': {
@@ -100,6 +100,14 @@ export const configuration = {
   envImportSuccess: 'Environment variables imported',
   permissionsImportSuccess: 'Permissions imported',
   openingSettingsJson: 'Opening settings.json...',
+
+  // Version check related
+  claudeCodeVersionCheck: 'Checking Claude Code version...',
+  claudeCodeVersionCheckSkipped: 'Claude Code version check skipped (just installed)',
+  claudeCodeAutoUpdating: 'Auto-updating Claude Code...',
+  claudeCodeVersionCheckFailed: 'Claude Code version check failed',
+  claudeCodeVersionCheckSuccess: 'Claude Code version check completed',
+  claudeCodeNoUpdateNeeded: 'Claude Code is up to date',
 
   // JSON config related
   invalidConfiguration: 'Invalid configuration',

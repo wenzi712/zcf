@@ -4,13 +4,13 @@ import ansis from 'ansis'
 import inquirer from 'inquirer'
 import { CLAUDE_DIR } from '../constants'
 import { getTranslation } from '../i18n'
-import { configureOutputStyle } from './output-style'
 import {
   applyAiLanguageDirective,
   backupExistingConfig,
   configureApi,
   getExistingApiConfig,
 } from './config'
+import { configureOutputStyle } from './output-style'
 import { addNumbersToChoices } from './prompt-helpers'
 import { formatApiKeyDisplay, validateApiKey } from './validator'
 
@@ -264,7 +264,7 @@ export async function updatePromptOnly(
   // Configure output styles
   await configureOutputStyle(
     scriptLang, // Display language for UI
-    configLang  // Config language for templates
+    configLang, // Config language for templates
   )
 
   console.log(ansis.green(`✔ ${i18n.configuration.configSuccess} ${CLAUDE_DIR}`))

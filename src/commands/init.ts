@@ -7,7 +7,6 @@ import inquirer from 'inquirer'
 import { version } from '../../package.json'
 import { WORKFLOW_CONFIGS } from '../config/workflows'
 import { CLAUDE_DIR, I18N, LANG_LABELS, MCP_SERVICES, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants'
-import { configureOutputStyle } from '../utils/output-style'
 import { displayBannerWithInfo } from '../utils/banner'
 import { backupCcrConfig, configureCcrProxy, createDefaultCcrConfig, readCcrConfig, setupCcrConfiguration, writeCcrConfig } from '../utils/ccr/config'
 import { installCcr, isCcrInstalled } from '../utils/ccr/installer'
@@ -23,6 +22,7 @@ import {
 import { configureApiCompletely, modifyApiConfigPartially } from '../utils/config-operations'
 import { handleExitPromptError, handleGeneralError } from '../utils/error-handler'
 import { installClaudeCode, isClaudeCodeInstalled } from '../utils/installer'
+import { checkClaudeCodeVersionAndPrompt } from '../utils/version-checker'
 import {
   addCompletedOnboarding,
   backupMcpConfig,
@@ -33,6 +33,7 @@ import {
   writeMcpConfig,
 } from '../utils/mcp'
 import { selectMcpServices } from '../utils/mcp-selector'
+import { configureOutputStyle } from '../utils/output-style'
 import { isTermux, isWindows } from '../utils/platform'
 import { addNumbersToChoices } from '../utils/prompt-helpers'
 import { resolveAiOutputLanguage, selectScriptLanguage } from '../utils/prompts'
@@ -105,7 +106,7 @@ function validateSkipPromptOptions(options: InitOptions) {
   if (options.outputStyles === undefined) {
     options.outputStyles = ['engineer-professional', 'nekomata-engineer', 'laowang-engineer']
   }
-  
+
   // Set default output style
   if (!options.defaultOutputStyle) {
     options.defaultOutputStyle = 'engineer-professional'
@@ -301,6 +302,10 @@ export async function init(options: InitOptions = {}) {
     }
     else {
       console.log(ansis.green(`✔ ${i18n.installation.alreadyInstalled}`))
+      
+      // Step 4.5: Check for Claude Code updates (only if already installed)
+      // Skip version check if Claude Code was just installed (it's already latest)
+      await checkClaudeCodeVersionAndPrompt(scriptLang, options.skipPrompt)
     }
 
     // Step 5: Handle existing config
@@ -596,14 +601,14 @@ export async function init(options: InitOptions = {}) {
           scriptLang, // Display language for UI
           configLang!, // Config language for templates
           options.outputStyles as string[],
-          options.defaultOutputStyle
+          options.defaultOutputStyle,
         )
       }
     }
     else {
       await configureOutputStyle(
         scriptLang, // Display language for UI
-        configLang! // Config language for templates
+        configLang!, // Config language for templates
       )
     }
 

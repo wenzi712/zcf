@@ -5,6 +5,7 @@ export default antfu({
   ignores: [
     '.bmad-core/**',
     '.claude/**',
+    'templates/**',
   ],
   rules: {
     'no-console': 'off',
