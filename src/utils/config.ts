@@ -1,4 +1,4 @@
-import type { AiOutputLanguage, SupportedLang } from '../constants'
+import type { AiOutputLanguage } from '../constants'
 import type { ApiConfig, ClaudeSettings } from '../types/config'
 import type { CopyDirOptions } from './fs-operations'
 import { fileURLToPath } from 'node:url'
@@ -8,11 +8,9 @@ import { AI_OUTPUT_LANGUAGES, CLAUDE_DIR, SETTINGS_FILE } from '../constants'
 import { getTranslation } from '../i18n'
 import {
   copyDir,
-
   copyFile,
   ensureDir,
   exists,
-  readDir,
   writeFile,
 } from './fs-operations'
 import { readJsonConfig, writeJsonConfig } from './json-config'
@@ -49,7 +47,7 @@ export function backupExistingConfig() {
   return backupDir
 }
 
-export function copyConfigFiles(lang: SupportedLang, onlyMd: boolean = false) {
+export function copyConfigFiles(onlyMd: boolean = false) {
   // Get the root directory of the package
   const currentFilePath = fileURLToPath(import.meta.url)
   // Navigate from dist/shared/xxx.mjs to package root
@@ -57,51 +55,17 @@ export function copyConfigFiles(lang: SupportedLang, onlyMd: boolean = false) {
   const rootDir = dirname(distDir)
   const baseTemplateDir = join(rootDir, 'templates')
 
-  // Copy Claude memory files (mcp.md, personality.md, rules.md, technical-guides.md)
-  copyClaudeMemoryFiles(lang, rootDir)
-
   if (!onlyMd) {
     // Intelligently merge settings.json instead of copying
-    const baseSettingsPath = join(baseTemplateDir, 'settings.json')
+    const baseSettingsPath = join(baseTemplateDir, 'common', 'settings.json')
     const destSettingsPath = join(CLAUDE_DIR, 'settings.json')
     if (exists(baseSettingsPath)) {
       mergeSettingsFile(baseSettingsPath, destSettingsPath)
     }
   }
-
-  // Always copy CLAUDE.md from base template directory
-  const claudeMdSource = join(baseTemplateDir, 'common', 'CLAUDE.md')
-  const claudeMdDest = join(CLAUDE_DIR, 'CLAUDE.md')
-  if (exists(claudeMdSource)) {
-    copyFile(claudeMdSource, claudeMdDest)
-  }
+  
+  // Note: CLAUDE.md is generated via output-style system when AI output language is selected
 }
-
-/**
- * Copy Claude memory related files only
- */
-function copyClaudeMemoryFiles(lang: SupportedLang, rootDir: string) {
-  const memorySourceDir = join(rootDir, 'templates', lang, 'memory')
-
-  if (!exists(memorySourceDir)) {
-    const i18n = getTranslation(lang)
-    throw new Error(`${i18n.configuration.memoryDirNotFound || 'Memory directory not found:'} ${memorySourceDir}`)
-  }
-
-  // Copy all files from memory directory directly to CLAUDE_DIR
-  const files = readDir(memorySourceDir)
-  files?.forEach((file) => {
-    if (file.endsWith('.md')) {
-      const sourcePath = join(memorySourceDir, file)
-      const destPath = join(CLAUDE_DIR, file)
-      copyFile(sourcePath, destPath)
-    }
-  })
-}
-
-// These functions have been replaced by the more generic copyDir with filters
-
-// ApiConfig type has been moved to types/config.ts
 
 /**
  * Read default settings.json configuration from template directory
@@ -334,8 +298,8 @@ export function getExistingApiConfig(): ApiConfig | null {
 }
 
 export function applyAiLanguageDirective(aiOutputLang: AiOutputLanguage | string) {
-  // Write language directive to a separate language.md file
-  const languageFile = join(CLAUDE_DIR, 'language.md')
+  // Write language directive directly to CLAUDE.md file
+  const claudeFile = join(CLAUDE_DIR, 'CLAUDE.md')
 
   // Prepare the language directive
   let directive = ''
@@ -351,6 +315,6 @@ export function applyAiLanguageDirective(aiOutputLang: AiOutputLanguage | string
     directive = `Always respond in ${aiOutputLang}`
   }
 
-  // Write to language.md file directly without markers
-  writeFile(languageFile, directive)
+  // Write to CLAUDE.md file directly without markers
+  writeFile(claudeFile, directive)
 }

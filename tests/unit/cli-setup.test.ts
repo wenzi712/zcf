@@ -256,8 +256,8 @@ describe('cli-setup', () => {
         expect(parsed.options.aiOutputLang).toBe('en')
       })
 
-      it('should recognize -o as shortcut for --config-action', () => {
-        const parsed = cli.parse(['node', 'test', 'init', '-o', 'backup'], { run: false })
+      it('should recognize -r as shortcut for --config-action', () => {
+        const parsed = cli.parse(['node', 'test', 'init', '-r', 'backup'], { run: false })
         expect(parsed.options.configAction).toBe('backup')
       })
 
@@ -286,9 +286,14 @@ describe('cli-setup', () => {
         expect(parsed.options.workflows).toBe('bmadWorkflow')
       })
 
-      it('should recognize -p as shortcut for --ai-personality', () => {
-        const parsed = cli.parse(['node', 'test', 'init', '-p', 'mentor'], { run: false })
-        expect(parsed.options.aiPersonality).toBe('mentor')
+      it('should recognize -o as shortcut for --output-styles', () => {
+        const parsed = cli.parse(['node', 'test', 'init', '-o', 'nekomata-engineer'], { run: false })
+        expect(parsed.options.outputStyles).toBe('nekomata-engineer')
+      })
+
+      it('should recognize -d as shortcut for --default-output-style', () => {
+        const parsed = cli.parse(['node', 'test', 'init', '-d', 'engineer-professional'], { run: false })
+        expect(parsed.options.defaultOutputStyle).toBe('engineer-professional')
       })
 
       it('should recognize -g as shortcut for --all-lang', () => {

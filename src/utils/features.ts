@@ -5,7 +5,7 @@ import ansis from 'ansis'
 import inquirer from 'inquirer'
 import { LANG_LABELS, MCP_SERVICES, SUPPORTED_LANGS, ZCF_CONFIG_FILE } from '../constants'
 import { getTranslation } from '../i18n'
-import { configureAiPersonality } from './ai-personality'
+import { configureOutputStyle } from './output-style'
 import { setupCcrConfiguration } from './ccr/config'
 import { installCcr, isCcrInstalled } from './ccr/installer'
 import {
@@ -368,8 +368,8 @@ export async function configureAiMemoryFeature(scriptLang: SupportedLang) {
         value: 'language',
       },
       {
-        name: i18n.configuration.configureAiPersonality || 'Configure AI personality',
-        value: 'personality',
+        name: i18n.configuration.configureOutputStyle || 'Configure global AI output style',
+        value: 'outputStyle',
       },
     ]),
   })
@@ -411,8 +411,8 @@ export async function configureAiMemoryFeature(scriptLang: SupportedLang) {
     updateZcfConfig({ aiOutputLang })
     console.log(ansis.green(`✔ ${i18n.configuration.aiLanguageConfigured || 'AI output language configured'}`))
   }
-  else {
-    await configureAiPersonality(scriptLang)
+  else if (option === 'outputStyle') {
+    await configureOutputStyle(scriptLang, scriptLang)
   }
 }
 

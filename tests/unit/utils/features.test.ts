@@ -54,8 +54,8 @@ vi.mock('../../../src/utils/zcf-config', () => ({
   updateZcfConfig: vi.fn(),
 }))
 
-vi.mock('../../../src/utils/ai-personality', () => ({
-  configureAiPersonality: vi.fn(),
+vi.mock('../../../src/utils/output-style', () => ({
+  configureOutputStyle: vi.fn(),
 }))
 
 vi.mock('../../../src/utils/platform', () => ({
@@ -324,29 +324,29 @@ describe('features utilities', () => {
       expect(updateZcfConfig).not.toHaveBeenCalled()
     })
 
-    it('should configure AI personality when personality option selected', async () => {
+    it('should configure AI output style when outputStyle option selected', async () => {
       const { configureAiMemoryFeature } = await import('../../../src/utils/features')
-      const { configureAiPersonality: _configureAiPersonality } = await import('../../../src/utils/ai-personality')
+      const { configureOutputStyle: _configureOutputStyle } = await import('../../../src/utils/output-style')
 
-      vi.mocked(inquirer.prompt).mockResolvedValue({ option: 'personality' })
-      vi.mocked(_configureAiPersonality).mockResolvedValue(undefined)
+      vi.mocked(inquirer.prompt).mockResolvedValue({ option: 'outputStyle' })
+      vi.mocked(_configureOutputStyle).mockResolvedValue(undefined)
 
       await configureAiMemoryFeature('zh-CN')
 
-      expect(_configureAiPersonality).toHaveBeenCalledWith('zh-CN')
+      expect(_configureOutputStyle).toHaveBeenCalledWith('zh-CN', 'zh-CN')
     })
 
     it('should handle user cancellation', async () => {
       const { configureAiMemoryFeature } = await import('../../../src/utils/features')
       const { applyAiLanguageDirective } = await import('../../../src/utils/config')
-      const { configureAiPersonality: _configureAiPersonality } = await import('../../../src/utils/ai-personality')
+      const { configureOutputStyle: _configureOutputStyle } = await import('../../../src/utils/output-style')
 
       vi.mocked(inquirer.prompt).mockResolvedValue({ option: undefined })
 
       await configureAiMemoryFeature('zh-CN')
 
       expect(applyAiLanguageDirective).not.toHaveBeenCalled()
-      expect(_configureAiPersonality).not.toHaveBeenCalled()
+      expect(_configureOutputStyle).not.toHaveBeenCalled()
     })
   })
 

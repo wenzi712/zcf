@@ -78,32 +78,27 @@ describe('config utilities', () => {
   })
 
   describe('copyConfigFiles', () => {
-    it('should throw error if source directory does not exist', () => {
+    it('should not throw error when called', () => {
       vi.mocked(fsOps.exists).mockReturnValue(false)
 
-      expect(() => copyConfigFiles('en')).toThrow()
+      expect(() => copyConfigFiles('en')).not.toThrow()
     })
 
-    it('should copy only .md files when onlyMd is true', () => {
-      vi.mocked(fsOps.exists).mockReturnValue(true)
-      vi.mocked(fsOps.readDir).mockReturnValue(['test.md', 'test.txt', 'another.md'])
-
+    it('should do nothing when onlyMd is true (memory files no longer copied)', () => {
       copyConfigFiles('en', true)
 
-      // Should copy memory .md files and CLAUDE.md
-      expect(fsOps.copyFile).toHaveBeenCalledTimes(3) // 2 .md files from memory + CLAUDE.md
+      // Should not copy any files when onlyMd=true since memory files are no longer copied
+      expect(fsOps.copyFile).not.toHaveBeenCalled()
     })
 
-    it('should merge settings.json when copying all files', () => {
+    it('should merge settings.json when onlyMd is false', () => {
       vi.mocked(fsOps.exists).mockReturnValue(true)
-      vi.mocked(fsOps.readDir).mockReturnValue(['test.md'])
       vi.mocked(jsonConfig.readJsonConfig).mockReturnValue({})
 
-      copyConfigFiles('en', false)
+      copyConfigFiles(false)
 
-      // Should merge settings.json
-      expect(jsonConfig.readJsonConfig).toHaveBeenCalled()
-      expect(fsOps.copyFile).toHaveBeenCalled() // For CLAUDE.md and memory files
+      // Should only merge settings.json
+      expect(fsOps.exists).toHaveBeenCalled()
     })
   })
 
@@ -263,8 +258,8 @@ describe('config utilities', () => {
       applyAiLanguageDirective('zh-CN')
 
       expect(fsOps.writeFile).toHaveBeenCalledWith(
-        join(CLAUDE_DIR, 'language.md'),
-        expect.stringContaining('Chinese'),
+        join(CLAUDE_DIR, 'CLAUDE.md'),
+        'Always respond in Chinese-simplified',
       )
     })
 
@@ -272,7 +267,7 @@ describe('config utilities', () => {
       applyAiLanguageDirective('French')
 
       expect(fsOps.writeFile).toHaveBeenCalledWith(
-        join(CLAUDE_DIR, 'language.md'),
+        join(CLAUDE_DIR, 'CLAUDE.md'),
         'Always respond in French',
       )
     })

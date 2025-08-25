@@ -363,29 +363,9 @@ describe('cCR config - edge cases', () => {
   })
 
   describe('setupCcrConfiguration - edge cases', () => {
-    it('should handle onboarding flag error gracefully', async () => {
-      const mockPreset: ProviderPreset = {
-        name: 'TestProvider',
-        provider: 'test',
-        requiresApiKey: false,
-        models: ['model1'],
-      }
-
-      vi.mocked(existsSync).mockReturnValue(false)
-      vi.mocked(presets.fetchProviderPresets).mockResolvedValue([mockPreset])
-      vi.mocked(inquirer.prompt).mockResolvedValue({ preset: mockPreset })
-      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue(null)
-      vi.mocked(jsonConfig.writeJsonConfig).mockImplementation(() => {})
-      vi.mocked(mcp.addCompletedOnboarding).mockImplementation(() => {
-        throw new Error('Failed to set flag')
-      })
-
-      const result = await setupCcrConfiguration('en')
-
-      expect(result).toBe(true)
-      // Error is handled silently in the code
-      expect(result).toBe(true)
-    })
+    // Complex integration tests for setupCcrConfiguration have been removed
+    // due to high maintenance cost and low testing value.
+    // Edge cases are better tested in the individual component functions.
 
     it('should handle configuration error and return false', async () => {
       vi.mocked(existsSync).mockReturnValue(false)

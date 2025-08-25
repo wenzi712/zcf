@@ -5,8 +5,8 @@ import {
   mkdirSync,
   readdirSync,
   readFileSync,
-
   statSync,
+  unlinkSync,
   writeFileSync,
 } from 'node:fs'
 import { dirname } from 'pathe'
@@ -148,6 +148,24 @@ export function isFile(path: string): boolean {
   }
   catch {
     return false
+  }
+}
+
+/**
+ * Remove a file
+ */
+export function removeFile(path: string): void {
+  try {
+    if (exists(path)) {
+      unlinkSync(path)
+    }
+  }
+  catch (error) {
+    throw new FileSystemError(
+      `Failed to remove file: ${path}`,
+      path,
+      error as Error,
+    )
   }
 }
 

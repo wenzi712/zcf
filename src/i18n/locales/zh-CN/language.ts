@@ -7,7 +7,7 @@ export const language = {
   languageChanged: '语言已更改',
   configLangHint: {
     'zh-CN': '便于中文用户自定义',
-    'en': '推荐，token 消耗更低',
+    'en': 'token 消耗更低',
   },
   updateConfigLangPrompt: '选择配置语言',
   updateConfigLangChoice: {

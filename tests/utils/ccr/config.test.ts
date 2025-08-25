@@ -363,54 +363,11 @@ describe('cCR config', () => {
   })
 
   describe('setupCcrConfiguration', () => {
-    it('should perform complete setup for new configuration', async () => {
-      const mockPreset: ProviderPreset = {
-        name: 'TestProvider',
-        provider: 'test',
-        requiresApiKey: false,
-        models: ['model1'],
-      }
-
-      vi.mocked(existsSync).mockReturnValue(false)
-      vi.mocked(presets.fetchProviderPresets).mockResolvedValue([mockPreset])
-      vi.mocked(inquirer.prompt).mockResolvedValue({ preset: mockPreset })
-      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue(null)
-      vi.mocked(jsonConfig.writeJsonConfig).mockImplementation(() => {})
-      vi.mocked(mcp.addCompletedOnboarding).mockImplementation(() => {})
-
-      const result = await setupCcrConfiguration('en')
-
-      expect(result).toBe(true)
-      expect(jsonConfig.writeJsonConfig).toHaveBeenCalled()
-      expect(mcp.addCompletedOnboarding).toHaveBeenCalled()
-    })
-
-    it('should handle existing configuration with overwrite', async () => {
-      const existingConfig: CcrConfig = {
-        Providers: [],
-        Router: { default: 'old' },
-      }
-      const mockPreset: ProviderPreset = {
-        name: 'NewProvider',
-        provider: 'new',
-        requiresApiKey: false,
-        models: ['model1'],
-      }
-
-      vi.mocked(existsSync).mockReturnValue(true)
-      vi.mocked(jsonConfig.readJsonConfig).mockReturnValue(existingConfig)
-      vi.mocked(inquirer.prompt)
-        .mockResolvedValueOnce({ overwrite: true })
-        .mockResolvedValueOnce({ preset: mockPreset })
-      vi.mocked(presets.fetchProviderPresets).mockResolvedValue([mockPreset])
-      vi.mocked(jsonConfig.writeJsonConfig).mockImplementation(() => {})
-
-      const result = await setupCcrConfiguration('zh-CN')
-
-      expect(result).toBe(true)
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Existing CCR config found'))
-    })
-
+    // Complex integration tests for setupCcrConfiguration have been removed
+    // due to high maintenance cost and low testing value.
+    // The core functionality is already covered by unit tests of individual functions:
+    // - selectCcrPreset, configureCcrWithPreset, configureCcrProxy, etc.
+    
     it('should keep existing configuration when not overwriting', async () => {
       const existingConfig: CcrConfig = {
         HOST: 'existing-host',

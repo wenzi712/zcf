@@ -265,7 +265,7 @@ $ npx zcf
 ```bash
 ? 选择 Claude Code 配置语言:
   ❯ 简体中文 (zh-CN) - 中文版（便于中文用户自定义）
-    English (en) - 英文版（推荐，token 消耗更低）
+    English (en) - 英文版（token 消耗更低）
 
 ? 选择 AI 输出语言:
   AI 将使用此语言回复你的问题

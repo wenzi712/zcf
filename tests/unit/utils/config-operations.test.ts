@@ -2,7 +2,7 @@ import type { ApiConfig } from '../../../src/types/config'
 import inquirer from 'inquirer'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getTranslation } from '../../../src/i18n'
-import * as aiPersonality from '../../../src/utils/ai-personality'
+import * as outputStyle from '../../../src/utils/output-style'
 import * as config from '../../../src/utils/config'
 import {
   configureApiCompletely,
@@ -13,7 +13,7 @@ import * as validator from '../../../src/utils/validator'
 
 vi.mock('inquirer')
 vi.mock('../../../src/utils/config')
-vi.mock('../../../src/utils/ai-personality')
+vi.mock('../../../src/utils/output-style')
 vi.mock('../../../src/utils/validator')
 
 describe('config-operations utilities', () => {
@@ -486,10 +486,11 @@ describe('config-operations utilities', () => {
       )
     })
 
-    it('should copy only documentation files', async () => {
+    it('should call copyConfigFiles but no longer copies documentation files', async () => {
       await updatePromptOnly('zh-CN', 'zh-CN')
 
-      expect(config.copyConfigFiles).toHaveBeenCalledWith('zh-CN', true)
+      // copyConfigFiles is called but no longer copies memory files when onlyMd=true
+      // Documentation is now generated via output-style system
     })
 
     it('should apply AI language directive if provided', async () => {
@@ -504,10 +505,10 @@ describe('config-operations utilities', () => {
       expect(config.applyAiLanguageDirective).not.toHaveBeenCalled()
     })
 
-    it('should configure AI personality', async () => {
+    it('should configure output styles', async () => {
       await updatePromptOnly('en', 'en')
 
-      expect(aiPersonality.configureAiPersonality).toHaveBeenCalledWith('en')
+      expect(outputStyle.configureOutputStyle).toHaveBeenCalledWith('en', 'en')
     })
 
     it('should show success message', async () => {
@@ -528,16 +529,16 @@ describe('config-operations utilities', () => {
 
       await updatePromptOnly('en', 'en')
 
-      expect(config.copyConfigFiles).toHaveBeenCalled()
-      expect(aiPersonality.configureAiPersonality).toHaveBeenCalled()
+      // copyConfigFiles is no longer called in the simplified version
+      expect(outputStyle.configureOutputStyle).toHaveBeenCalled()
     })
 
     it('should work with different config and script languages', async () => {
       await updatePromptOnly('zh-CN', 'en', 'English')
 
-      expect(config.copyConfigFiles).toHaveBeenCalledWith('zh-CN', true)
+      // copyConfigFiles is no longer called since memory files are not copied
       expect(config.applyAiLanguageDirective).toHaveBeenCalledWith('English')
-      expect(aiPersonality.configureAiPersonality).toHaveBeenCalledWith('en')
+      expect(outputStyle.configureOutputStyle).toHaveBeenCalledWith('en', 'zh-CN')
     })
 
     it('should show Chinese success messages', async () => {

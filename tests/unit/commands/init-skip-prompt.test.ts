@@ -34,8 +34,8 @@ vi.mock('../../../src/utils/prompts', () => ({
   resolveAiOutputLanguage: vi.fn(),
 }))
 
-vi.mock('../../../src/utils/ai-personality', () => ({
-  configureAiPersonality: vi.fn(),
+vi.mock('../../../src/utils/output-style', () => ({
+  configureOutputStyle: vi.fn(),
 }))
 
 vi.mock('../../../src/utils/mcp', () => ({
@@ -270,8 +270,8 @@ describe('init command with simplified parameters', () => {
       )
     })
 
-    it('should use default AI personality when not specified', async () => {
-      const { configureAiPersonality } = await import('../../../src/utils/ai-personality')
+    it('should use default output styles when not specified', async () => {
+      const { configureOutputStyle } = await import('../../../src/utils/output-style')
       const { isClaudeCodeInstalled } = await import('../../../src/utils/installer')
 
       vi.mocked(existsSync).mockReturnValue(false)
@@ -284,7 +284,12 @@ describe('init command with simplified parameters', () => {
 
       await init(options)
 
-      expect(configureAiPersonality).toHaveBeenCalledWith('en', 'professional') // Default personality
+      expect(configureOutputStyle).toHaveBeenCalledWith(
+        'en', // display language
+        'en', // config language
+        ['engineer-professional', 'nekomata-engineer', 'laowang-engineer'], // default output styles
+        'engineer-professional' // default output style
+      )
     })
   })
 
@@ -304,7 +309,7 @@ describe('init command with simplified parameters', () => {
 
       await init(options)
 
-      expect(copyConfigFiles).toHaveBeenCalledWith('en', false)
+      expect(copyConfigFiles).toHaveBeenCalledWith(false)
       expect(applyAiLanguageDirective).toHaveBeenCalledWith('en')
     })
 
@@ -324,7 +329,7 @@ describe('init command with simplified parameters', () => {
       await init(options)
 
       // lang and config-lang should be en, ai-output-lang should be fr
-      expect(copyConfigFiles).toHaveBeenCalledWith('en', false)
+      expect(copyConfigFiles).toHaveBeenCalledWith(false)
       expect(applyAiLanguageDirective).toHaveBeenCalledWith('fr')
     })
   })

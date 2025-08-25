@@ -29,6 +29,7 @@ export interface ClaudeSettings {
     [key: string]: any
   }
   statusLine?: StatusLineConfig
+  outputStyle?: string
   [key: string]: any
 }
 

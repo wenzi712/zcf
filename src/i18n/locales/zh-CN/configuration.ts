@@ -25,13 +25,14 @@ export const configuration = {
   selectMemoryOption: '选择配置选项',
   configureAiLanguage: '配置 AI 输出语言',
   configureAiPersonality: '配置 AI 个性风格',
+  configureOutputStyle: '配置全局 AI 输出风格',
   aiLanguageConfigured: 'AI 输出语言已配置',
   existingLanguageConfig: '检测到已有 AI 输出语言配置',
   currentLanguage: '当前语言',
   modifyLanguage: '是否修改 AI 输出语言？',
   keepLanguage: '保持当前语言配置',
 
-  // AI personality
+  // AI personality (deprecated - replaced by output styles)
   selectAiPersonality: '选择 AI 个性风格',
   customPersonalityHint: '定义你自己的个性',
   enterCustomPersonality: '请输入自定义个性描述',
@@ -42,6 +43,45 @@ export const configuration = {
   keepPersonality: '保持当前个性配置',
   directiveCannotBeEmpty: '指令不能为空',
   languageRequired: '语言为必填项',
+
+  // Output styles
+  selectOutputStyles: '选择要安装的输出风格',
+  selectDefaultOutputStyle: '选择全局默认输出风格',
+  outputStyleInstalled: '输出风格安装成功',
+  selectedStyles: '已选择风格',
+  defaultStyle: '默认风格',
+  selectAtLeastOne: '请至少选择一个输出风格',
+  legacyFilesDetected: '检测到旧版个性配置文件',
+  cleanupLegacyFiles: '是否清理旧版配置文件？',
+  legacyFilesRemoved: '旧版配置文件已清理',
+  
+  // Output style names and descriptions
+  outputStyles: {
+    'engineer-professional': {
+      name: '工程师专业版',
+      description: '专业的软件工程师，严格遵循SOLID、KISS、DRY、YAGNI原则',
+    },
+    'nekomata-engineer': {
+      name: '猫娘工程师',
+      description: '专业的猫娘工程师Nova，结合严谨工程师素养与可爱猫娘特质',
+    },
+    'laowang-engineer': {
+      name: '老王暴躁技术流',
+      description: '老王暴躁技术流，绝不容忍代码报错和不规范的代码',
+    },
+    'default': {
+      name: '默认风格',
+      description: '完成编码任务时高效且提供简洁响应 (Claude Code自带)',
+    },
+    'explanatory': {
+      name: '解释风格',
+      description: '解释其实现选择和代码库模式 (Claude Code自带)',
+    },
+    'learning': {
+      name: '学习风格',
+      description: '协作式的边做边学模式，暂停并要求您编写小段代码进行实践练习 (Claude Code自带)',
+    },
+  },
 
   // Cache
   confirmClearCache: '确认清除所有 ZCF 偏好缓存？',

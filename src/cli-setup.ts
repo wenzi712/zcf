@@ -22,7 +22,8 @@ export interface CliOptions {
   apiUrl?: string
   mcpServices?: string // default: all non-key services, "skip" to skip all
   workflows?: string // default: all workflows, "skip" to skip all
-  aiPersonality?: string // default: professional
+  outputStyles?: string // default: all custom styles
+  defaultOutputStyle?: string // default: engineer-professional
   allLang?: string // New: unified language parameter
   installCometixLine?: string | boolean // New: CCometixLine installation control, default: true
 }
@@ -47,13 +48,14 @@ export function setupCommands(cli: CAC) {
     .option('--ai-output-lang, -a <lang>', 'AI output language')
     .option('--force, -f', 'Force overwrite existing configuration')
     .option('--skip-prompt, -s', 'Skip all interactive prompts (non-interactive mode)')
-    .option('--config-action, -o <action>', 'Config handling (new/backup/merge/docs-only/skip), default: backup')
+    .option('--config-action, -r <action>', 'Config handling (new/backup/merge/docs-only/skip), default: backup')
     .option('--api-type, -t <type>', 'API type (auth_token/api_key/ccr_proxy/skip)')
     .option('--api-key, -k <key>', 'API key (used for both API key and auth token types)')
     .option('--api-url, -u <url>', 'Custom API URL')
     .option('--mcp-services, -m <services>', 'Comma-separated MCP services to install (context7,mcp-deepwiki,Playwright,exa), "skip" to skip all, "all" for all non-key services, default: all')
     .option('--workflows, -w <workflows>', 'Comma-separated workflows to install (sixStepsWorkflow,featPlanUx,gitWorkflow,bmadWorkflow), "skip" to skip all, "all" for all workflows, default: all')
-    .option('--ai-personality, -p <type>', 'AI personality type (professional,catgirl,friendly,mentor,custom), default: professional')
+    .option('--output-styles, -o <styles>', 'Comma-separated output styles (engineer-professional,nekomata-engineer,laowang-engineer,default,explanatory,learning), "skip" to skip all, "all" for all custom styles, default: all')
+    .option('--default-output-style, -d <style>', 'Default output style, default: engineer-professional')
     .option('--all-lang, -g <lang>', 'Set all language parameters to this value')
     .option('--install-cometix-line, -x <value>', 'Install CCometixLine statusline tool (true/false), default: true')
     .action(async (options) => {
@@ -127,7 +129,8 @@ export async function handleInitCommand(options: CliOptions) {
     apiUrl: options.apiUrl,
     mcpServices: options.mcpServices,
     workflows: options.workflows,
-    aiPersonality: options.aiPersonality,
+    outputStyles: options.outputStyles,
+    defaultOutputStyle: options.defaultOutputStyle,
     allLang: options.allLang,
     installCometixLine: options.installCometixLine,
   })
@@ -169,6 +172,7 @@ export function customizeHelp(sections: any[]) {
     title: ansis.yellow('Options / 选项:'),
     body: [
       `  ${ansis.green('--init')}                    Run full initialization directly / 直接运行完整初始化`,
+      `  ${ansis.green('--lang, -l')} <lang>         Display language / 显示语言 (zh-CN, en)`,
       `  ${ansis.green('--config-lang, -c')} <lang>  Configuration language / 配置语言 (zh-CN, en)`,
       `  ${ansis.green('--force, -f')}               Force overwrite / 强制覆盖现有配置`,
       `  ${ansis.green('--help, -h')}                Display help / 显示帮助`,
@@ -181,10 +185,11 @@ export function customizeHelp(sections: any[]) {
       `  ${ansis.green('--api-url, -u')} <url>       Custom API URL / 自定义API地址`,
       `  ${ansis.green('--ai-output-lang, -a')} <lang> AI output language / AI输出语言`,
       `  ${ansis.green('--all-lang, -g')} <lang>     Set all language params / 统一设置所有语言参数`,
-      `  ${ansis.green('--config-action, -o')} <action> Config handling / 配置处理 (default: backup)`,
+      `  ${ansis.green('--config-action, -r')} <action> Config handling / 配置处理 (default: backup)`,
       `  ${ansis.green('--mcp-services, -m')} <list>  MCP services / MCP服务 (default: all non-key services)`,
       `  ${ansis.green('--workflows, -w')} <list>    Workflows / 工作流 (default: all workflows)`,
-      `  ${ansis.green('--ai-personality, -p')} <type> AI personality / AI个性 (default: professional)`,
+      `  ${ansis.green('--output-styles, -o')} <styles> Output styles / 输出样式 (default: all custom styles)`,
+      `  ${ansis.green('--default-output-style, -d')} <style> Default output style / 默认输出样式 (default: engineer-professional)`,
       `  ${ansis.green('--install-cometix-line, -x')} <value> Install statusline tool / 安装状态栏工具 (default: true)`,
     ].join('\n'),
   })

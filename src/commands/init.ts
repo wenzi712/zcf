@@ -7,7 +7,7 @@ import inquirer from 'inquirer'
 import { version } from '../../package.json'
 import { WORKFLOW_CONFIGS } from '../config/workflows'
 import { CLAUDE_DIR, I18N, LANG_LABELS, MCP_SERVICES, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants'
-import { configureAiPersonality } from '../utils/ai-personality'
+import { configureOutputStyle } from '../utils/output-style'
 import { displayBannerWithInfo } from '../utils/banner'
 import { backupCcrConfig, configureCcrProxy, createDefaultCcrConfig, readCcrConfig, setupCcrConfiguration, writeCcrConfig } from '../utils/ccr/config'
 import { installCcr, isCcrInstalled } from '../utils/ccr/installer'
@@ -54,7 +54,8 @@ export interface InitOptions {
   apiUrl?: string
   mcpServices?: string[] | string | boolean
   workflows?: string[] | string | boolean
-  aiPersonality?: string
+  outputStyles?: string[] | string | boolean
+  defaultOutputStyle?: string
   allLang?: string // New: unified language parameter
   installCometixLine?: string | boolean // New: CCometixLine installation control
 }
@@ -89,8 +90,25 @@ function validateSkipPromptOptions(options: InitOptions) {
   if (!options.aiOutputLang) {
     options.aiOutputLang = 'en'
   }
-  if (!options.aiPersonality) {
-    options.aiPersonality = 'professional'
+  // Parse outputStyles parameter
+  if (typeof options.outputStyles === 'string') {
+    if (options.outputStyles === 'skip') {
+      options.outputStyles = false
+    }
+    else if (options.outputStyles === 'all') {
+      options.outputStyles = ['engineer-professional', 'nekomata-engineer', 'laowang-engineer']
+    }
+    else {
+      options.outputStyles = options.outputStyles.split(',').map(s => s.trim())
+    }
+  }
+  if (options.outputStyles === undefined) {
+    options.outputStyles = ['engineer-professional', 'nekomata-engineer', 'laowang-engineer']
+  }
+  
+  // Set default output style
+  if (!options.defaultOutputStyle) {
+    options.defaultOutputStyle = 'engineer-professional'
   }
   // Parse installCometixLine parameter
   if (typeof options.installCometixLine === 'string') {
@@ -141,6 +159,24 @@ function validateSkipPromptOptions(options: InitOptions) {
       if (!validServices.includes(service)) {
         throw new Error(`Invalid MCP service: ${service}. Available services: ${validServices.join(', ')}`)
       }
+    }
+  }
+
+  // Parse and validate output styles
+  if (Array.isArray(options.outputStyles)) {
+    const validStyles = ['engineer-professional', 'nekomata-engineer', 'laowang-engineer', 'default', 'explanatory', 'learning']
+    for (const style of options.outputStyles) {
+      if (!validStyles.includes(style)) {
+        throw new Error(`Invalid output style: ${style}. Available styles: ${validStyles.join(', ')}`)
+      }
+    }
+  }
+
+  // Validate default output style
+  if (options.defaultOutputStyle) {
+    const validStyles = ['engineer-professional', 'nekomata-engineer', 'laowang-engineer', 'default', 'explanatory', 'learning']
+    if (!validStyles.includes(options.defaultOutputStyle)) {
+      throw new Error(`Invalid default output style: ${options.defaultOutputStyle}. Available styles: ${validStyles.join(', ')}`)
     }
   }
 
@@ -523,7 +559,7 @@ export async function init(options: InitOptions = {}) {
 
     if (action === 'docs-only') {
       // Only copy base config files without agents/commands
-      copyConfigFiles(configLang!, true)
+      copyConfigFiles(true)
       // Select and install workflows
       if (options.skipPrompt) {
         // Use provided workflows or default to all workflows, skip if false
@@ -537,7 +573,7 @@ export async function init(options: InitOptions = {}) {
     }
     else if (['backup', 'merge', 'new'].includes(action)) {
       // Copy all base config files
-      copyConfigFiles(configLang!, false)
+      copyConfigFiles(false)
       // Select and install workflows
       if (options.skipPrompt) {
         // Use provided workflows or default to all workflows, skip if false
@@ -550,15 +586,25 @@ export async function init(options: InitOptions = {}) {
       }
     }
 
-    // Step 8: Apply language directive to language.md
+    // Step 8: Apply language directive to CLAUDE.md
     applyAiLanguageDirective(aiOutputLang as AiOutputLanguage | string)
-    // Step 8.5: Configure AI personality
+    // Step 8.5: Configure Output Styles
     if (options.skipPrompt) {
-      // Use provided personality or default to 'professional'
-      await configureAiPersonality(scriptLang, options.aiPersonality!)
+      // Use provided output styles and default
+      if (options.outputStyles !== false) {
+        await configureOutputStyle(
+          scriptLang, // Display language for UI
+          configLang!, // Config language for templates
+          options.outputStyles as string[],
+          options.defaultOutputStyle
+        )
+      }
     }
     else {
-      await configureAiPersonality(scriptLang)
+      await configureOutputStyle(
+        scriptLang, // Display language for UI
+        configLang! // Config language for templates
+      )
     }
 
     // Step 9: Apply API configuration (skip if only updating docs)
