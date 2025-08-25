@@ -24,7 +24,7 @@ npx zcf          # 打开交互式菜单，根据你的需求选择操作
 
 - `1` 完整初始化（等同于 `zcf i`）
 - `2` 导入工作流（等同于 `zcf u`）
-- `3-7` 配置管理（API/CCR、MCP、模型设置、AI 输出样式、环境权限等）
+- `3-7` 配置管理（API/CCR、MCP、模型设置、AI 输出风格、环境权限等）
 - `R` Claude Code Router 管理（v2.8.1 增强）
 - `U` ccusage - Claude Code 用量分析
 - `L` CCometixLine - 基于 Rust 的高性能状态栏工具，集成 Git 信息和实时使用量跟踪（v2.9.9+ 新增）
@@ -84,15 +84,15 @@ npx zcf i --skip-prompt --all-lang zh-CN --api-type api_key --api-key "sk-xxx" -
 | `--api-url, -u`              | 自定义 API URL                          | URL 字符串                                                                                             | 否                            | 官方 API                                                                               |
 | `--mcp-services, -m`         | 要安装的 MCP 服务（多选，逗号分隔）     | `context7`, `mcp-deepwiki`, `Playwright`, `exa`, 或 `skip` 表示跳过全部                                | 否                            | `all`                                                                                  |
 | `--workflows, -w`            | 要安装的工作流（多选，逗号分隔）        | `commonTools`, `sixStepsWorkflow`, `featPlanUx`, `gitWorkflow`, `bmadWorkflow`, 或 `skip` 表示跳过全部 | 否                            | `all`                                                                                  |
-| `--output-styles, -o`        | 要安装的输出样式（多选，逗号分隔）           | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`，或 `skip` 表示不安装                     | 否                            | `all`                                                                                  |
-| `--default-output-style, -d`  | 默认输出样式                           | 同输出样式选项，还包括内置样式：`default`, `explanatory`, `learning`                                           | 否                            | `engineer-professional`                                                               |
+| `--output-styles, -o`        | 要安装的输出风格（多选，逗号分隔）           | `engineer-professional`, `nekomata-engineer`, `laowang-engineer`，或 `skip` 表示不安装                     | 否                            | `all`                                                                                  |
+| `--default-output-style, -d`  | 默认输出风格                           | 同输出风格选项，还包括内置风格：`default`, `explanatory`, `learning`                                           | 否                            | `engineer-professional`                                                               |
 | `--install-cometix-line, -x` | 安装 CCometixLine 状态栏工具            | `true`, `false`                                                                                        | 否                            | `true`                                                                                 |
 
-#### 🎨 AI 输出样式（v2.12+ 新功能）
+#### 🎨 AI 输出风格（v2.12+ 新功能）
 
-ZCF 现在支持可定制的 AI 输出样式，个性化你的 Claude Code 体验：
+ZCF 现在支持可定制的 AI 输出风格，个性化你的 Claude Code 体验：
 
-**可用的输出样式：**
+**可用的输出风格：**
 - `engineer-professional`：专业软件工程师，遵循 SOLID、KISS、DRY、YAGNI 原则
 - `nekomata-engineer`：专业猫娘工程师 Nova，结合严谨工程技术与可爱猫娘特质
 - `laowang-engineer`：老王暴脾气技术流，绝不容忍代码错误和不规范代码
@@ -103,6 +103,14 @@ ZCF 现在支持可定制的 AI 输出样式，个性化你的 Claude Code 体�
 - 为所有项目设置全局默认样式
 - 自动清理旧版个性化配置文件
 - 基于模板的自定义系统
+
+**使用提示：**
+- 可使用 `/output-style` 命令随时切换项目级的输出风格
+- 或在 ZCF 菜单第 6 项中修改全局输出风格
+
+**重要提示：**
+- Claude Code 版本需要大于 1.0.81 才支持 output-style，可使用 `npx zcf check` 进行更新。
+- 旧版的全局记忆规则已迁移到 `专业软件工程师` 输出风格中，解决了占用过多 token 以及 AI 容易忘记全局记忆的问题。
 
 #### 🎯 BMad 工作流（v2.7 新功能）
 

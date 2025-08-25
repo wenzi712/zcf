@@ -104,6 +104,14 @@ ZCF now supports customizable AI output styles to personalize your Claude Code e
 - Automatic cleanup of legacy personality files
 - Template-based customization system
 
+**Usage Tips:**
+- Use `/output-style` command to switch project-level output styles anytime
+- Or modify global output styles in ZCF menu option 6
+
+**Important:**
+- Claude Code version must be greater than 1.0.81 to support output-style. Use `npx zcf check` to update.
+- Legacy global memory rules have been migrated to the `engineer-professional` output style, solving issues with excessive token usage and AI forgetting global memory.
+
 #### 🎯 BMad Workflow (v2.7 New Feature)
 
 [BMad](https://github.com/bmad-code-org/BMAD-METHOD) (BMad-Method: Universal AI Agent Framework) is an enterprise-grade workflow system that provides:
