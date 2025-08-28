@@ -4,33 +4,25 @@
 
 ### Patch Changes
 
-- ## 优化
-  - 优化 BMad 初始化模板，增强工作流程触发机制
-  - 更新架构文档，完善模块分析文档结构
-  - 改进质量保证 (QA) 相关任务模板，新增多种质量评估工具
-  - 优化需求追溯和风险评估框架，提升项目管理能力
-  - 增强测试设计模板，支持多层级测试策略
-  - 完善 Claude 命令系统，新增多个专业任务处理模板
+- ## 模板优化
+  - 优化 BMad 初始化命令模板，提升系统设置引导体验
+  - 增强英文 bmad-init 模板描述，提供更全面的工作流程说明（+76 行）
+  - 完善中文 bmad-init 模板功能覆盖，改进用户初始化体验（+74 行）
+  - 改进模板文档结构，提供更清晰的 BMad 系统配置指导
+  - 更新猫娘工程师输出样式模板，增强自称和用户称呼规范
+  - 完善猫娘工程师身份认知描述，优化双语模板一致性
 
-  ## Optimization
-  - Optimize BMad initialization templates with enhanced workflow trigger mechanisms
-  - Update architecture documentation with improved module analysis structure
-  - Enhance QA-related task templates with multiple quality assessment tools
-  - Improve requirements tracing and risk assessment frameworks for better project management
-  - Strengthen test design templates with multi-level testing strategy support
-  - Perfect Claude command system with additional professional task processing templates
+  ## Template Optimization
+  - Optimize BMad initialization command templates for improved system setup guidance
+  - Enhance English bmad-init template descriptions with comprehensive workflow coverage (+76 lines)
+  - Improve Chinese bmad-init template functionality with better user initialization experience (+74 lines)
+  - Refine template documentation structure with clearer BMad system configuration guidance
+  - Update nekomata engineer output style templates with enhanced self-reference and user address specifications
+  - Improve nekomata engineer identity recognition descriptions with bilingual template consistency
 
-  ## 文档更新
-  - 更新核心 CLAUDE.md 配置文档，完善开发指南
-  - 增强 BMad 用户指南，提供更详细的棕地开发工作流程
-  - 新增测试级别框架和测试优先级矩阵文档
-  - 完善模板系统文档，改进双语支持
+  注：本版本变更主要涉及 BMad 模板优化。其他 BMad 系统文件的批量更新为 bmad-init 触发的自动同步，非 ZCF 核心功能变更。
 
-  ## Documentation Updates
-  - Update core CLAUDE.md configuration documentation with improved development guidelines
-  - Enhance BMad user guide with more detailed brownfield development workflows
-  - Add test levels framework and test priorities matrix documentation
-  - Improve template system documentation with better bilingual support
+  Note: This version primarily focuses on BMad template optimization. Other bulk BMad system file updates are automatic synchronizations triggered by bmad-init, not ZCF core functionality changes.
 
 ## 2.12.2
 
