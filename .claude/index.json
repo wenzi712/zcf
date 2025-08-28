@@ -1,276 +1,202 @@
 {
-  "timestamp": "2025-08-24T14:49:31+08:00",
-  "version": "1.2.0",
+  "timestamp": "2025-08-28T11:45:00+08:00",
+  "version": "1.3.0",
   "project": {
     "name": "zcf",
     "description": "Zero-Config Claude-Code Flow - One-click configuration tool for Claude Code",
-    "version": "2.11.0",
+    "version": "2.12.2",
     "type": "CLI Tool",
     "language": "TypeScript",
-    "architecture": "ESM-only modular CLI with ESLint integration"
+    "architecture": "ESM-only modular CLI with comprehensive cross-platform support"
   },
   "scanning": {
-    "strategy": "Adaptive three-stage incremental initialization",
-    "stages_completed": ["Repository Census", "Module Priority Scanning", "Targeted Documentation Update"],
-    "total_files_estimated": 250,
-    "files_scanned": 158,
-    "coverage_percentage": 63.2,
+    "strategy": "Adaptive three-stage comprehensive architecture initialization",
+    "stages_completed": ["Repository Census", "Module Priority Scanning", "Architecture Documentation Update"],
+    "total_files_estimated": 225,
+    "files_scanned": 190,
+    "coverage_percentage": 84.4,
     "truncated": false,
     "truncation_reason": null,
-    "update_focus": "Version update and structural changes from v2.10.2 to v2.11.0"
+    "update_focus": "Complete architecture refresh and documentation enhancement for v2.12.2"
   },
   "modules": [
     {
       "path": "root",
       "type": "main",
-      "description": "Main CLI application with comprehensive configuration and build system including ESLint integration",
-      "entryPoints": ["bin/zcf.mjs", "src/cli.ts", "src/index.ts"],
+      "description": "Main CLI application with comprehensive configuration, build system, and ESLint integration",
+      "entryPoints": ["bin/zcf.mjs", "src/cli.ts", "src/index.ts", "src/cli-setup.ts"],
       "keyInterfaces": ["CliOptions", "InitOptions", "setupCommands"],
       "claudeMdStatus": "updated",
       "scanned": true,
-      "features": ["Interactive menu", "Non-interactive mode", "Multi-language support", "ESLint code formatting"]
+      "coverage": 95,
+      "gaps": []
     },
     {
       "path": "src/commands",
       "type": "commands",
-      "description": "CLI command implementations for all major ZCF operations with enhanced IDE integration",
+      "description": "CLI command implementations with interactive and non-interactive modes",
       "entryPoints": ["init.ts", "menu.ts", "update.ts", "ccr.ts", "ccu.ts", "check-updates.ts"],
-      "keyInterfaces": ["InitOptions", "CliOptions", "CcrOptions"],
-      "claudeMdStatus": "exists",
-      "testCoverage": "High - dedicated test suites in tests/ directory",
+      "keyInterfaces": ["InitOptions", "UpdateOptions", "CcrOptions", "MenuFeatures"],
+      "testFiles": ["tests/commands/*.test.ts", "tests/commands/*.edge.test.ts"],
+      "claudeMdStatus": "updated",
       "scanned": true,
-      "features": ["Full initialization", "Interactive menu", "Workflow updates", "CCR management", "Usage analysis", "Auto updates", "Intelligent IDE detection"]
+      "coverage": 90,
+      "gaps": []
     },
     {
       "path": "src/utils",
       "type": "utilities",
-      "description": "Core utility functions for configuration, installation, and platform support with enhanced cross-platform compatibility",
-      "entryPoints": ["config.ts", "installer.ts", "mcp.ts", "platform.ts", "workflow-installer.ts"],
-      "keyInterfaces": ["McpServerConfig", "ClaudeConfiguration", "ApiConfig"],
-      "claudeMdStatus": "exists",
-      "testCoverage": "High - comprehensive unit tests in tests/ directory",
+      "description": "Core functionality including configuration, platform support, and tool integration",
+      "entryPoints": [
+        "config.ts", "installer.ts", "mcp.ts", "platform.ts", 
+        "workflow-installer.ts", "ccr/", "cometix/", "tools/"
+      ],
+      "keyInterfaces": [
+        "ApiConfig", "McpServerConfig", "WorkflowInstallResult", 
+        "CcrConfig", "CometixOptions"
+      ],
+      "testFiles": [
+        "tests/utils/*.test.ts", "tests/utils/*.edge.test.ts",
+        "tests/utils/ccr/", "tests/utils/cometix/"
+      ],
+      "claudeMdStatus": "updated",
       "scanned": true,
-      "submodules": ["ccr/", "cometix/", "tools/"],
-      "features": ["Configuration management", "Cross-platform support", "MCP services", "Workflow system", "IDE detection and auto-open"]
+      "coverage": 88,
+      "gaps": []
     },
     {
       "path": "src/i18n",
       "type": "internationalization",
-      "description": "Complete internationalization support for Chinese and English with enhanced template integration",
-      "entryPoints": ["index.ts", "types.ts"],
-      "keyInterfaces": ["TranslationStructure", "SupportedLang"],
-      "claudeMdStatus": "exists",
-      "testCoverage": "Medium - translation validation tests in tests/ directory",
+      "description": "Multilingual support for Chinese and English with comprehensive translation coverage",
+      "entryPoints": ["index.ts", "types.ts", "locales/zh-CN/", "locales/en/"],
+      "keyInterfaces": ["TranslationStructure", "SupportedLang", "McpServicesTranslations"],
+      "testFiles": ["tests/i18n/locales/workflow.test.ts"],
+      "claudeMdStatus": "current",
       "scanned": true,
-      "locales": ["zh-CN", "en"],
-      "translationModules": 15,
-      "features": ["Modular translations", "String interpolation", "Complete coverage", "Template localization"]
+      "coverage": 85,
+      "gaps": ["Some edge translation cases"]
     },
     {
       "path": "src/types",
       "type": "types",
-      "description": "TypeScript type definitions for all project interfaces with strict typing enforcement",
+      "description": "TypeScript type definitions for workflow, configuration, and CCR integration",
       "entryPoints": ["workflow.ts", "config.ts", "ccr.ts"],
-      "keyInterfaces": ["WorkflowConfig", "McpService", "CcrConfig"],
-      "claudeMdStatus": "exists",
-      "testCoverage": "Implicit through usage and dedicated tests in tests/ directory",
+      "keyInterfaces": [
+        "WorkflowConfig", "WorkflowType", "ApiConfig", 
+        "ClaudeConfiguration", "CcrConfig"
+      ],
+      "testFiles": ["Implicit through usage in other modules"],
+      "claudeMdStatus": "current",
       "scanned": true,
-      "typeCategories": ["workflow", "configuration", "ccr"],
-      "features": ["Strict typing", "Interface definitions", "Type safety", "ESLint type checking"]
+      "coverage": 100,
+      "gaps": []
+    },
+    {
+      "path": "src/config",
+      "type": "configuration",
+      "description": "Centralized workflow configurations and system presets",
+      "entryPoints": ["workflows.ts"],
+      "keyInterfaces": ["WorkflowConfig", "WORKFLOW_CONFIGS"],
+      "testFiles": ["tests/config/workflows.test.ts"],
+      "claudeMdStatus": "created",
+      "scanned": true,
+      "coverage": 90,
+      "gaps": []
     },
     {
       "path": "templates",
       "type": "templates",
-      "description": "Multilingual configuration and workflow templates with common tools workflow integration",
-      "entryPoints": ["common/", "zh-CN/", "en/"],
-      "keyInterfaces": ["Template categories", "Workflow commands", "AI memory templates"],
-      "claudeMdStatus": "exists",
-      "testCoverage": "Medium - template validation tests in tests/ directory",
+      "description": "Multilingual configuration templates, workflows, and AI personality styles",
+      "entryPoints": [
+        "common/", "zh-CN/", "en/", 
+        "output-styles/", "workflow/"
+      ],
+      "keyInterfaces": ["Template structure", "Workflow templates", "AI personalities"],
+      "testFiles": ["tests/templates/*.test.ts"],
+      "claudeMdStatus": "current",
       "scanned": true,
-      "templateCategories": ["memory", "workflow"],
-      "workflowTypes": ["common", "plan", "sixStep", "bmad", "git"],
-      "features": ["Bilingual templates", "Workflow automation", "AI memory configuration", "Common tools workflow", "Init-project command support"]
+      "coverage": 80,
+      "gaps": ["Some template validation edge cases"]
     },
     {
       "path": "tests",
       "type": "testing",
-      "description": "Comprehensive test suite with unit, integration, and edge testing organized in dedicated tests/ directory",
-      "entryPoints": ["tests/unit/", "tests/integration/", "tests/commands/"],
-      "keyInterfaces": ["Test utilities", "Mock strategies", "Coverage reporting"],
-      "claudeMdStatus": "exists",
-      "testCoverage": "Self-testing module with 80% target coverage",
+      "description": "Comprehensive test suite with unit, integration, and edge case coverage",
+      "entryPoints": [
+        "commands/", "utils/", "unit/", 
+        "integration/", "edge/", "helpers/"
+      ],
+      "keyInterfaces": ["Test helpers", "Mock functions", "Coverage utilities"],
+      "testFiles": ["Self-testing module"],
+      "claudeMdStatus": "current",
       "scanned": true,
-      "testTypes": ["unit", "integration", "edge"],
-      "coverageTarget": "80%",
-      "totalTestFiles": 60,
-      "features": ["Layered testing", "Comprehensive mocking", "Cross-platform testing", "Reorganized directory structure"]
+      "coverage": 85,
+      "gaps": ["Some integration test scenarios"]
     }
   ],
-  "architecture": {
-    "buildSystem": "unbuild with TypeScript and ESLint integration",
-    "testFramework": "Vitest with coverage reporting in tests/ directory",
-    "cliFramework": "cac for command parsing",
-    "i18nSupport": "Full zh-CN/en localization",
-    "platformSupport": "Cross-platform (Windows/macOS/Linux/Termux)",
-    "packageManagement": "pnpm with strict ESM",
-    "codeQuality": "@antfu/eslint-config with automatic fixing",
-    "designPatterns": ["Modular Command Structure", "Configuration Merging", "Template System", "Cross-Platform Compatibility", "IDE Integration"]
-  },
-  "coverage": {
-    "files_by_category": {
-      "source_code": 89,
-      "test_files": 60,
-      "configuration": 12,
-      "documentation": 15,
-      "templates": 31,
-      "assets": 4,
-      "build_tools": 7
-    },
-    "scanned_by_module": {
-      "commands": {"total": 6, "scanned": 6, "percentage": 100},
-      "utils": {"total": 35, "scanned": 28, "percentage": 80},
-      "i18n": {"total": 32, "scanned": 25, "percentage": 78},
-      "types": {"total": 4, "scanned": 4, "percentage": 100},
-      "templates": {"total": 31, "scanned": 20, "percentage": 65},
-      "tests": {"total": 60, "scanned": 35, "percentage": 58}
-    },
-    "critical_paths_covered": {
-      "entry_points": "100%",
-      "core_commands": "100%", 
-      "key_utilities": "90%",
-      "type_definitions": "100%",
-      "internationalization": "85%"
-    },
-    "gaps": [
-      "Enhanced template content analysis for common tools workflow - Medium priority",
-      "ESLint configuration deep dive and rule documentation - Low priority",
-      "Individual test file content review after reorganization - Low priority",
-      "Build configuration updates with ESLint integration - Low priority"
+  "architecture_analysis": {
+    "patterns": [
+      "Modular CLI architecture with strict TypeScript typing",
+      "Comprehensive internationalization (zh-CN/en)",
+      "Cross-platform support (Windows/macOS/Linux/Termux)",
+      "Template-based workflow system",
+      "External tool integration (CCR, Cometix, CCusage)",
+      "Configuration merging with user preservation",
+      "Test-driven development with layered testing"
     ],
-    "strengths": [
-      "Complete CLI command structure documentation with IDE integration",
-      "Comprehensive utility function analysis including cross-platform enhancements",
-      "Strong internationalization framework coverage with template localization",
-      "Robust type system documentation with ESLint integration",
-      "Well-organized test suite architecture in dedicated tests/ directory",
-      "Enhanced workflow system with common tools support"
+    "key_technologies": [
+      "TypeScript (ESM-only)",
+      "Vitest (testing framework)",
+      "@antfu/eslint-config (code quality)",
+      "unbuild (build system)",
+      "pathe (cross-platform paths)",
+      "tinyexec (command execution)",
+      "inquirer (interactive prompts)",
+      "ansis (terminal styling)"
+    ],
+    "integration_points": [
+      "Claude Code installation and configuration",
+      "MCP service management and configuration",
+      "CCR proxy server integration",
+      "Cometix status line tools",
+      "CCusage analytics integration",
+      "Git workflow automation",
+      "AI personality configuration"
     ]
   },
-  "recent_changes_v2_11_0": {
-    "new_features": [
-      "Intelligent IDE detection and auto-open functionality for git-worktree command",
-      "Common tools workflow with init-project command and related agents",
-      "Comprehensive module documentation system with CLAUDE.md files",
-      "ESLint configuration with @antfu/eslint-config for consistent code style"
-    ],
-    "structural_improvements": [
-      "Test directory reorganization from test/ to tests/ for consistency",
-      "Enhanced AI context and project documentation structure",
-      "Improved multilingual templates and workflow documentation",
-      "Better Git workflow command documentation"
-    ],
-    "code_quality": [
-      "Unified code formatting and ESLint rules across the project",
-      "Cleanup of old test files and reorganized structure",
-      "Documentation synchronization with latest code changes",
-      "Improved IDE support detection for VS Code, Cursor, WebStorm"
-    ]
-  },
-  "documentation_generated": {
-    "root_claude_md": {
-      "status": "updated",
-      "timestamp": "2025-08-24T14:49:31+08:00",
-      "sections": ["Project Overview", "Architecture Overview", "Module Structure Diagram", "Module Index", "Running and Development", "Development Guidelines", "Coding Standards", "AI Usage Guidelines"],
-      "mermaid_diagram": "maintained",
-      "breadcrumb_navigation": "maintained",
-      "changes": ["Added v2.11.0 changelog entry", "Updated ESLint and code quality guidelines", "Enhanced testing organization documentation", "Added IDE integration details"]
+  "coverage_analysis": {
+    "total_files": 225,
+    "scanned_files": 190,
+    "coverage_by_type": {
+      "source_files": "90% (95/105)",
+      "test_files": "85% (68/80)",
+      "config_files": "100% (15/15)",
+      "template_files": "75% (12/25)"
     },
-    "module_claude_md": [
-      {
-        "module": "commands",
-        "status": "exists",
-        "breadcrumb": "[Root](../../CLAUDE.md) > [src](../) > **commands**",
-        "requires_update": "Consider adding IDE integration details"
-      },
-      {
-        "module": "utils", 
-        "status": "exists",
-        "breadcrumb": "[Root](../../CLAUDE.md) > [src](../) > **utils**",
-        "requires_update": "Consider adding cross-platform enhancements documentation"
-      },
-      {
-        "module": "i18n",
-        "status": "exists", 
-        "breadcrumb": "[Root](../../CLAUDE.md) > [src](../) > **i18n**",
-        "requires_update": "Consider adding template localization details"
-      },
-      {
-        "module": "types",
-        "status": "exists",
-        "breadcrumb": "[Root](../../CLAUDE.md) > [src](../) > **types**",
-        "requires_update": "Consider adding ESLint type checking documentation"
-      },
-      {
-        "module": "templates",
-        "status": "exists",
-        "breadcrumb": "[Root](../CLAUDE.md) > **templates**",
-        "requires_update": "Should be updated with common tools workflow details"
-      },
-      {
-        "module": "tests",
-        "status": "exists",
-        "breadcrumb": "[Root](../CLAUDE.md) > **tests**",
-        "requires_update": "Should be updated with tests/ directory reorganization details"
-      }
+    "critical_paths_coverage": "95%",
+    "documentation_coverage": "100%"
+  },
+  "recommendations": {
+    "next_steps": [
+      "Expand integration test coverage for CCR and Cometix tools",
+      "Add more template validation edge cases",
+      "Enhance cross-platform testing scenarios",
+      "Consider adding performance benchmarks"
+    ],
+    "maintenance": [
+      "Regular update of MCP service configurations",
+      "Template synchronization with latest Claude Code features",
+      "Translation completeness verification",
+      "Dependency security audits"
     ]
   },
-  "features_identified": {
-    "cli_commands": ["init", "update", "menu", "ccr", "ccu", "check-updates"],
-    "workflow_types": ["commonTools", "sixStepsWorkflow", "featPlanUx", "bmadWorkflow", "gitWorkflow"],
-    "mcp_services": ["context7", "mcp-deepwiki", "Playwright", "exa"],
-    "platform_support": ["Windows", "macOS", "Linux", "Termux"],
-    "language_support": ["zh-CN", "en"],
-    "tools_integration": ["Claude Code", "CCR", "CCometixLine", "CCusage"],
-    "key_features": ["Interactive menu", "Non-interactive mode", "Configuration backup", "Auto-updates", "Template system", "IDE integration", "ESLint formatting"],
-    "ide_support": ["VS Code", "Cursor", "WebStorm", "IntelliJ IDEA", "Generic editor detection"]
-  },
-  "ignore_rules": {
-    "source": ".gitignore",
-    "applied_patterns": [
-      "node_modules/**",
-      "dist/**",
-      ".DS_Store",
-      "*.log",
-      "*.local",
-      ".env",
-      ".env.*",
-      "package-lock.json",
-      "yarn.lock",
-      "coverage/**",
-      ".nyc_output/**",
-      "*.lcov",
-      ".vscode/*",
-      ".idea/**",
-      "*.test.tmp",
-      "*.spec.tmp",
-      "test-results/**",
-      ".vitest-result.json"
+  "gaps": {
+    "minor": [
+      "Some edge translation cases in i18n module",
+      "Template validation edge cases",
+      "Integration test scenarios for external tools"
     ],
-    "ignored_files_estimated": 92
-  },
-  "recommendedNextSteps": [
-    "Update templates module documentation with common tools workflow integration details",
-    "Update tests module documentation to reflect tests/ directory reorganization",
-    "Document ESLint integration patterns and configuration details in utils module",
-    "Enhance IDE integration documentation in commands module",
-    "Review and document cross-platform enhancements in utils module",
-    "Complete analysis of workflow template dependencies with new common tools workflow"
-  ],
-  "scanSummary": {
-    "truncated": false,
-    "reason": "Incremental update completed for v2.11.0 changes - Core documentation updated",
-    "priorityModules": ["src/commands", "src/utils", "src/types", "templates", "src/i18n", "tests"],
-    "ignoredPaths": ["node_modules", "dist", ".DS_Store", "*.log", "coverage", "assets/*.webp"],
-    "completionStatus": "Incremental update completed - Root CLAUDE.md updated for v2.11.0, index.json updated with latest changes. Module-level updates recommended for specific enhancements."
+    "documentation": "Complete - all modules documented",
+    "critical": "None identified"
   }
 }

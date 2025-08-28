@@ -4,17 +4,17 @@
 
 ## Module Responsibilities
 
-CLI command implementation module containing all major command functions for ZCF, providing both interactive and non-interactive operation interfaces.
+CLI command implementation module containing all major command functions for ZCF, providing both interactive and non-interactive operation interfaces for Claude Code environment setup and management.
 
 ## Entry Points and Startup
 
 - **Main Entry Points**:
-  - `init.ts` - Complete initialization flow
-  - `menu.ts` - Interactive menu system
-  - `update.ts` - Workflow updates
-  - `ccr.ts` - Claude Code Router management
-  - `ccu.ts` - CCusage integration
-  - `check-updates.ts` - Tool update checker
+  - `init.ts` - Complete initialization flow with full setup options
+  - `menu.ts` - Interactive menu system with feature selection
+  - `update.ts` - Workflow template updates without full reinstall
+  - `ccr.ts` - Claude Code Router proxy configuration
+  - `ccu.ts` - CCusage tool integration and execution
+  - `check-updates.ts` - Tool version checking and update management
 
 ## External Interfaces
 
@@ -28,140 +28,164 @@ export interface InitOptions {
   aiOutputLang?: AiOutputLanguage | string
   force?: boolean
   skipPrompt?: boolean
+  skipBanner?: boolean
   // Non-interactive mode parameters
   configAction?: 'new' | 'backup' | 'merge' | 'docs-only' | 'skip'
   apiType?: 'auth_token' | 'api_key' | 'ccr_proxy' | 'skip'
-  // ... other options
+  selectedMcpServices?: string[]
+  selectedWorkflows?: string[]
+  // Additional configuration options
+  ccrPort?: number
+  ccrConfig?: boolean
+  cometixConfig?: boolean
+  aiPersonality?: string
 }
 
-// Menu system
-export async function showMainMenu(): Promise<void>
+// Update command options
+export interface UpdateOptions {
+  lang?: SupportedLang
+  force?: boolean
+  selectedWorkflows?: string[]
+}
+
+// CCR command options
+export interface CcrOptions {
+  lang?: SupportedLang
+}
+
+// Check updates options
+export interface CheckUpdatesOptions {
+  lang?: SupportedLang
+}
 ```
 
 ### API Endpoints
 
-- `init(options: InitOptions)` - Execute complete initialization
-- `update(options: UpdateOptions)` - Update workflow templates
-- `showMainMenu()` - Display interactive main menu
-- `ccr(options: CcrOptions)` - CCR proxy configuration
-- `executeCcusage(args: string[])` - CCusage tool execution
-- `checkUpdates(options: CheckUpdatesOptions)` - Check tool updates
+- `init(options: InitOptions)` - Execute complete initialization workflow
+- `update(options: UpdateOptions)` - Update workflow templates and configurations
+- `showMainMenu()` - Display interactive main menu with all features
+- `ccr(options: CcrOptions)` - Configure Claude Code Router proxy settings
+- `executeCcusage(args: string[])` - Execute CCusage tool with specified arguments
+- `checkUpdates(options: CheckUpdatesOptions)` - Check for tool updates and perform upgrades
+
+### Menu System Interface
+
+```typescript
+// Menu feature functions
+export interface MenuFeatures {
+  fullInit: () => Promise<void>
+  importWorkflow: () => Promise<void>
+  configureApiOrCcr: () => Promise<void>
+  configureMcp: () => Promise<void>
+  configureAiMemory: () => Promise<void>
+  // Tool integrations
+  runCcr: () => Promise<void>
+  runCcu: () => Promise<void>
+  runCometix: () => Promise<void>
+  // System features
+  checkUpdates: () => Promise<void>
+  changeLanguage: () => Promise<void>
+  clearCache: () => Promise<void>
+}
+```
 
 ## Key Dependencies and Configuration
 
 ### Core Dependencies
 
-- `inquirer` - Interactive command line prompts
-- `ansis` - Terminal colors and styling
-- `../utils/*` - Utility function collection
-- `../constants` - Global constants
-- `../i18n` - Internationalization support
+```typescript
+// Configuration and utilities
+import { getTranslation } from '../i18n'
+import { displayBannerWithInfo } from '../utils/banner'
+import { configureApi, backupExistingConfig } from '../utils/config'
+import { installClaudeCode } from '../utils/installer'
+import { selectAndInstallWorkflows } from '../utils/workflow-installer'
 
-### Configuration Files
+// Platform and validation
+import { isWindows, isTermux } from '../utils/platform'
+import { handleExitPromptError } from '../utils/error-handler'
+import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config'
+```
 
-- No independent config files, uses global ZCF configuration
-- Depends on `~/.claude/settings.json` for state management
-- Stores user preferences via `~/.claude/.zcf-config.json`
+### Configuration Integration
+
+- **I18n System**: Full internationalization support for all user interactions
+- **Platform Detection**: Windows/macOS/Linux/Termux compatibility handling
+- **Configuration Management**: Smart merging and backup of existing configurations
+- **Workflow System**: Integration with template installation and management
+- **Tool Integration**: CCR, CCusage, and Cometix tool management
 
 ## Data Models
 
-### Command Options Interface
+### Command Flow Architecture
 
 ```typescript
-// CLI options base interface
-export interface CliOptions {
-  init?: boolean
-  lang?: 'zh-CN' | 'en'
-  configLang?: 'zh-CN' | 'en'
-  aiOutputLang?: string
-  force?: boolean
-  skipPrompt?: boolean
-  // Non-interactive parameters
-  configAction?: string
-  apiType?: string
-  apiKey?: string
-  apiUrl?: string
-  mcpServices?: string
-  workflows?: string
-  aiPersonality?: string
-  allLang?: string
-  installCometixLine?: string | boolean
+interface CommandFlow {
+  init: {
+    phases: ['banner', 'config', 'api', 'mcp', 'workflows', 'tools', 'completion']
+    skipOptions: ['prompt', 'banner', 'config', 'api', 'mcp', 'workflows']
+    rollbackCapability: true
+  }
+  menu: {
+    structure: 'hierarchical'
+    categories: ['claude-code', 'tools', 'system']
+    persistence: 'language-aware'
+  }
+  update: {
+    scope: ['workflows', 'templates', 'agents']
+    conflictResolution: 'preserve-user-changes'
+  }
 }
 ```
 
-### Command Execution Flow
+### Error Handling Strategy
 
-1. **Parameter Parsing** - Parse CLI arguments and options
-2. **Language Selection** - Determine display and configuration language
-3. **Environment Detection** - Detect platform and installed tools
-4. **Configuration Handling** - Backup, merge, or create new configuration
-5. **Function Execution** - Execute specific command logic
-6. **Result Feedback** - Display execution results and next step suggestions
+```typescript
+interface ErrorHandling {
+  gracefulDegradation: true
+  userFriendlyMessages: true
+  i18nSupport: true
+  platformSpecificGuidance: true
+  recoverySuggestions: true
+}
+```
 
 ## Testing and Quality
 
-### Testing Strategy
-
-- **Unit Tests**: `test/unit/commands/` - Unit tests for each command
-- **Edge Tests**: `*.edge.test.ts` - Boundary conditions and error scenarios
-- **Integration Tests**: Inter-command integration testing
-- **Mock Strategy**: Extensive mocking of file system, external commands, and user input
-
 ### Test Coverage
 
-- ✅ **init command**: Complete initialization flow testing
-- ✅ **menu command**: Interactive menu logic
-- ✅ **update command**: Workflow update mechanism
-- ✅ **ccr command**: CCR configuration and management
-- ✅ **ccu command**: CCusage integration
-- ✅ **Non-interactive mode**: skip-prompt parameter validation
-
-### Quality Metrics
-
-- Test coverage: **90%+**
-- Edge test coverage: **Complete**
-- Cross-platform compatibility: **Windows/macOS/Linux/Termux**
-- Error handling: **Graceful degradation**
-
-## FAQ
-
-### Q: How to add a new CLI command?
-
-1. Create a new command file in `src/commands/`
-2. Register the command in `src/cli-setup.ts`
-3. Add corresponding type definitions and options interface
-4. Write unit tests and edge tests
-
-### Q: How does non-interactive mode work?
-
-Use the `--skip-prompt` parameter, all user interactions are pre-provided via CLI arguments, suitable for CI/CD environments.
-
-### Q: How is internationalization implemented?
-
-Through the `../i18n` module providing multilingual support, each command supports both Chinese and English interfaces.
-
-## Related File List
-
-### Core Files
-
-- `init.ts` - Main initialization command (734 lines)
-- `menu.ts` - Interactive menu system (201 lines)
-- `update.ts` - Workflow update command
-- `ccr.ts` - Claude Code Router management
-- `ccu.ts` - CCusage tool integration
-- `check-updates.ts` - Automatic update checker
+- **Unit Tests**: Individual command function testing
+- **Integration Tests**: Full workflow execution testing  
+- **Edge Case Tests**: Platform-specific and error condition testing
+- **Mock Testing**: External tool integration testing with comprehensive mocking
 
 ### Test Files
 
-- `test/unit/commands/*.test.ts` - Unit test suites
-- `test/unit/commands/*.edge.test.ts` - Edge tests
-- `tests/commands/*.test.ts` - Additional test coverage
+- `tests/commands/*.test.ts` - Core command functionality tests
+- `tests/commands/*.edge.test.ts` - Edge case and error condition tests
+- `tests/unit/commands/` - Isolated unit tests for command logic
 
-## Changelog
+### Common Issues
 
-### 2025-08-20
+- **Platform Dependencies**: Windows path handling and Termux environment detection
+- **User Input Validation**: Handling of invalid selections and exit conditions
+- **External Tool Integration**: CCR, CCusage availability and version compatibility
+- **Configuration Conflicts**: Existing configuration preservation and merging
 
-- **Module Documentation Created**: Completed comprehensive documentation of commands module
-- **Architecture Analysis**: Detailed analysis of 6 core commands' functionality and interfaces
-- **Test Coverage Assessment**: Confirmed high-coverage testing strategy
-- **API Interface Documentation**: Complete recording of all command interfaces and options
+## Related Files
+
+- `../utils/` - Core utility functions for configuration, installation, and platform support
+- `../i18n/` - Internationalization support for command interfaces
+- `../types/` - TypeScript interfaces for command options and configurations
+- `../config/workflows.ts` - Workflow configuration definitions
+- `../../templates/` - Template files used by commands
+
+## Change Log (Module-Specific)
+
+### Recent Updates
+
+- Enhanced non-interactive mode support with comprehensive skip options
+- Added CCusage tool integration for usage analytics
+- Improved error handling with platform-specific guidance
+- Expanded menu system with tool integration features
+- Added intelligent IDE detection and auto-open functionality

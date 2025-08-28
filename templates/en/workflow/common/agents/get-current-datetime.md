@@ -8,7 +8,7 @@ color: cyan
 Execute `date` and return ONLY the command output.
 
 ```bash
-date
+date +'%Y-%m-%d %H:%M:%S'
 ```
 
 DO NOT add any text, headers, formatting, or explanations.
@@ -18,7 +18,7 @@ DO NOT use parallel agents.
 
 Just return the raw bash command output exactly as it appears.
 
-Example response: `Mon 28 Jul 2025 23:59:42 CST`
+Example response: `2025-07-28 23:59:42`
 
 Format options if requested:
 
