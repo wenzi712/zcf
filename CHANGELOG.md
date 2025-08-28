@@ -1,5 +1,37 @@
 # Changelog
 
+## 2.12.3
+
+### Patch Changes
+
+- ## 优化
+  - 优化 BMad 初始化模板，增强工作流程触发机制
+  - 更新架构文档，完善模块分析文档结构
+  - 改进质量保证 (QA) 相关任务模板，新增多种质量评估工具
+  - 优化需求追溯和风险评估框架，提升项目管理能力
+  - 增强测试设计模板，支持多层级测试策略
+  - 完善 Claude 命令系统，新增多个专业任务处理模板
+
+  ## Optimization
+  - Optimize BMad initialization templates with enhanced workflow trigger mechanisms
+  - Update architecture documentation with improved module analysis structure
+  - Enhance QA-related task templates with multiple quality assessment tools
+  - Improve requirements tracing and risk assessment frameworks for better project management
+  - Strengthen test design templates with multi-level testing strategy support
+  - Perfect Claude command system with additional professional task processing templates
+
+  ## 文档更新
+  - 更新核心 CLAUDE.md 配置文档，完善开发指南
+  - 增强 BMad 用户指南，提供更详细的棕地开发工作流程
+  - 新增测试级别框架和测试优先级矩阵文档
+  - 完善模板系统文档，改进双语支持
+
+  ## Documentation Updates
+  - Update core CLAUDE.md configuration documentation with improved development guidelines
+  - Enhance BMad user guide with more detailed brownfield development workflows
+  - Add test levels framework and test priorities matrix documentation
+  - Improve template system documentation with better bilingual support
+
 ## 2.12.2
 
 ### Patch Changes
