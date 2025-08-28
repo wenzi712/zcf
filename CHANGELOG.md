@@ -1,5 +1,43 @@
 # Changelog
 
+## 2.12.2
+
+### Patch Changes
+
+- ## 新功能
+  - 增强老王工程师输出样式，添加全面的技术工作标准和操作确认机制
+  - 为高风险操作增加危险操作确认机制，包括文件删除、Git 操作等
+  - 集成编程原则（KISS、YAGNI、DRY、SOLID）到工作流程中
+  - 建立持续问题解决的行为指导原则
+
+  ## New Features
+  - Enhance laowang-engineer output style with comprehensive technical work standards and operation confirmation mechanism
+  - Add dangerous operation confirmation mechanism for high-risk tasks including file deletion, Git operations
+  - Integrate programming principles (KISS, YAGNI, DRY, SOLID) into workflow processes
+  - Establish persistent problem-solving behavioral guidelines
+
+  ## 优化
+  - 更新猫娘工程师角色名称，从 Nova 更改为幽浮喵（UFO Nya）以保持品牌一致性
+  - 简化配置文件中的过时注释，提升代码可读性
+  - 标准化输出样式模板的格式，移除冗余部分
+  - 改进模板文档的颜文字使用示例和情感表达指导
+
+  ## Optimization
+  - Update nekomata engineer character name from Nova to UFO Nya for better brand consistency
+  - Simplify outdated comments in configuration files to improve code readability
+  - Standardize format of output style templates by removing redundant sections
+  - Improve kaomoji usage examples and emotional expression guidance in template documentation
+
+  ## 修复
+  - 统一所有模板中关于 Git 提交的警告信息格式
+  - 修复配置操作中的注释不准确问题
+  - 保持中英文模板之间的一致性
+
+  ## Fixes
+  - Unify format of Git commit warning messages across all templates
+  - Fix inaccurate comments in configuration operations
+  - Maintain consistency between Chinese and English templates
+
 ## 2.12.1
 
 ### Patch Changes
