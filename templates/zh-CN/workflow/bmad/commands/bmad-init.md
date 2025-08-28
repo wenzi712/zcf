@@ -16,6 +16,49 @@ const { execSync } = require('node:child_process')
 const fs = require('node:fs')
 const path = require('node:path')
 
+// 检查 expect 工具是否可用
+function checkExpectAvailability() {
+  try {
+    execSync('which expect', { stdio: 'ignore' })
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+// 使用 expect 自动化交互式安装
+function installWithExpect() {
+  const expectScript = `
+    spawn npx bmad-method@latest install -f -d . -i claude-code
+    expect "What would you like to do?"
+    send "1\\r"
+    expect "How would you like to proceed?"
+    send "1\\r"
+    expect eof
+  `
+  
+  execSync(`expect -c '${expectScript}'`, {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+    shell: true
+  })
+}
+
+// 降级安装方案
+function fallbackInstallation() {
+  console.log('⚠️  系统未安装 expect 工具，使用交互式安装')
+  console.log('请根据安装程序的提示手动选择：')
+  console.log('  1. 选择 "Upgrade BMad core" (升级 BMad 核心)')
+  console.log('  2. 选择 "Backup and overwrite modified files" (备份并覆盖修改的文件)')
+  console.log('')
+  
+  execSync('npx bmad-method@latest install -f -d . -i claude-code', {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+    shell: true
+  })
+}
+
 async function initBmad() {
   // 检查是否已安装并获取版本
   const manifestPath = path.join(process.cwd(), '.bmad-core', 'install-manifest.yaml')
@@ -53,15 +96,20 @@ async function initBmad() {
     return
   }
 
-  // 安装 BMad
+  // 安装 BMad - 使用 expect 优先方案
   console.log('🚀 正在安装 BMad-Method...')
+  
   try {
-    execSync('echo -e "1\\n" | npx bmad-method@latest install -f -d . -i claude-code', {
-      stdio: 'inherit',
-      cwd: process.cwd(),
-      shell: true
-    })
+    const hasExpect = checkExpectAvailability()
+    
+    if (hasExpect) {
+      console.log('📋 使用自动化安装 (expect 工具可用)')
+      installWithExpect()
+    } else {
+      fallbackInstallation()
+    }
 
+    console.log('')
     console.log('✅ BMad-Method已成功安装！')
     console.log('')
     console.log('═══════════════════════════════════════════════════════════════')
@@ -89,7 +137,19 @@ async function initBmad() {
   }
   catch (error) {
     console.error('❌ 安装失败：', error.message)
-    console.log('请手动运行：npx bmad-method@latest install -f -d . -i claude-code')
+    console.log('')
+    console.log('🛠️  手动安装指南：')
+    console.log('请手动运行以下命令并根据提示选择：')
+    console.log('  npx bmad-method@latest install -f -d . -i claude-code')
+    console.log('')
+    console.log('安装提示：')
+    console.log('  1. 当询问 "What would you like to do?" 时，选择第一个选项')
+    console.log('  2. 当询问 "How would you like to proceed?" 时，选择 "Backup and overwrite"')
+    console.log('')
+    console.log('💡 提示：如果需要自动化安装，请考虑安装 expect 工具：')
+    console.log('  • macOS: brew install expect')
+    console.log('  • Ubuntu: sudo apt-get install expect')
+    console.log('  • CentOS: sudo yum install expect')
   }
 }
 

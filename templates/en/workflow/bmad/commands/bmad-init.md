@@ -16,6 +16,49 @@ const { execSync } = require('node:child_process')
 const fs = require('node:fs')
 const path = require('node:path')
 
+// Check if expect tool is available
+function checkExpectAvailability() {
+  try {
+    execSync('which expect', { stdio: 'ignore' })
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+// Use expect to automate interactive installation
+function installWithExpect() {
+  const expectScript = `
+    spawn npx bmad-method@latest install -f -d . -i claude-code
+    expect "What would you like to do?"
+    send "1\\r"
+    expect "How would you like to proceed?"
+    send "1\\r"
+    expect eof
+  `
+  
+  execSync(`expect -c '${expectScript}'`, {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+    shell: true
+  })
+}
+
+// Fallback installation method
+function fallbackInstallation() {
+  console.log('⚠️  expect tool not found, using interactive installation')
+  console.log('Please follow the installation prompts and select:')
+  console.log('  1. Choose "Upgrade BMad core" when prompted')
+  console.log('  2. Choose "Backup and overwrite modified files" when prompted')
+  console.log('')
+  
+  execSync('npx bmad-method@latest install -f -d . -i claude-code', {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+    shell: true
+  })
+}
+
 async function initBmad() {
   // Check if already installed and get version
   const manifestPath = path.join(process.cwd(), '.bmad-core', 'install-manifest.yaml')
@@ -53,15 +96,20 @@ async function initBmad() {
     return
   }
 
-  // Install BMad
+  // Install BMad - Using expect-first approach
   console.log('🚀 Installing BMad Method...')
+  
   try {
-    execSync('echo -e "1\\n" | npx bmad-method@latest install -f -d . -i claude-code', {
-      stdio: 'inherit',
-      cwd: process.cwd(),
-      shell: true
-    })
+    const hasExpect = checkExpectAvailability()
+    
+    if (hasExpect) {
+      console.log('📋 Using automated installation (expect tool available)')
+      installWithExpect()
+    } else {
+      fallbackInstallation()
+    }
 
+    console.log('')
     console.log('✅ BMad Method installed successfully!')
     console.log('')
     console.log('═══════════════════════════════════════════════════════════════')
@@ -88,8 +136,20 @@ async function initBmad() {
     console.log('       and guide you through the entire development process.')
   }
   catch (error) {
-    console.error('❌ Failed to install BMad:', error.message)
-    process.exit(1)
+    console.error('❌ Installation failed:', error.message)
+    console.log('')
+    console.log('🛠️  Manual Installation Guide:')
+    console.log('Please run the following command and follow the prompts:')
+    console.log('  npx bmad-method@latest install -f -d . -i claude-code')
+    console.log('')
+    console.log('Installation Tips:')
+    console.log('  1. When asked "What would you like to do?", choose the first option')
+    console.log('  2. When asked "How would you like to proceed?", choose "Backup and overwrite"')
+    console.log('')
+    console.log('💡 Tip: For automated installation, consider installing expect tool:')
+    console.log('  • macOS: brew install expect')
+    console.log('  • Ubuntu: sudo apt-get install expect')
+    console.log('  • CentOS: sudo yum install expect')
   }
 }
 
