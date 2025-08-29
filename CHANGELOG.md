@@ -1,5 +1,57 @@
 # Changelog
 
+## 2.12.4
+
+### Patch Changes
+
+- ## 新功能
+  - 新增 spec-workflow MCP 工作流支持，提供规范化开发流程管理
+  - 重构 MCP 服务配置架构，采用专用模块化设计
+
+  ## 架构优化
+  - 重构 MCP 服务配置到专用模块 `src/config/mcp-services.ts`
+  - 实现类型安全的 MCP 服务定义和翻译系统
+  - 优化版本检查器实现，提升工具链稳定性
+
+  ## 文档完善
+  - 更新命令文档，完善 zcf-release 和 zcf-update-docs 使用说明
+  - 改进 README 文档，增加 spec-workflow 集成说明
+  - 完善模板变更日志和 bmad 工作流文档
+
+  ## 测试增强
+  - 新增 MCP 服务配置模块完整测试覆盖
+  - 优化 MCP 选择器测试用例
+  - 修复边缘测试文件管理问题
+
+  ## 配置改进
+  - 增强 MCP 服务多语言支持 (zh-CN/en)
+  - 更新拼写检查字典配置
+  - 改进类型定义和代码组织结构
+
+  ## New Features
+  - Add spec-workflow MCP integration for standardized development process management
+  - Refactor MCP services configuration with dedicated modular architecture
+
+  ## Architecture Optimization
+  - Extract MCP services configuration to dedicated `src/config/mcp-services.ts` module
+  - Implement type-safe MCP service definitions with translation system
+  - Optimize version checker implementation for improved toolchain stability
+
+  ## Documentation Enhancement
+  - Update command documentation with comprehensive zcf-release and zcf-update-docs guides
+  - Improve README documentation with spec-workflow integration details
+  - Enhance template changelog and bmad workflow documentation
+
+  ## Testing Enhancement
+  - Add comprehensive test coverage for MCP services configuration module
+  - Optimize MCP selector test cases
+  - Fix edge test file management issues
+
+  ## Configuration Improvements
+  - Enhance MCP services multilingual support (zh-CN/en)
+  - Update spell check dictionary configuration
+  - Improve type definitions and code organization structure
+
 ## 2.12.3
 
 ### Patch Changes
