@@ -127,6 +127,21 @@ ZCF 现在支持可定制的 AI 输出风格，个性化你的 Claude Code 体�
 
 安装后，使用 `/bmad-init` 在项目中初始化 BMad 工作流。
 
+#### 📋 Spec 工作流（v2.12.4+ 新功能）
+
+[Spec 工作流](https://github.com/Pimzino/spec-workflow-mcp) 是一个综合性的 MCP 服务，提供从需求到实现的结构化特性开发工作流程：
+
+- **需求分析**：结构化需求收集和文档编写
+- **设计阶段**：详细的技术设计和架构规划  
+- **任务管理**：自动任务拆解和进度跟踪
+- **实施工作流**：从需求到实现的系统化方法
+- **交互式仪表板**：内置的工作流可视化和管理仪表板
+- **审批系统**：每个开发阶段的评审和审批流程
+
+Spec 工作流 MCP 包含一个自动启动的仪表板（通过 `--AutoStartDashboard` 标志），为管理开发工作流提供可视化界面。
+
+**使用指南**：详细使用说明和最佳实践，请参阅 [Spec 工作流官方文档](https://github.com/Pimzino/spec-workflow-mcp/blob/main/README.md#quick-start)。
+
 #### 🚀 CCR (Claude Code Router) 支持（v2.8+ 增强版）
 
 [CCR](https://github.com/musistudio/claude-code-router/blob/main/README_zh.md) 是一个强大的代理路由器，可以实现：

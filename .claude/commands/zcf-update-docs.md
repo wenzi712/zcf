@@ -1,3 +1,12 @@
+---
+description: Automatically check code changes since last tag and update documentation (README.md, README_zh-CN.md, CLAUDE.md) to ensure consistency with actual code implementation
+allowed-tools: Read(**), Exec(git, cat, grep, diff)
+argument-hint: [--check-only]
+# examples:
+#   - /zcf-update-docs                 # Check and update all documentation files
+#   - /zcf-update-docs --check-only    # Only check for inconsistencies without making updates (dry run)
+---
+
 # ZCF Update Docs - Documentation Synchronization
 
 Automatically check code changes since last tag and update documentation (README.md, README_zh-CN.md, CLAUDE.md) to ensure consistency with actual code implementation.

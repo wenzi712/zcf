@@ -27,7 +27,7 @@ export const MCP_SERVICE_CONFIGS: McpServiceConfig[] = [
     config: {
       type: 'stdio',
       command: 'npx',
-      args: ['-y', '@pimzino/spec-workflow-mcp@latest'],
+      args: ['-y', '@pimzino/spec-workflow-mcp@latest', '--AutoStartDashboard'],
       env: {},
     },
   },

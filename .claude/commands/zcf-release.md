@@ -1,3 +1,16 @@
+---
+description: Automate version release and code commit using changeset
+allowed-tools: Read(**), Exec(git, pnpm, node, date, cat)
+argument-hint: [-p|--patch] [-mi|--minor] [-ma|--major] [<version>]
+# examples:
+#   - /zcf-release                     # Default patch version bump
+#   - /zcf-release -p                  # Patch version bump (2.9.11 → 2.9.12)
+#   - /zcf-release -mi                 # Minor version bump (2.9.11 → 2.10.0)
+#   - /zcf-release -ma                 # Major version bump (2.9.11 → 3.0.0)
+#   - /zcf-release 1.5.0               # Exact version (→ 1.5.0)
+#   - /zcf-release 3.0.0-alpha.1       # Pre-release version (→ 3.0.0-alpha.1)
+---
+
 # ZCF Release - Automated Release and Commit
 
 Automate version release and code commit using changeset.

@@ -127,6 +127,21 @@ ZCF now supports customizable AI output styles to personalize your Claude Code e
 
 After installation, use `/bmad-init` to initialize the BMad workflow in your project.
 
+#### 📋 Spec Workflow (v2.12.4+ New Feature)
+
+[Spec Workflow](https://github.com/Pimzino/spec-workflow-mcp) is a comprehensive MCP service that provides structured feature development workflow from requirements to implementation:
+
+- **Requirements Analysis**: Structured requirements gathering and documentation
+- **Design Phase**: Detailed technical design and architecture planning  
+- **Task Management**: Automatic task breakdown and progress tracking
+- **Implementation Workflow**: Systematic approach from requirements to implementation
+- **Interactive Dashboard**: Built-in dashboard for workflow visualization and management
+- **Approval System**: Review and approval process for each development phase
+
+The Spec Workflow MCP includes an automatic dashboard that launches with the `--AutoStartDashboard` flag, providing a visual interface for managing your development workflow.
+
+**Usage Guide**: For detailed usage instructions and best practices, see the [official Spec Workflow documentation](https://github.com/Pimzino/spec-workflow-mcp/blob/main/README.md#quick-start).
+
 #### 🚀 CCR (Claude Code Router) Support (v2.8+ Enhanced)
 
 [CCR](https://github.com/musistudio/claude-code-router/blob/main/README.md) is a powerful proxy router that enables:
