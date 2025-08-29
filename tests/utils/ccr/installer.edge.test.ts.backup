@@ -128,6 +128,46 @@ describe('cCR installer - edge cases', () => {
       expect(version).toBe('3.0.0')
     })
 
+    it('should handle stderr output', async () => {
+      const mockExec = vi.mocked(exec)
+      // @ts-expect-error - testing purpose
+      mockExec.mockImplementation((cmd, callback) => {
+        if (typeof callback === 'function') {
+          callback(null, '', 'Warning: deprecated\nVersion: 1.5.0')
+        }
+      })
+
+      const version = await getCcrVersion()
+      expect(version).toBeNull() // Only checks stdout
+    })
+
+    it('should handle very long version strings', async () => {
+      const mockExec = vi.mocked(exec)
+      const longVersion = `${'9'.repeat(100)}.0.0`
+      // @ts-expect-error - testing purpose
+      mockExec.mockImplementation((cmd, callback) => {
+        if (typeof callback === 'function') {
+          callback(null, `Version ${longVersion}`, '')
+        }
+      })
+
+      const version = await getCcrVersion()
+      expect(version).toBe(longVersion)
+    })
+
+    it('should handle null/undefined in callback', async () => {
+      const mockExec = vi.mocked(exec)
+      // @ts-expect-error - testing purpose
+      mockExec.mockImplementation((cmd, callback) => {
+        if (typeof callback === 'function') {
+          // @ts-expect-error - testing purpose
+          callback(null, null, null)
+        }
+      })
+
+      const version = await getCcrVersion()
+      expect(version).toBeNull()
+    })
   })
 
   describe('installCcr - edge cases', () => {
@@ -208,6 +248,30 @@ describe('cCR installer - edge cases', () => {
       await expect(installCcr('en')).rejects.toThrow()
     })
 
+    it('should handle concurrent installation attempts', async () => {
+      const mockExec = vi.mocked(exec)
+      let installCount = 0
+      // @ts-expect-error - testing purpose
+      mockExec.mockImplementation((cmd, callback) => {
+        if (typeof callback === 'function') {
+          if (cmd.includes('npm install')) {
+            installCount++
+            setTimeout(() => callback(null, 'installed', ''), 50)
+          }
+          else {
+            callback(new Error('not found'), '', '')
+          }
+        }
+      })
+
+      const results = await Promise.all([
+        installCcr('en'),
+        installCcr('zh-CN'),
+      ])
+
+      expect(installCount).toBe(2)
+      expect(results).toHaveLength(2)
+    })
   })
 
   describe('startCcrService - edge cases', () => {
@@ -273,6 +337,21 @@ describe('cCR installer - edge cases', () => {
       expect(i18n.getTranslation).toHaveBeenCalledWith('zh-CN')
     })
 
+    it('should handle service that never responds', async () => {
+      const mockExec = vi.mocked(exec)
+      // @ts-expect-error - testing purpose
+      mockExec.mockImplementation((_cmd, _callback) => {
+        // Never call callback - simulating hanging process
+      })
+
+      const promise = startCcrService('en')
+
+      // Should still resolve after timeout
+      await expect(Promise.race([
+        promise,
+        new Promise(resolve => setTimeout(() => resolve('timeout'), 3000)),
+      ])).resolves.toBe(undefined)
+    })
   })
 
   describe('race conditions', () => {

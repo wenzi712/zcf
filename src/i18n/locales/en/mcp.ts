@@ -19,6 +19,10 @@ export const mcpServices = {
     name: 'Context7 Docs',
     description: 'Query latest library documentation and code examples',
   },
+  'spec-workflow': {
+    name: 'Spec Workflow',
+    description: 'Structured feature development workflow, systematic approach from requirements to implementation',
+  },
   'mcp-deepwiki': {
     name: 'DeepWiki',
     description: 'Query GitHub repository documentation and examples',

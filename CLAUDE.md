@@ -99,15 +99,15 @@ graph TD
 
 ## Module Index
 
-| Module                   | Path            | Description                               | Entry Points                                                        | Test Coverage                   |
-| ------------------------ | --------------- | ----------------------------------------- | ------------------------------------------------------------------- | ------------------------------- |
-| **Commands**             | `src/commands/` | CLI command implementations               | init.ts, menu.ts, update.ts, ccr.ts, ccu.ts, check-updates.ts       | High - dedicated suites         |
-| **Utilities**            | `src/utils/`    | Core functionality and platform support  | config.ts, installer.ts, mcp.ts, platform.ts, workflow-installer.ts | High - comprehensive unit tests |
-| **Internationalization** | `src/i18n/`     | Multilingual support (zh-CN/en)          | index.ts, types.ts, locales/                                        | Medium - translation validation |
-| **Types**                | `src/types/`    | TypeScript type definitions              | workflow.ts, config.ts, ccr.ts                                      | Implicit through usage          |
-| **Configuration**        | `src/config/`   | Workflow and system configurations       | workflows.ts                                                        | High - config validation tests  |
-| **Templates**            | `templates/`    | Configuration templates and workflows     | common/, zh-CN/, en/, output-styles/                               | Medium - template tests         |
-| **Testing**              | `tests/`        | Test suites with core and edge coverage  | Unit, integration, edge test files                                  | Self-testing module             |
+| Module                   | Path            | Description                             | Entry Points                                                        | Test Coverage                   |
+| ------------------------ | --------------- | --------------------------------------- | ------------------------------------------------------------------- | ------------------------------- |
+| **Commands**             | `src/commands/` | CLI command implementations             | init.ts, menu.ts, update.ts, ccr.ts, ccu.ts, check-updates.ts       | High - dedicated suites         |
+| **Utilities**            | `src/utils/`    | Core functionality and platform support | config.ts, installer.ts, mcp.ts, platform.ts, workflow-installer.ts | High - comprehensive unit tests |
+| **Internationalization** | `src/i18n/`     | Multilingual support (zh-CN/en)         | index.ts, types.ts, locales/                                        | Medium - translation validation |
+| **Types**                | `src/types/`    | TypeScript type definitions             | workflow.ts, config.ts, ccr.ts                                      | Implicit through usage          |
+| **Configuration**        | `src/config/`   | Workflow and system configurations      | workflows.ts                                                        | High - config validation tests  |
+| **Templates**            | `templates/`    | Configuration templates and workflows   | common/, zh-CN/, en/, output-styles/                                | Medium - template tests         |
+| **Testing**              | `tests/`        | Test suites with core and edge coverage | Unit, integration, edge test files                                  | Self-testing module             |
 
 ## CLI Usage
 

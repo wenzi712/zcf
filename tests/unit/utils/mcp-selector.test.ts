@@ -1,6 +1,6 @@
 import inquirer from 'inquirer'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { MCP_SERVICES } from '../../../src/constants'
+import { getMcpServices, MCP_SERVICE_CONFIGS } from '../../../src/config/mcp-services'
 import { selectMcpServices } from '../../../src/utils/mcp-selector'
 
 vi.mock('inquirer', () => ({
@@ -22,64 +22,70 @@ describe('mcp-selector utilities', () => {
     vi.spyOn(console, 'log').mockImplementation(() => {})
   })
 
-  describe('mCP_SERVICES constant', () => {
-    it('should have MCP_SERVICES defined', () => {
-      expect(MCP_SERVICES).toBeDefined()
-      expect(Array.isArray(MCP_SERVICES)).toBe(true)
+  describe('mcp service configuration and functions', () => {
+    it('should have MCP_SERVICE_CONFIGS defined', () => {
+      expect(MCP_SERVICE_CONFIGS).toBeDefined()
+      expect(Array.isArray(MCP_SERVICE_CONFIGS)).toBe(true)
     })
 
-    it('should have correct structure for each service', () => {
-      MCP_SERVICES.forEach((service) => {
-        expect(service).toHaveProperty('id')
+    it('should have correct structure for each config', () => {
+      MCP_SERVICE_CONFIGS.forEach((config) => {
+        expect(config).toHaveProperty('id')
+        expect(config).toHaveProperty('requiresApiKey')
+        expect(config).toHaveProperty('config')
+        expect(typeof config.id).toBe('string')
+        expect(typeof config.requiresApiKey).toBe('boolean')
+        expect(typeof config.config).toBe('object')
+        // Should not have hardcoded names/descriptions
+        expect(config).not.toHaveProperty('name')
+        expect(config).not.toHaveProperty('description')
+      })
+    })
+
+    it('should have at least one MCP service config', () => {
+      expect(MCP_SERVICE_CONFIGS.length).toBeGreaterThan(0)
+    })
+
+    it('should provide services with both zh-CN and en translations', () => {
+      const zhServices = getMcpServices('zh-CN')
+      const enServices = getMcpServices('en')
+
+      expect(zhServices.length).toBeGreaterThan(0)
+      expect(enServices.length).toBeGreaterThan(0)
+      expect(zhServices.length).toBe(enServices.length)
+
+      zhServices.forEach((service) => {
         expect(service).toHaveProperty('name')
         expect(service).toHaveProperty('description')
-        expect(service).toHaveProperty('config')
-        expect(typeof service.id).toBe('string')
-        expect(typeof service.name).toBe('object')
-        expect(typeof service.description).toBe('object')
-        expect(typeof service.config).toBe('object')
+        expect(typeof service.name).toBe('string')
+        expect(typeof service.description).toBe('string')
       })
-    })
 
-    it('should have at least one MCP service', () => {
-      expect(MCP_SERVICES.length).toBeGreaterThan(0)
-    })
-
-    it('should have both zh-CN and en names for each service', () => {
-      MCP_SERVICES.forEach((service) => {
-        expect(service.name).toHaveProperty('zh-CN')
-        expect(service.name).toHaveProperty('en')
-        expect(typeof service.name['zh-CN']).toBe('string')
-        expect(typeof service.name.en).toBe('string')
-      })
-    })
-
-    it('should have both zh-CN and en descriptions for each service', () => {
-      MCP_SERVICES.forEach((service) => {
-        expect(service.description).toHaveProperty('zh-CN')
-        expect(service.description).toHaveProperty('en')
-        expect(typeof service.description['zh-CN']).toBe('string')
-        expect(typeof service.description.en).toBe('string')
+      enServices.forEach((service) => {
+        expect(service).toHaveProperty('name')
+        expect(service).toHaveProperty('description')
+        expect(typeof service.name).toBe('string')
+        expect(typeof service.description).toBe('string')
       })
     })
 
     it('should have unique IDs for each service', () => {
-      const ids = MCP_SERVICES.map(s => s.id)
+      const ids = MCP_SERVICE_CONFIGS.map(s => s.id)
       const uniqueIds = new Set(ids)
       expect(uniqueIds.size).toBe(ids.length)
     })
 
     it('should have valid config structure for each service', () => {
-      MCP_SERVICES.forEach((service) => {
-        expect(service.config).toHaveProperty('command')
-        expect(typeof service.config.command).toBe('string')
+      MCP_SERVICE_CONFIGS.forEach((config) => {
+        expect(config.config).toHaveProperty('command')
+        expect(typeof config.config.command).toBe('string')
 
-        if (service.config.args) {
-          expect(Array.isArray(service.config.args)).toBe(true)
+        if (config.config.args) {
+          expect(Array.isArray(config.config.args)).toBe(true)
         }
 
-        if (service.config.type) {
-          expect(typeof service.config.type).toBe('string')
+        if (config.config.type) {
+          expect(typeof config.config.type).toBe('string')
         }
       })
     })
@@ -121,23 +127,25 @@ describe('mcp-selector utilities', () => {
 
     it('should build choices with correct language', async () => {
       const promptSpy = vi.mocked(inquirer.prompt).mockResolvedValue({ services: [] })
+      const enServices = getMcpServices('en')
 
       await selectMcpServices('en')
 
       const call = promptSpy.mock.calls[0][0] as any
       expect(call.choices).toBeDefined()
-      expect(call.choices.length).toBe(MCP_SERVICES.length)
+      expect(call.choices.length).toBe(enServices.length)
 
       // Check that choices are built with English names
       call.choices.forEach((choice: any, index: number) => {
-        expect(choice.value).toBe(MCP_SERVICES[index].id)
-        expect(choice.name).toContain(MCP_SERVICES[index].name.en)
+        expect(choice.value).toBe(enServices[index].id)
+        expect(choice.name).toContain(enServices[index].name)
         expect(choice.selected).toBe(false)
       })
     })
 
     it('should build choices with Chinese language', async () => {
       const promptSpy = vi.mocked(inquirer.prompt).mockResolvedValue({ services: [] })
+      const zhServices = getMcpServices('zh-CN')
 
       await selectMcpServices('zh-CN')
 
@@ -146,20 +154,20 @@ describe('mcp-selector utilities', () => {
 
       // Check that choices are built with Chinese names
       call.choices.forEach((choice: any, index: number) => {
-        expect(choice.value).toBe(MCP_SERVICES[index].id)
-        expect(choice.name).toContain(MCP_SERVICES[index].name['zh-CN'])
+        expect(choice.value).toBe(zhServices[index].id)
+        expect(choice.name).toContain(zhServices[index].name)
         expect(choice.selected).toBe(false)
       })
     })
 
     it('should handle all available services selection', async () => {
-      const allServiceIds = MCP_SERVICES.map(s => s.id)
+      const allServiceIds = MCP_SERVICE_CONFIGS.map(s => s.id)
       vi.mocked(inquirer.prompt).mockResolvedValue({ services: allServiceIds })
 
       const result = await selectMcpServices('zh-CN')
 
       expect(result).toEqual(allServiceIds)
-      expect(result?.length).toBe(MCP_SERVICES.length)
+      expect(result?.length).toBe(MCP_SERVICE_CONFIGS.length)
     })
   })
 

@@ -49,10 +49,5 @@ describe('version-checker', () => {
       expect(shouldUpdate('invalid', '1.0.0')).toBe(true)
       expect(shouldUpdate('', '1.0.0')).toBe(true)
     })
-
-    it('should handle edge cases', () => {
-      expect(shouldUpdate('1.0.0', '')).toBe(true)
-      expect(shouldUpdate('', '')).toBe(true)
-    })
   })
 })

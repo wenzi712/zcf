@@ -1,4 +1,3 @@
-import type { McpService } from './types'
 import { homedir } from 'node:os'
 import { join } from 'pathe'
 
@@ -31,72 +30,4 @@ export const AI_OUTPUT_LANGUAGES = {
 export type AiOutputLanguage = keyof typeof AI_OUTPUT_LANGUAGES
 export const I18N = I18N_STRUCTURE
 
-export const MCP_SERVICES: McpService[] = [
-  {
-    id: 'context7',
-    name: { 'zh-CN': 'Context7 文档查询', 'en': 'Context7 Docs' },
-    description: {
-      'zh-CN': '查询最新的库文档和代码示例',
-      'en': 'Query latest library documentation and code examples',
-    },
-    requiresApiKey: false,
-    config: {
-      type: 'stdio',
-      command: 'npx',
-      args: ['-y', '@upstash/context7-mcp'],
-      env: {},
-    },
-  },
-  {
-    id: 'mcp-deepwiki',
-    name: { 'zh-CN': 'DeepWiki', 'en': 'DeepWiki' },
-    description: {
-      'zh-CN': '查询 GitHub 仓库文档和示例',
-      'en': 'Query GitHub repository documentation and examples',
-    },
-    requiresApiKey: false,
-    config: {
-      type: 'stdio',
-      command: 'npx',
-      args: ['-y', 'mcp-deepwiki@latest'],
-      env: {},
-    },
-  },
-  {
-    id: 'Playwright',
-    name: { 'zh-CN': 'Playwright 浏览器控制', 'en': 'Playwright Browser Control' },
-    description: {
-      'zh-CN': '直接控制浏览器进行自动化操作',
-      'en': 'Direct browser control for automation',
-    },
-    requiresApiKey: false,
-    config: {
-      type: 'stdio',
-      command: 'npx',
-      args: ['-y', '@playwright/mcp@latest'],
-      env: {},
-    },
-  },
-  {
-    id: 'exa',
-    name: { 'zh-CN': 'Exa AI 搜索', 'en': 'Exa AI Search' },
-    description: {
-      'zh-CN': '使用 Exa AI 进行网页搜索',
-      'en': 'Web search using Exa AI',
-    },
-    requiresApiKey: true,
-    apiKeyPrompt: {
-      'zh-CN': '请输入 Exa API Key（可从 https://dashboard.exa.ai/api-keys 获取）',
-      'en': 'Enter Exa API Key (get from https://dashboard.exa.ai/api-keys)',
-    },
-    apiKeyEnvVar: 'EXA_API_KEY',
-    config: {
-      type: 'stdio',
-      command: 'npx',
-      args: ['-y', 'exa-mcp-server'],
-      env: {
-        EXA_API_KEY: 'YOUR_EXA_API_KEY',
-      },
-    },
-  },
-]
+// MCP_SERVICES has been moved to src/config/mcp-services.ts for better separation of concerns

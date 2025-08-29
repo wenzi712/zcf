@@ -5,8 +5,9 @@ import process from 'node:process'
 import ansis from 'ansis'
 import inquirer from 'inquirer'
 import { version } from '../../package.json'
+import { getMcpServices, MCP_SERVICE_CONFIGS } from '../config/mcp-services'
 import { WORKFLOW_CONFIGS } from '../config/workflows'
-import { CLAUDE_DIR, I18N, LANG_LABELS, MCP_SERVICES, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants'
+import { CLAUDE_DIR, I18N, LANG_LABELS, SETTINGS_FILE, SUPPORTED_LANGS } from '../constants'
 import { displayBannerWithInfo } from '../utils/banner'
 import { backupCcrConfig, configureCcrProxy, createDefaultCcrConfig, readCcrConfig, setupCcrConfiguration, writeCcrConfig } from '../utils/ccr/config'
 import { installCcr, isCcrInstalled } from '../utils/ccr/installer'
@@ -148,14 +149,14 @@ function validateSkipPromptOptions(options: InitOptions) {
       options.mcpServices = false
     }
     else if (options.mcpServices === 'all') {
-      options.mcpServices = MCP_SERVICES.filter(s => !s.requiresApiKey).map(s => s.id)
+      options.mcpServices = MCP_SERVICE_CONFIGS.filter(s => !s.requiresApiKey).map(s => s.id)
     }
     else {
       options.mcpServices = options.mcpServices.split(',').map(s => s.trim())
     }
   }
   if (Array.isArray(options.mcpServices)) {
-    const validServices = MCP_SERVICES.map(s => s.id)
+    const validServices = MCP_SERVICE_CONFIGS.map(s => s.id)
     for (const service of options.mcpServices) {
       if (!validServices.includes(service)) {
         throw new Error(`Invalid MCP service: ${service}. Available services: ${validServices.join(', ')}`)
@@ -206,7 +207,7 @@ function validateSkipPromptOptions(options: InitOptions) {
   if (options.mcpServices === undefined) {
     options.mcpServices = 'all'
     // Convert "all" to actual service array
-    options.mcpServices = MCP_SERVICES.filter(s => !s.requiresApiKey).map(s => s.id)
+    options.mcpServices = MCP_SERVICE_CONFIGS.filter(s => !s.requiresApiKey).map(s => s.id)
   }
 
   // Set default workflows (use "all" as explicit default)
@@ -677,7 +678,7 @@ export async function init(options: InitOptions = {}) {
           const newServers: Record<string, McpServerConfig> = {}
 
           for (const serviceId of selectedServices) {
-            const service = MCP_SERVICES.find(s => s.id === serviceId)
+            const service = getMcpServices(scriptLang).find(s => s.id === serviceId)
             if (!service)
               continue
 
@@ -687,19 +688,19 @@ export async function init(options: InitOptions = {}) {
             if (service.requiresApiKey) {
               if (options.skipPrompt) {
                 // In skip-prompt mode, skip services that require API keys
-                console.log(ansis.yellow(`${i18n.common.skip}: ${service.name[scriptLang]} (requires API key)`))
+                console.log(ansis.yellow(`${i18n.common.skip}: ${service.name} (requires API key)`))
                 continue
               }
               else {
                 const response = await inquirer.prompt<{ apiKey: string }>({
                   type: 'input',
                   name: 'apiKey',
-                  message: service.apiKeyPrompt![scriptLang],
+                  message: service.apiKeyPrompt!,
                   validate: value => !!value || i18n.api.keyRequired,
                 })
 
                 if (!response.apiKey) {
-                  console.log(ansis.yellow(`${i18n.common.skip}: ${service.name[scriptLang]}`))
+                  console.log(ansis.yellow(`${i18n.common.skip}: ${service.name}`))
                   continue
                 }
 

@@ -41,11 +41,11 @@ export interface ApiConfig {
 ### MCP Service Management Interface
 
 ```typescript
-// MCP service operations  
+// MCP service operations
 export function readMcpConfig(): ClaudeConfiguration | null
 export function writeMcpConfig(config: ClaudeConfiguration): void
 export function mergeMcpServers(
-  existing: ClaudeConfiguration | null, 
+  existing: ClaudeConfiguration | null,
   newServers: Record<string, McpServerConfig>
 ): ClaudeConfiguration
 export function buildMcpServerConfig(services: string[]): Record<string, McpServerConfig>
@@ -80,7 +80,7 @@ export async function installClaudeCode(lang: SupportedLang): Promise<void>
 ```typescript
 // Workflow installation
 export async function selectAndInstallWorkflows(
-  lang: SupportedLang, 
+  lang: SupportedLang,
   forceReinstall?: boolean,
   preselectedWorkflows?: string[]
 ): Promise<WorkflowInstallResult[]>
@@ -112,7 +112,7 @@ export function createDefaultCcrConfig(port?: number): CcrConfig
 export async function configureCcrProxy(config: CcrProxyConfig): Promise<boolean>
 ```
 
-### Cometix Integration Interface  
+### Cometix Integration Interface
 
 ```typescript
 // Cometix (Status Line) tool management
@@ -127,19 +127,19 @@ export function configureCometixStatus(options: CometixOptions): void
 ### Core Dependencies
 
 ```typescript
-// File system operations
-import { copyDir, copyFile, ensureDir, exists, writeFile } from './fs-operations'
-import { readJsonConfig, writeJsonConfig } from './json-config'
-
+import { dirname, join } from 'pathe'
 // Cross-platform support
 import { exec } from 'tinyexec'
-import { join, dirname } from 'pathe'
 
 // Internationalization
 import { getTranslation } from '../i18n'
+// File system operations
+import { copyDir, copyFile, ensureDir, exists, writeFile } from './fs-operations'
+
+import { readJsonConfig, writeJsonConfig } from './json-config'
 
 // Platform utilities
-import { isWindows, isTermux, getTermuxPrefix } from './platform'
+import { getTermuxPrefix, isTermux, isWindows } from './platform'
 ```
 
 ### Configuration Integration

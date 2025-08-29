@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ClAUDE_CONFIG_FILE, MCP_SERVICES } from '../../../src/constants'
+import { ClAUDE_CONFIG_FILE } from '../../../src/constants'
+import { getMcpService } from '../../../src/config/mcp-services'
 import * as jsonConfig from '../../../src/utils/json-config'
 import {
   backupMcpConfig,
@@ -264,7 +265,7 @@ describe('mcp utilities', () => {
     })
 
     it('should have exa service configured with environment variable', () => {
-      const exaService = MCP_SERVICES.find(s => s.id === 'exa')
+      const exaService = getMcpService('exa', 'en')
 
       expect(exaService).toBeDefined()
       expect(exaService!.config.command).toBe('npx')
@@ -274,7 +275,7 @@ describe('mcp utilities', () => {
     })
 
     it('should build exa service config with API key in environment', () => {
-      const exaService = MCP_SERVICES.find(s => s.id === 'exa')
+      const exaService = getMcpService('exa', 'en')
       vi.mocked(platform.isWindows).mockReturnValue(false)
 
       const config = buildMcpServerConfig(
@@ -289,7 +290,7 @@ describe('mcp utilities', () => {
     })
 
     it('should handle exa service on Windows platform', () => {
-      const exaService = MCP_SERVICES.find(s => s.id === 'exa')
+      const exaService = getMcpService('exa', 'en')
       vi.mocked(platform.isWindows).mockReturnValue(true)
       vi.mocked(platform.getMcpCommand).mockReturnValue(['cmd', '/c', 'npx'])
 

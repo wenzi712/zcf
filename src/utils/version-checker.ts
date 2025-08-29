@@ -5,37 +5,53 @@ import semver from 'semver'
 
 const execAsync = promisify(exec)
 
-export async function getInstalledVersion(command: string): Promise<string | null> {
-  try {
-    // Try -v first (more universal), then --version
-    let stdout: string
+export async function getInstalledVersion(command: string, maxRetries = 3): Promise<string | null> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const result = await execAsync(`${command} -v`)
-      stdout = result.stdout
-    }
-    catch {
-      // Fallback to --version if -v doesn't work
-      const result = await execAsync(`${command} --version`)
-      stdout = result.stdout
-    }
+      // Try -v first (more universal), then --version
+      let stdout: string
+      try {
+        const result = await execAsync(`${command} -v`)
+        stdout = result.stdout
+      }
+      catch {
+        // Fallback to --version if -v doesn't work
+        const result = await execAsync(`${command} --version`)
+        stdout = result.stdout
+      }
 
-    // Extract version from output
-    const versionMatch = stdout.match(/(\d+\.\d+\.\d+(?:-[\w.]+)?)/)
-    return versionMatch ? versionMatch[1] : null
+      // Extract version from output
+      const versionMatch = stdout.match(/(\d+\.\d+\.\d+(?:-[\w.]+)?)/)
+      return versionMatch ? versionMatch[1] : null
+    }
+    catch (error) {
+      if (attempt === maxRetries) {
+        // Final attempt failed, return null
+        return null
+      }
+      // Wait briefly before retry (100ms * attempt number)
+      await new Promise(resolve => setTimeout(resolve, 100 * attempt))
+    }
   }
-  catch {
-    return null
-  }
+  return null
 }
 
-export async function getLatestVersion(packageName: string): Promise<string | null> {
-  try {
-    const { stdout } = await execAsync(`npm view ${packageName} version`)
-    return stdout.trim()
+export async function getLatestVersion(packageName: string, maxRetries = 3): Promise<string | null> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const { stdout } = await execAsync(`npm view ${packageName} version`)
+      return stdout.trim()
+    }
+    catch (error) {
+      if (attempt === maxRetries) {
+        // Final attempt failed, return null
+        return null
+      }
+      // Wait briefly before retry (200ms * attempt number for network calls)
+      await new Promise(resolve => setTimeout(resolve, 200 * attempt))
+    }
   }
-  catch {
-    return null
-  }
+  return null
 }
 
 export function compareVersions(current: string, latest: string): number {

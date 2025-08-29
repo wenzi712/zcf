@@ -3,7 +3,8 @@ import type { McpServerConfig } from '../types'
 import { existsSync, unlinkSync } from 'node:fs'
 import ansis from 'ansis'
 import inquirer from 'inquirer'
-import { LANG_LABELS, MCP_SERVICES, SUPPORTED_LANGS, ZCF_CONFIG_FILE } from '../constants'
+import { getMcpServices } from '../config/mcp-services'
+import { LANG_LABELS, SUPPORTED_LANGS, ZCF_CONFIG_FILE } from '../constants'
 import { getTranslation } from '../i18n'
 import { setupCcrConfiguration } from './ccr/config'
 import { installCcr, isCcrInstalled } from './ccr/installer'
@@ -258,7 +259,7 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
     const newServers: Record<string, McpServerConfig> = {}
 
     for (const serviceId of selectedServices) {
-      const service = MCP_SERVICES.find(s => s.id === serviceId)
+      const service = getMcpServices(scriptLang).find(s => s.id === serviceId)
       if (!service)
         continue
 
@@ -268,7 +269,7 @@ export async function configureMcpFeature(scriptLang: SupportedLang) {
         const { apiKey } = await inquirer.prompt<{ apiKey: string }>({
           type: 'input',
           name: 'apiKey',
-          message: service.apiKeyPrompt![scriptLang],
+          message: service.apiKeyPrompt!,
           validate: value => !!value || i18n.api.keyRequired,
         })
 

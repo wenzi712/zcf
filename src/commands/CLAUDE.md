@@ -97,13 +97,13 @@ export interface MenuFeatures {
 // Configuration and utilities
 import { getTranslation } from '../i18n'
 import { displayBannerWithInfo } from '../utils/banner'
-import { configureApi, backupExistingConfig } from '../utils/config'
+import { backupExistingConfig, configureApi } from '../utils/config'
+import { handleExitPromptError } from '../utils/error-handler'
 import { installClaudeCode } from '../utils/installer'
-import { selectAndInstallWorkflows } from '../utils/workflow-installer'
 
 // Platform and validation
-import { isWindows, isTermux } from '../utils/platform'
-import { handleExitPromptError } from '../utils/error-handler'
+import { isTermux, isWindows } from '../utils/platform'
+import { selectAndInstallWorkflows } from '../utils/workflow-installer'
 import { readZcfConfig, updateZcfConfig } from '../utils/zcf-config'
 ```
 
@@ -155,7 +155,7 @@ interface ErrorHandling {
 ### Test Coverage
 
 - **Unit Tests**: Individual command function testing
-- **Integration Tests**: Full workflow execution testing  
+- **Integration Tests**: Full workflow execution testing
 - **Edge Case Tests**: Platform-specific and error condition testing
 - **Mock Testing**: External tool integration testing with comprehensive mocking
 

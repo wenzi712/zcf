@@ -65,12 +65,20 @@ vi.mock('../../../src/config/workflows', () => ({
   ],
 }))
 
-vi.mock('../../../src/constants', () => ({
-  MCP_SERVICES: [
+vi.mock('../../../src/config/mcp-services', () => ({
+  MCP_SERVICE_CONFIGS: [
+    { id: 'context7', requiresApiKey: false },
+    { id: 'mcp-deepwiki', requiresApiKey: false },
+    { id: 'exa', requiresApiKey: true },
+  ],
+  getMcpServices: vi.fn(() => [
     { id: 'context7', name: 'Context7', requiresApiKey: false },
     { id: 'mcp-deepwiki', name: 'DeepWiki', requiresApiKey: false },
     { id: 'exa', name: 'Exa', requiresApiKey: true },
-  ],
+  ]),
+}))
+
+vi.mock('../../../src/constants', () => ({
   CLAUDE_DIR: '/test/.claude',
   SETTINGS_FILE: '/test/.claude/settings.json',
   I18N: {

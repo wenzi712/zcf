@@ -19,6 +19,10 @@ export const mcpServices = {
     name: 'Context7 文档查询',
     description: '查询最新的库文档和代码示例',
   },
+  'spec-workflow': {
+    name: 'Spec 工作流',
+    description: '规范化特性开发工作流程，从需求到实现的系统化方法',
+  },
   'mcp-deepwiki': {
     name: 'DeepWiki',
     description: '查询 GitHub 仓库文档和示例',

@@ -1,7 +1,7 @@
 import type { SupportedLang } from '../constants'
 import ansis from 'ansis'
 import inquirer from 'inquirer'
-import { MCP_SERVICES } from '../constants'
+import { getMcpServices } from '../config/mcp-services'
 import { getTranslation } from '../i18n'
 
 /**
@@ -11,10 +11,11 @@ import { getTranslation } from '../i18n'
  */
 export async function selectMcpServices(scriptLang: SupportedLang): Promise<string[] | undefined> {
   const i18n = getTranslation(scriptLang)
+  const mcpServices = getMcpServices(scriptLang)
 
   // Build choices without ALL option
-  const choices = MCP_SERVICES.map(service => ({
-    name: `${service.name[scriptLang]} - ${ansis.gray(service.description[scriptLang])}`,
+  const choices = mcpServices.map(service => ({
+    name: `${service.name} - ${ansis.gray(service.description)}`,
     value: service.id,
     selected: false,
   }))
