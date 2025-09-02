@@ -22,24 +22,65 @@ describe('nPM Package Integration Tests', () => {
   afterAll(() => cleanup())
 
   it('should pack successfully with all i18n files included', async () => {
-    // Build the project first
-    const { stdout: buildOutput } = await execAsync('npm run build', { cwd: projectRoot })
-    expect(buildOutput).toContain('Successfully copied')
-    expect(buildOutput).toContain('i18n files')
+    // Check if dist directory exists, if not build the project
+    const distExists = existsSync(join(projectRoot, 'dist'))
+    if (!distExists) {
+      const { stdout: buildOutput } = await execAsync('npm run build', { cwd: projectRoot })
+      expect(buildOutput).toContain('Successfully copied')
+      expect(buildOutput).toContain('i18n files')
+    }
+
+    // Verify critical i18n files exist in dist before packing
+    const criticalFiles = [
+      'dist/i18n/locales/zh-CN/menu.json',
+      'dist/i18n/locales/en/menu.json',
+      'dist/i18n/locales/zh-CN/common.json',
+      'dist/i18n/locales/en/common.json',
+    ]
+
+    for (const file of criticalFiles) {
+      const fullPath = join(projectRoot, file)
+      expect(existsSync(fullPath), `${file} should exist in dist directory`).toBe(true)
+    }
 
     // Use npm pack with --json for detailed package contents
     const { stdout: packOutput } = await execAsync('npm pack --json', { cwd: projectRoot })
-    const packData = JSON.parse(packOutput)
+    let packData: Array<{ files?: Array<{ path: string }>, filename?: string }>
+    try {
+      packData = JSON.parse(packOutput)
+    }
+    catch (error) {
+      console.error('Failed to parse npm pack output:', packOutput)
+      throw error
+    }
 
     // Extract file list from npm pack JSON output
     const files = packData[0]?.files || []
-    const fileNames = files.map((f: any) => f.path)
+    if (files.length === 0) {
+      console.error('No files found in npm pack output:', packData)
+      throw new Error('npm pack returned no files')
+    }
 
-    // Verify critical i18n files are included
-    expect(fileNames).toContain('dist/i18n/locales/zh-CN/menu.json')
-    expect(fileNames).toContain('dist/i18n/locales/en/menu.json')
-    expect(fileNames).toContain('dist/i18n/locales/zh-CN/common.json')
-    expect(fileNames).toContain('dist/i18n/locales/en/common.json')
+    const fileNames = files.map(f => f.path)
+
+    // Log all files for debugging
+    console.log('Files included in npm pack:', fileNames.filter((name: string) => name.includes('i18n')))
+
+    // Verify critical i18n files are included with better error messages
+    const expectedFiles = [
+      'dist/i18n/locales/zh-CN/menu.json',
+      'dist/i18n/locales/en/menu.json',
+      'dist/i18n/locales/zh-CN/common.json',
+      'dist/i18n/locales/en/common.json',
+    ]
+
+    for (const expectedFile of expectedFiles) {
+      if (!fileNames.includes(expectedFile)) {
+        console.error(`Missing file: ${expectedFile}`)
+        console.error('Available i18n files:', fileNames.filter((name: string) => name.includes('i18n')))
+        expect(fileNames, `${expectedFile} should be included in npm pack`).toContain(expectedFile)
+      }
+    }
 
     // Check all required namespaces
     const requiredNamespaces = ['api', 'ccr', 'cli', 'cometix', 'configuration', 'errors', 'installation', 'language', 'mcp', 'tools', 'updater', 'workflow']
