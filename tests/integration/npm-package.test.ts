@@ -34,7 +34,11 @@ describe('nPM Package Integration Tests', () => {
 
     if (missingFiles.length > 0) {
       console.log(`Building project because ${missingFiles.length} critical i18n files are missing:`, missingFiles)
-      const { stdout: buildOutput } = await execAsync('npm run build', { cwd: projectRoot })
+
+      // Use platform-specific npm command for Windows compatibility
+      const buildCommand = process.platform === 'win32' ? 'npm.cmd run build' : 'npm run build'
+
+      const { stdout: buildOutput } = await execAsync(buildCommand, { cwd: projectRoot })
       expect(buildOutput).toContain('Successfully copied')
       expect(buildOutput).toContain('i18n files')
 
