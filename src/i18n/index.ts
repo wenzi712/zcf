@@ -63,11 +63,28 @@ export async function initI18n(language: SupportedLang = 'zh-CN'): Promise<void>
         loadPath: (() => {
           const currentDir = dirname(fileURLToPath(import.meta.url))
 
+          // For npm packages, we need to find the package root
+          // currentDir will be something like: /path/to/node_modules/zcf/dist/i18n
+          // or in chunks: /path/to/node_modules/zcf/dist/chunks
+          const packageRoot = (() => {
+            let dir = currentDir
+            // Look for package.json to identify package root
+            while (dir !== dirname(dir)) {
+              if (existsSync(join(dir, 'package.json'))) {
+                return dir
+              }
+              dir = dirname(dir)
+            }
+            return currentDir
+          })()
+
           // Try multiple possible paths in order of preference
           const possibleBasePaths = [
             join(currentDir, 'locales'), // Development: src/i18n/locales
-            join(process.cwd(), 'dist/i18n/locales'), // Production: dist/i18n/locales
+            join(packageRoot, 'dist/i18n/locales'), // NPM package: /node_modules/zcf/dist/i18n/locales
+            join(process.cwd(), 'dist/i18n/locales'), // Production build: ./dist/i18n/locales
             join(currentDir, '../../../dist/i18n/locales'), // Fallback for deep chunk paths
+            join(currentDir, '../../i18n/locales'), // Alternative chunk structure
           ]
 
           // Find the first path that exists by checking for common.json
