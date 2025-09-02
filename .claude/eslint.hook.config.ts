@@ -5,7 +5,6 @@ export default antfu({
   ignores: [
     '.bmad-core/**',
     '.claude/**',
-    'templates/**',
     '**/**.md',
   ],
   rules: {
