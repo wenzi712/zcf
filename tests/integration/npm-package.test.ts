@@ -143,9 +143,6 @@ describe('nPM Package Integration Tests', () => {
         rmSync(tarballPath)
       }
     }
-    catch (error) {
-      throw error
-    }
     finally {
       // Always clean up tarball files to prevent test pollution
       try {

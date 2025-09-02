@@ -238,7 +238,7 @@ describe('i18n Integrity Tests', () => {
 
         expect(i18nMatches.length, `Should include at least ${expectedMinCount} i18n files`).toBeGreaterThanOrEqual(expectedMinCount)
       }
-      catch (error) {
+      catch {
         console.warn('npm pack test skipped - might be in CI without dist built')
         // Skip this test if npm pack fails (e.g., in CI without build)
       }
@@ -281,7 +281,8 @@ describe('i18n Integrity Tests', () => {
         expect(enOutput).not.toContain('menuDescriptions.')
       }
       catch (error) {
-        console.warn('CLI test skipped - might timeout in CI environment:', error.message)
+        const message = error instanceof Error ? error.message : String(error)
+        console.warn('CLI test skipped - might timeout in CI environment:', message)
         // This is expected in CI environments where interactive CLI might not work properly
       }
     })

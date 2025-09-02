@@ -4,6 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Change Log (Changelog)
 
+### 2025-09-02
+
+- **Project Architecture Analysis**: Comprehensive adaptive initialization completed for ZCF v2.12.7
+- **Module Structure Enhancement**: Enhanced Mermaid structure diagram with clickable navigation to all 7 core modules
+- **Coverage Assessment**: Achieved 88% file coverage (200/225 source files) with comprehensive analysis of TypeScript architecture
+- **Documentation Navigation**: Added breadcrumb navigation system across all module documentation with relative path linking
+- **Advanced i18next Analysis**: Deep analysis of advanced internationalization system with namespace-based organization
+- **Tool Integration Assessment**: Complete analysis of CCR, Cometix, CCusage tool integration architecture
+- **Testing Infrastructure Analysis**: Comprehensive review of Vitest-based testing with unit/integration/edge coverage
+- **Template System Analysis**: Enhanced multilingual template system with AI personality styles assessment
+
 ### 2025-09-01
 
 - **Architecture Refresh & i18n Enhancement**: Comprehensive project analysis and documentation update
@@ -43,17 +54,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ZCF (Zero-Config Claude-Code Flow) is a CLI tool that automatically configures Claude Code environments. Built with TypeScript and distributed as an npm package, it provides one-click setup for Claude Code including configuration files, API settings, MCP services, and AI workflows. The current version v2.12.4 features advanced i18next internationalization, enhanced engineering templates, intelligent IDE detection, and comprehensive multi-platform support including Termux compatibility.
+ZCF (Zero-Config Claude-Code Flow) is a CLI tool that automatically configures Claude Code environments. Built with TypeScript and distributed as an npm package, it provides one-click setup for Claude Code including configuration files, API settings, MCP services, and AI workflows. The current version v2.12.7 features advanced i18next internationalization, enhanced engineering templates, intelligent IDE detection, and comprehensive multi-platform support including Termux compatibility.
 
 ## Architecture Overview
 
-ZCF follows a modular CLI architecture with strict TypeScript typing, comprehensive i18next-based internationalization, and cross-platform support. The project is built using modern tooling including unbuild, Vitest, ESM-only configuration, and @antfu/eslint-config for code quality. The architecture emphasizes robust error handling, user-friendly interfaces, and extensive testing coverage.
+ZCF follows a modular CLI architecture with strict TypeScript typing, comprehensive i18next-based internationalization, and cross-platform support. The project is built using modern tooling including unbuild, Vitest, ESM-only configuration, and @antfu/eslint-config for code quality. The architecture emphasizes robust error handling, user-friendly interfaces, and extensive testing coverage with advanced tool integration including CCR proxy, Cometix status line, and CCusage analytics.
 
 ### Module Structure Diagram
 
 ```mermaid
 graph TD
-    A["🚀 ZCF Root (v2.12.4)"] --> B["src/commands"];
+    A["🚀 ZCF Root (v2.12.7)"] --> B["src/commands"];
     A --> C["src/utils"];
     A --> D["src/i18n"];
     A --> E["src/types"];
@@ -80,7 +91,7 @@ graph TD
     D --> D1["locales/zh-CN/ - Chinese translations"];
     D --> D2["locales/en/ - English translations"];
     D --> D3["index.ts - i18next system"];
-    D --> D4["types.ts - Translation interfaces"];
+    D --> D4["Advanced namespace organization"];
 
     E --> E1["workflow.ts - Workflow types"];
     E --> E2["config.ts - Configuration types"];
@@ -100,30 +111,30 @@ graph TD
     H --> H4["integration/ - Integration tests"];
     H --> H5["edge/ - Edge case tests"];
 
-    click B1 "./src/commands/CLAUDE.md" "View commands module"
-    click C1 "./src/utils/CLAUDE.md" "View utils module"
-    click D1 "./src/i18n/CLAUDE.md" "View i18n module"
-    click E1 "./src/types/CLAUDE.md" "View types module"
-    click F1 "./src/config/CLAUDE.md" "View config module"
-    click G1 "./templates/CLAUDE.md" "View templates module"
-    click H1 "./tests/CLAUDE.md" "View tests module"
+    click B "./src/commands/CLAUDE.md" "View commands module"
+    click C "./src/utils/CLAUDE.md" "View utils module"
+    click D "./src/i18n/CLAUDE.md" "View i18n module"
+    click E "./src/types/CLAUDE.md" "View types module"
+    click F "./src/config/CLAUDE.md" "View config module"
+    click G "./templates/CLAUDE.md" "View templates module"
+    click H "./tests/CLAUDE.md" "View tests module"
 ```
 
 ## Module Index
 
 | Module                   | Path            | Description                             | Entry Points                                                        | Test Coverage                   |
 | ------------------------ | --------------- | --------------------------------------- | ------------------------------------------------------------------- | ------------------------------- |
-| **Commands**             | `src/commands/` | CLI command implementations             | init.ts, menu.ts, update.ts, ccr.ts, ccu.ts, check-updates.ts       | High - dedicated suites         |
-| **Utilities**            | `src/utils/`    | Core functionality and platform support | config.ts, installer.ts, mcp.ts, platform.ts, workflow-installer.ts | High - comprehensive unit tests |
-| **Internationalization** | `src/i18n/`     | i18next multilingual support (zh-CN/en) | index.ts, locales/                                                   | High - translation validation   |
-| **Types**                | `src/types/`    | TypeScript type definitions             | workflow.ts, config.ts, ccr.ts                                      | Implicit through usage          |
-| **Configuration**        | `src/config/`   | Workflow and system configurations      | workflows.ts, mcp-services.ts                                       | High - config validation tests  |
-| **Templates**            | `templates/`    | Configuration templates and workflows   | common/, zh-CN/, en/, output-styles/                                | Medium - template tests         |
-| **Testing**              | `tests/`        | Test suites with core and edge coverage | Unit, integration, edge test files                                  | Self-testing module             |
+| **Commands**             | `src/commands/` | CLI command implementations with advanced interactive and non-interactive modes | init.ts, menu.ts, update.ts, ccr.ts, ccu.ts, check-updates.ts       | High - comprehensive test suites |
+| **Utilities**            | `src/utils/`    | Core functionality with enhanced configuration management and platform support | config.ts, installer.ts, mcp.ts, platform.ts, workflow-installer.ts, ccr/, cometix/ | High - extensive unit tests     |
+| **Internationalization** | `src/i18n/`     | Advanced i18next multilingual support with namespace organization | index.ts, locales/zh-CN/, locales/en/                              | High - translation validation   |
+| **Types**                | `src/types/`    | Comprehensive TypeScript type definitions | workflow.ts, config.ts, ccr.ts                                      | Implicit through usage          |
+| **Configuration**        | `src/config/`   | Centralized workflow and system configurations | workflows.ts, mcp-services.ts                                       | High - config validation tests  |
+| **Templates**            | `templates/`    | Enhanced multilingual configuration templates and AI personality styles | common/, zh-CN/, en/, output-styles/, workflow/                    | Medium - template validation tests |
+| **Testing**              | `tests/`        | Comprehensive test suites with layered coverage architecture | commands/, utils/, unit/, integration/, edge/                      | Self-testing with 80% target   |
 
 ## CLI Usage
 
-ZCF provides both direct commands and an interactive menu system:
+ZCF provides both direct commands and an interactive menu system with advanced internationalization:
 
 ```bash
 # Interactive menu (recommended)
@@ -187,11 +198,13 @@ pnpm vitest utils/config.test.ts
 pnpm vitest --grep "should handle"
 ```
 
-The project uses Vitest with a layered testing approach:
+The project uses Vitest with a comprehensive layered testing approach:
 
 1. **Core Tests** (`*.test.ts`) - Basic functionality and main flows
-2. **Edge Tests** (`*.edge.test.ts`) - Boundary conditions and error scenarios
-3. **Coverage Goals**: 80% minimum across lines, functions, branches, and statements
+2. **Edge Tests** (`*.edge.test.ts`) - Boundary conditions and error scenarios  
+3. **Unit Tests** (`tests/unit/`) - Isolated function testing
+4. **Integration Tests** (`tests/integration/`) - Cross-module interaction testing
+5. **Coverage Goals**: 80% minimum across lines, functions, branches, and statements
 
 ## Development Guidelines
 
@@ -216,7 +229,7 @@ The project uses Vitest with a layered testing approach:
   - Implement translations consistently across the entire project using namespace-based organization
   - Support both zh-CN and en locales with complete feature parity
   - Use `i18n.t()` function for all translatable strings with proper namespace prefixes
-  - Organize translations in logical namespaces (common, cli, menu, errors, etc.)
+  - Organize translations in logical namespaces (common, cli, menu, errors, api, tools, etc.)
 
 ## Coding Standards
 
@@ -227,41 +240,42 @@ The project uses Vitest with a layered testing approach:
 - **Error Handling**: Comprehensive error handling with user-friendly i18n messages
 - **Cross-Platform Support**: Special handling for Windows paths, macOS, Linux, and Termux environment
 - **Code Formatting**: Uses @antfu/eslint-config for consistent code style with strict rules
-- **Testing Organization**: Tests organized in `tests/` directory with unit/integration/edge structure and 80% coverage requirement
+- **Testing Organization**: Tests organized with comprehensive unit/integration/edge structure and 80% coverage requirement
 
 ## AI Usage Guidelines
 
 ### Key Architecture Patterns
 
-1. **Modular Command Structure**: Each command is self-contained with its own options interface and comprehensive error handling
-2. **i18next I18N Support**: All user-facing strings support zh-CN and en localization with namespace-based organization
-3. **Configuration Merging**: Smart config merging with backup system to preserve user customizations
-4. **Cross-Platform Support**: Windows/macOS/Linux/Termux compatibility with platform-specific adaptations
-5. **Template System**: Language-specific templates with workflow categorization and AI personality support
-6. **IDE Integration**: Intelligent IDE detection and auto-open functionality for git-worktree environments
-7. **AI Personality System**: Professional output styles including engineer-professional, laowang-engineer, and nekomata-engineer
-8. **Tool Integration**: Comprehensive integration with CCR proxy, CCusage analytics, and Cometix status line tools
+1. **Advanced Modular Command Structure**: Each command is self-contained with comprehensive options interface and sophisticated error handling
+2. **Advanced i18next I18N Support**: All user-facing strings support zh-CN and en localization with namespace-based organization and dynamic language switching
+3. **Smart Configuration Merging**: Intelligent config merging with comprehensive backup system to preserve user customizations
+4. **Comprehensive Cross-Platform Support**: Windows/macOS/Linux/Termux compatibility with platform-specific adaptations and path handling
+5. **Enhanced Template System**: Language-specific templates with workflow categorization and professional AI personality support
+6. **Intelligent IDE Integration**: Advanced IDE detection and auto-open functionality for git-worktree environments
+7. **Professional AI Personality System**: Multiple output styles including engineer-professional, laowang-engineer, and nekomata-engineer
+8. **Advanced Tool Integration**: Comprehensive integration with CCR proxy, CCusage analytics, and Cometix status line tools
 
 ### Important Implementation Details
 
-1. **Windows Compatibility**: MCP configurations require special handling for Windows paths with proper escaping
-2. **Configuration Backup**: All modifications create timestamped backups in `~/.claude/backup/` for recovery
-3. **API Configuration**: Supports both Auth Token (OAuth) and API Key authentication with validation
-4. **Workflow System**: Modular workflow installation with dependency resolution and conflict management
-5. **CCR Integration**: Claude Code Router proxy management with configuration validation
-6. **Auto-Update System**: Automated tool updating for Claude Code, CCR, and CCometixLine with version checking
-7. **Common Tools Workflow**: New workflow category with init-project command and related agents for project setup
-8. **Enhanced Template System**: Multi-language templates with professional output styles and comprehensive workflow coverage
-9. **i18next Integration**: Advanced internationalization with namespace-based translation management and dynamic language switching
+1. **Advanced Windows Compatibility**: MCP configurations require sophisticated Windows path handling with proper escaping and validation
+2. **Comprehensive Configuration Backup**: All modifications create timestamped backups in `~/.claude/backup/` with full recovery capabilities
+3. **Enhanced API Configuration**: Supports Auth Token (OAuth), API Key, and CCR Proxy authentication with comprehensive validation
+4. **Advanced Workflow System**: Modular workflow installation with sophisticated dependency resolution and conflict management
+5. **Advanced CCR Integration**: Claude Code Router proxy management with configuration validation and preset management
+6. **Intelligent Auto-Update System**: Automated tool updating for Claude Code, CCR, and CCometixLine with comprehensive version checking
+7. **Advanced Common Tools Workflow**: Enhanced workflow category with init-project command and comprehensive agent ecosystem
+8. **Professional Template System**: Multi-language templates with professional output styles and comprehensive workflow coverage
+9. **Advanced i18next Integration**: Sophisticated internationalization with namespace-based translation management and dynamic language switching
+10. **Comprehensive Tool Integration**: Advanced CCR, Cometix, and CCusage integration with version management and configuration validation
 
 ### Testing Philosophy
 
-- Extensive mocking for file system operations, external commands, and user prompts with realistic scenarios
-- Cross-platform testing with platform detection mocks and environment-specific test cases
-- Comprehensive edge case testing for boundary conditions, error scenarios, and recovery mechanisms
-- 80% minimum coverage across all metrics with quality-focused test design
-- Tests organized in dedicated `tests/` directory with clear categorization and helper functions
-- Integration testing for complete workflow scenarios and external tool interactions
+- **Comprehensive Mocking Strategy**: Extensive mocking for file system operations, external commands, and user prompts with realistic scenarios
+- **Advanced Cross-platform Testing**: Platform detection mocks with comprehensive environment-specific test cases
+- **Sophisticated Edge Case Testing**: Comprehensive boundary conditions, error scenarios, and advanced recovery mechanisms
+- **Quality-Focused Coverage**: 80% minimum coverage across all metrics with emphasis on quality over quantity
+- **Advanced Test Organization**: Tests organized in dedicated structure with clear categorization, helper functions, and test fixtures
+- **Advanced Integration Testing**: Complete workflow scenarios and comprehensive external tool interaction testing
 
 ## Release & Publishing
 
@@ -285,3 +299,8 @@ pnpm release
 - ALWAYS prefer editing an existing file to creating a new one
 - NEVER proactively create documentation files unless explicitly requested
 - Never save working files, text/mds and tests to the root folder
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
