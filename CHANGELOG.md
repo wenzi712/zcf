@@ -1,5 +1,37 @@
 # Changelog
 
+## 2.12.7
+
+### Patch Changes
+
+- ## 新功能
+  - 新增 i18n 完整性测试套件，自动验证翻译文件完整性和一致性
+  - 新增 NPM 包集成测试，确保构建过程中 i18n 文件正确分发
+  - 增强现有测试套件，提供完整的 i18n 模拟支持
+
+  ## New Features
+  - Add i18n integrity test suite to automatically validate translation completeness and consistency
+  - Add NPM package integration test to ensure proper i18n file distribution in builds
+  - Enhance existing test suites with comprehensive i18n mocking support
+
+  ## 修复
+  - 修复 CLI 帮助文本格式问题，移除章节标题中的多余冒号
+  - 统一所有语言文件中的格式规范，改进用户体验
+
+  ## Fixes
+  - Fix CLI help text formatting by removing redundant colons from section headers
+  - Standardize formatting across all language files for improved user experience
+
+  ## 优化
+  - 优化测试覆盖率配置，排除开发专用目录
+  - 更新 .gitignore 配置，排除 NPM 测试产物和临时文件
+  - 改进构建脚本中的测试覆盖率命令
+
+  ## Optimization
+  - Optimize test coverage configuration to exclude development-only directories
+  - Update .gitignore to exclude npm test artifacts and temporary files
+  - Improve test coverage command in build scripts
+
 ## 2.12.6
 
 ### Patch Changes
