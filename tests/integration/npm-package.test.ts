@@ -22,15 +22,7 @@ describe('nPM Package Integration Tests', () => {
   afterAll(() => cleanup())
 
   it('should pack successfully with all i18n files included', async () => {
-    // Check if dist directory exists, if not build the project
-    const distExists = existsSync(join(projectRoot, 'dist'))
-    if (!distExists) {
-      const { stdout: buildOutput } = await execAsync('npm run build', { cwd: projectRoot })
-      expect(buildOutput).toContain('Successfully copied')
-      expect(buildOutput).toContain('i18n files')
-    }
-
-    // Verify critical i18n files exist in dist before packing
+    // Check if critical i18n files exist in dist, if not build the project
     const criticalFiles = [
       'dist/i18n/locales/zh-CN/menu.json',
       'dist/i18n/locales/en/menu.json',
@@ -38,9 +30,22 @@ describe('nPM Package Integration Tests', () => {
       'dist/i18n/locales/en/common.json',
     ]
 
-    for (const file of criticalFiles) {
-      const fullPath = join(projectRoot, file)
-      expect(existsSync(fullPath), `${file} should exist in dist directory`).toBe(true)
+    const missingFiles = criticalFiles.filter(file => !existsSync(join(projectRoot, file)))
+
+    if (missingFiles.length > 0) {
+      console.log(`Building project because ${missingFiles.length} critical i18n files are missing:`, missingFiles)
+      const { stdout: buildOutput } = await execAsync('npm run build', { cwd: projectRoot })
+      expect(buildOutput).toContain('Successfully copied')
+      expect(buildOutput).toContain('i18n files')
+
+      // Verify files exist after build
+      for (const file of criticalFiles) {
+        const fullPath = join(projectRoot, file)
+        expect(existsSync(fullPath), `${file} should exist in dist directory after build`).toBe(true)
+      }
+    }
+    else {
+      console.log('All critical i18n files exist, skipping build')
     }
 
     // Use npm pack with --json for detailed package contents
