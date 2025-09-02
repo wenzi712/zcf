@@ -158,7 +158,12 @@ After installation, use `/bmad-init` to initialize the BMad workflow in your pro
 - **Interactive Dashboard**: Built-in dashboard for workflow visualization and management
 - **Approval System**: Review and approval process for each development phase
 
-The Spec Workflow MCP includes an automatic dashboard that launches with the `--AutoStartDashboard` flag, providing a visual interface for managing your development workflow.
+The Spec Workflow MCP provides an optional dashboard for workflow visualization. Users can manually launch the dashboard using:
+```bash
+npx -y @pimzino/spec-workflow-mcp@latest --dashboard
+```
+
+Alternatively, you can install the [VS Code extension](https://marketplace.visualstudio.com/items?itemName=Pimzino.spec-workflow-mcp) for integrated workflow management.
 
 **Usage Guide**: For detailed usage instructions and best practices, see the [official Spec Workflow documentation](https://github.com/Pimzino/spec-workflow-mcp/blob/main/README.md#quick-start).
 

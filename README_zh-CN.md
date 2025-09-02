@@ -158,7 +158,12 @@ ZCF 现在支持可定制的 AI 输出风格，个性化你的 Claude Code 体�
 - **交互式仪表板**：内置的工作流可视化和管理仪表板
 - **审批系统**：每个开发阶段的评审和审批流程
 
-Spec 工作流 MCP 包含一个自动启动的仪表板（通过 `--AutoStartDashboard` 标志），为管理开发工作流提供可视化界面。
+Spec 工作流 MCP 提供可选的工作流可视化仪表板。用户可以手动启动仪表板：
+```bash
+npx -y @pimzino/spec-workflow-mcp@latest --dashboard
+```
+
+或者安装 [VS Code 扩展](https://marketplace.visualstudio.com/items?itemName=Pimzino.spec-workflow-mcp) 以获得集成的工作流管理功能。
 
 **使用指南**：详细使用说明和最佳实践，请参阅 [Spec 工作流官方文档](https://github.com/Pimzino/spec-workflow-mcp/blob/main/README.md#quick-start)。
 
