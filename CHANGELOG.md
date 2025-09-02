@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.12.6
+
+### Patch Changes
+
+- ## 修复
+  - 改进 i18n 国际化系统的包路径解析机制
+  - 支持 NPM 包安装后的路径查找（/node_modules/zcf/dist/i18n/locales）
+  - 添加包根目录自动检测，通过搜索 package.json 定位
+  - 增加多种备用路径支持，提升各种打包结构的兼容性
+  - 优化生产部署环境的国际化文件加载
+
+  ## Fixes
+  - Improve i18n package path resolution mechanism
+  - Support path finding after NPM package installation (/node_modules/zcf/dist/i18n/locales)
+  - Add automatic package root detection by searching for package.json
+  - Add multiple fallback path support for better compatibility with various bundling structures
+  - Optimize i18n file loading in production deployment environments
+
 ## 2.12.5
 
 ### Patch Changes
