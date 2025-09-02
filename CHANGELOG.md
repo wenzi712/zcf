@@ -1,5 +1,41 @@
 # Changelog
 
+## 2.12.5
+
+### Patch Changes
+
+- ## 文档优化
+  - 修正 Spec 工作流仪表板说明，移除误导性的自动启动描述
+  - 提供手动启动仪表板的正确命令和 VS Code 扩展选项
+  - 改善用户体验，将仪表板设为可选而非干扰性功能
+
+  ## 功能修复
+  - 简化 CCR 菜单配置检查逻辑
+  - 修复 CCR 配置验证流程
+
+  ## 架构重构
+  - 实现 i18next 国际化系统，完全替换原有语言检测方法
+  - 将翻译文件从 TypeScript 转换为 JSON 格式，提升性能和维护性
+  - 重构 i18n 模块架构，采用命名空间组织方式
+  - 优化跨平台兼容性和代码质量
+
+  ## Documentation Enhancement
+  - Fix Spec Workflow dashboard description by removing misleading automatic launch info
+  - Provide correct manual dashboard launch command and VS Code extension option
+  - Improve user experience by making dashboard optional rather than intrusive
+
+  ## Bug Fixes
+  - Simplify CCR menu configuration check logic
+  - Fix CCR configuration validation process
+
+  ## Architecture Refactor
+  - Implement i18next internationalization system, completely replacing previous language detection
+  - Convert translation files from TypeScript to JSON format for better performance and maintainability
+  - Refactor i18n module architecture with namespace-based organization
+  - Improve cross-platform compatibility and code quality
+
+  🤖 Generated with [Claude Code](https://claude.ai/code)
+
 ## 2.12.4
 
 ### Patch Changes
