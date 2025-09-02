@@ -1,9 +1,9 @@
 {
-  "help.commands": "Commands:",
-  "help.shortcuts": "Shortcuts:",
-  "help.options": "Options:",
-  "help.examples": "Examples:",
-  "help.nonInteractiveMode": "Non-interactive mode (for CI/CD):",
+  "help.commands": "Commands",
+  "help.shortcuts": "Shortcuts",
+  "help.options": "Options",
+  "help.examples": "Examples",
+  "help.nonInteractiveMode": "Non-interactive mode (for CI/CD)",
   "help.commandDescriptions.showInteractiveMenuDefault": "Show interactive menu (default)",
   "help.commandDescriptions.initClaudeCodeConfig": "Initialize Claude Code configuration",
   "help.commandDescriptions.updateWorkflowFiles": "Update workflow-related md files",
@@ -38,5 +38,8 @@
   "help.exampleDescriptions.checkAndUpdateTools": "Check and update tools",
   "help.exampleDescriptions.nonInteractiveModeCicd": "Non-interactive mode (CI/CD)",
   "banner.subtitle": "One-click configuration tool for Claude Code",
-  "banner.updateSubtitle": "Update configuration for Claude Code"
+  "banner.updateSubtitle": "Update configuration for Claude Code",
+  "help.defaults.dailyUsage": "Daily usage (default)",
+  "help.defaults.updateTools": "Update Claude Code, CCR and CCometixLine",
+  "help.defaults.prefix": "default:"
 }

@@ -33,3 +33,14 @@ junit.xml
 
 # Test temporary output files
 *-output.txt
+
+# NPM integration test artifacts
+tmp-npm-test/
+*_test.log
+zh_test.log
+en_test.log
+zh_output.txt
+en_output.txt
+release_*_test.log
+test-*.js
+zcf-*.tgz

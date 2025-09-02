@@ -5,6 +5,34 @@ vi.mock('../../../src/utils/zcf-config', () => ({
   readZcfConfig: vi.fn().mockReturnValue({ preferredLang: 'en' }),
 }))
 
+// Mock i18n system
+vi.mock('../../../src/i18n', () => ({
+  ensureI18nInitialized: vi.fn(),
+  i18n: {
+    t: vi.fn((key: string, params?: any) => {
+      // Mock translation function to return expected error messages
+      switch (key) {
+        case 'errors:invalidModel':
+          return `Invalid model: ${params?.model}. Expected 'opus', 'sonnet', or 'opusplan'`
+        case 'errors:invalidEnvConfig':
+          return 'Invalid env configuration: expected object'
+        case 'errors:invalidBaseUrl':
+          return 'Invalid ANTHROPIC_BASE_URL: expected string'
+        case 'errors:invalidApiKeyConfig':
+          return 'Invalid ANTHROPIC_API_KEY: expected string'
+        case 'errors:invalidAuthTokenConfig':
+          return 'Invalid ANTHROPIC_AUTH_TOKEN: expected string'
+        case 'errors:invalidPermissionsConfig':
+          return 'Invalid permissions configuration: expected object'
+        case 'errors:invalidPermissionsAllow':
+          return 'Invalid permissions.allow: expected array'
+        default:
+          return key
+      }
+    }),
+  },
+}))
+
 describe('config-validator utilities', () => {
   beforeEach(() => {
     vi.clearAllMocks()

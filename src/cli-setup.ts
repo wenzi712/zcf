@@ -140,12 +140,12 @@ export function customizeHelp(sections: any[]) {
       `  ${ansis.green('--api-url, -u')} <url>       ${i18n.t('cli:help.optionDescriptions.customApiUrl')}`,
       `  ${ansis.green('--ai-output-lang, -a')} <lang> ${i18n.t('cli:help.optionDescriptions.aiOutputLanguage')}`,
       `  ${ansis.green('--all-lang, -g')} <lang>     ${i18n.t('cli:help.optionDescriptions.setAllLanguageParams')}`,
-      `  ${ansis.green('--config-action, -r')} <action> ${i18n.t('cli:help.optionDescriptions.configHandling')} (default: backup)`,
-      `  ${ansis.green('--mcp-services, -m')} <list>  ${i18n.t('cli:help.optionDescriptions.mcpServices')} (default: all non-key services)`,
-      `  ${ansis.green('--workflows, -w')} <list>    ${i18n.t('cli:help.optionDescriptions.workflows')} (default: all workflows)`,
-      `  ${ansis.green('--output-styles, -o')} <styles> ${i18n.t('cli:help.optionDescriptions.outputStyles')} (default: all custom styles)`,
-      `  ${ansis.green('--default-output-style, -d')} <style> ${i18n.t('cli:help.optionDescriptions.defaultOutputStyle')} (default: engineer-professional)`,
-      `  ${ansis.green('--install-cometix-line, -x')} <value> ${i18n.t('cli:help.optionDescriptions.installStatuslineTool')} (default: true)`,
+      `  ${ansis.green('--config-action, -r')} <action> ${i18n.t('cli:help.optionDescriptions.configHandling')} (${i18n.t('cli:help.defaults.prefix')} backup)`,
+      `  ${ansis.green('--mcp-services, -m')} <list>  ${i18n.t('cli:help.optionDescriptions.mcpServices')} (${i18n.t('cli:help.defaults.prefix')} all non-key services)`,
+      `  ${ansis.green('--workflows, -w')} <list>    ${i18n.t('cli:help.optionDescriptions.workflows')} (${i18n.t('cli:help.defaults.prefix')} all workflows)`,
+      `  ${ansis.green('--output-styles, -o')} <styles> ${i18n.t('cli:help.optionDescriptions.outputStyles')} (${i18n.t('cli:help.defaults.prefix')} all custom styles)`,
+      `  ${ansis.green('--default-output-style, -d')} <style> ${i18n.t('cli:help.optionDescriptions.defaultOutputStyle')} (${i18n.t('cli:help.defaults.prefix')} engineer-professional)`,
+      `  ${ansis.green('--install-cometix-line, -x')} <value> ${i18n.t('cli:help.optionDescriptions.installStatuslineTool')} (${i18n.t('cli:help.defaults.prefix')} true)`,
     ].join('\n'),
   })
 
@@ -167,11 +167,11 @@ export function customizeHelp(sections: any[]) {
       `  ${ansis.cyan('npx zcf ccr')}`,
       '',
       ansis.gray(`  # ${i18n.t('cli:help.exampleDescriptions.runClaudeCodeUsageAnalysis')}`),
-      `  ${ansis.cyan('npx zcf ccu')}               ${ansis.gray('# Daily usage (default)')}`,
+      `  ${ansis.cyan('npx zcf ccu')}               ${ansis.gray(`# ${i18n.t('cli:help.defaults.dailyUsage')}`)}`,
       `  ${ansis.cyan('npx zcf ccu monthly --json')}`,
       '',
       ansis.gray(`  # ${i18n.t('cli:help.exampleDescriptions.checkAndUpdateTools')}`),
-      `  ${ansis.cyan('npx zcf check-updates')}     ${ansis.gray('# Update Claude Code, CCR and CCometixLine')}`,
+      `  ${ansis.cyan('npx zcf check-updates')}     ${ansis.gray(`# ${i18n.t('cli:help.defaults.updateTools')}`)}`,
       `  ${ansis.cyan('npx zcf check')}`,
       '',
       ansis.gray(`  # ${i18n.t('cli:help.exampleDescriptions.nonInteractiveModeCicd')}`),
@@ -218,16 +218,16 @@ export async function setupCommands(cli: CAC) {
     .option('--ai-output-lang, -a <lang>', 'AI output language')
     .option('--force, -f', 'Force overwrite existing configuration')
     .option('--skip-prompt, -s', 'Skip all interactive prompts (non-interactive mode)')
-    .option('--config-action, -r <action>', 'Config handling (new/backup/merge/docs-only/skip), default: backup')
+    .option('--config-action, -r <action>', `Config handling (new/backup/merge/docs-only/skip), ${i18n.t('cli:help.defaults.prefix')} backup`)
     .option('--api-type, -t <type>', 'API type (auth_token/api_key/ccr_proxy/skip)')
     .option('--api-key, -k <key>', 'API key (used for both API key and auth token types)')
     .option('--api-url, -u <url>', 'Custom API URL')
-    .option('--mcp-services, -m <services>', 'Comma-separated MCP services to install (context7,mcp-deepwiki,Playwright,exa), "skip" to skip all, "all" for all non-key services, default: all')
-    .option('--workflows, -w <workflows>', 'Comma-separated workflows to install (sixStepsWorkflow,featPlanUx,gitWorkflow,bmadWorkflow), "skip" to skip all, "all" for all workflows, default: all')
-    .option('--output-styles, -o <styles>', 'Comma-separated output styles (engineer-professional,nekomata-engineer,laowang-engineer,default,explanatory,learning), "skip" to skip all, "all" for all custom styles, default: all')
-    .option('--default-output-style, -d <style>', 'Default output style, default: engineer-professional')
+    .option('--mcp-services, -m <services>', `Comma-separated MCP services to install (context7,mcp-deepwiki,Playwright,exa), "skip" to skip all, "all" for all non-key services, ${i18n.t('cli:help.defaults.prefix')} all`)
+    .option('--workflows, -w <workflows>', `Comma-separated workflows to install (sixStepsWorkflow,featPlanUx,gitWorkflow,bmadWorkflow), "skip" to skip all, "all" for all workflows, ${i18n.t('cli:help.defaults.prefix')} all`)
+    .option('--output-styles, -o <styles>', `Comma-separated output styles (engineer-professional,nekomata-engineer,laowang-engineer,default,explanatory,learning), "skip" to skip all, "all" for all custom styles, ${i18n.t('cli:help.defaults.prefix')} all`)
+    .option('--default-output-style, -d <style>', `Default output style, ${i18n.t('cli:help.defaults.prefix')} engineer-professional`)
     .option('--all-lang, -g <lang>', 'Set all language parameters to this value')
-    .option('--install-cometix-line, -x <value>', 'Install CCometixLine statusline tool (true/false), default: true')
+    .option('--install-cometix-line, -x <value>', `Install CCometixLine statusline tool (true/false), ${i18n.t('cli:help.defaults.prefix')} true`)
     .action(await withLanguageResolution(async (options) => {
       await init(options)
     }))

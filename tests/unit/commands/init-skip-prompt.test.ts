@@ -150,6 +150,31 @@ vi.mock('node:fs', () => ({
   existsSync: vi.fn(),
 }))
 
+// Mock i18n system
+vi.mock('../../../src/i18n', () => ({
+  ensureI18nInitialized: vi.fn(),
+  initI18n: vi.fn(),
+  i18n: {
+    t: vi.fn((key: string, params?: any) => {
+      // Mock translation function to return expected error messages
+      switch (key) {
+        case 'errors:invalidApiType':
+          return `Invalid apiType value: ${params?.value}. Must be 'auth_token', 'api_key', 'ccr_proxy', or 'skip'`
+        case 'errors:invalidMcpService':
+          return `Invalid MCP service: ${params?.service}. Available services: ${params?.validServices}`
+        case 'errors:invalidWorkflow':
+          return `Invalid workflow: ${params?.workflow}. Available workflows: ${params?.validWorkflows}`
+        case 'errors:apiKeyRequiredForApiKey':
+          return 'API key is required when apiType is "api_key"'
+        case 'errors:apiKeyRequiredForAuthToken':
+          return 'API key is required when apiType is "auth_token"'
+        default:
+          return key
+      }
+    }),
+  },
+}))
+
 describe('init command with simplified parameters', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -164,7 +189,6 @@ describe('init command with simplified parameters', () => {
 
   describe('simplified parameter structure', () => {
     it('should work with only --api-key (no --auth-token needed)', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -186,7 +210,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should work with auth token using same --api-key parameter', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -207,7 +230,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should use default configAction=backup when not specified', async () => {
-
       vi.mocked(existsSync).mockReturnValue(true) // Existing config
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -223,7 +245,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should auto-install Claude Code by default (no --install-claude needed)', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(false) // Not installed
 
@@ -239,7 +260,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should not install MCP services requiring API keys by default', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(readMcpConfig).mockReturnValue({ mcpServers: {} })
@@ -257,7 +277,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should select all services and workflows by default when not specified', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -276,7 +295,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should use default output styles when not specified', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -296,7 +314,6 @@ describe('init command with simplified parameters', () => {
 
   describe('--all-lang parameter', () => {
     it('should use --all-lang for all three language parameters when en', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -313,7 +330,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should use en for lang/config-lang and custom value for ai-output-lang when not zh-CN/en', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -333,7 +349,6 @@ describe('init command with simplified parameters', () => {
 
   describe('install-CCometixLine parameter', () => {
     it('should install CCometixLine by default when install-CCometixLine is true', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCometixLineInstalled).mockResolvedValue(false)
@@ -350,7 +365,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should install CCometixLine by default when install-CCometixLine is not specified', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCometixLineInstalled).mockResolvedValue(false)
@@ -367,7 +381,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should not install CCometixLine when install-CCometixLine is false', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCometixLineInstalled).mockResolvedValue(false)
@@ -384,7 +397,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should handle string "false" for install-CCometixLine parameter', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCometixLineInstalled).mockResolvedValue(false)
@@ -401,7 +413,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should handle string "true" for install-CCometixLine parameter', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCometixLineInstalled).mockResolvedValue(false)
@@ -420,7 +431,6 @@ describe('init command with simplified parameters', () => {
 
   describe('mcp and workflow skip values', () => {
     it('should skip all MCP services when mcp-services is "skip"', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -436,7 +446,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should skip all MCP services when mcp-services is false boolean', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -452,7 +461,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should skip all workflows when workflows is "skip"', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -468,7 +476,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should skip all workflows when workflows is false boolean', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -538,7 +545,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should handle "all" value for mcp-services', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -555,7 +561,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should handle "all" value for workflows', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
 
@@ -577,7 +582,6 @@ describe('init command with simplified parameters', () => {
 
   describe('ccr_proxy configuration in skip-prompt mode', () => {
     it('should handle ccr_proxy without prompting for user interaction', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCcrInstalled).mockResolvedValue({ isInstalled: false, hasCorrectPackage: false })
@@ -604,7 +608,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should backup existing CCR config when using ccr_proxy in skip-prompt mode', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCcrInstalled).mockResolvedValue({ isInstalled: true, hasCorrectPackage: true })
@@ -639,7 +642,6 @@ describe('init command with simplified parameters', () => {
     })
 
     it('should create default skip configuration for ccr_proxy in skip-prompt mode', async () => {
-
       vi.mocked(existsSync).mockReturnValue(false)
       vi.mocked(isClaudeCodeInstalled).mockResolvedValue(true)
       vi.mocked(isCcrInstalled).mockResolvedValue({ isInstalled: true, hasCorrectPackage: true })
