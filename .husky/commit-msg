@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "📝 Validating commit message format..."
+
+# Run commitlint to validate the commit message
+npx commitlint --edit $1
+
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Commit message does not follow Conventional Commits format!"
+  echo ""
+  echo "ℹ️  Expected format: <type>(<scope>): <subject>"
+  echo ""
+  echo "📋 Examples of valid commit messages:"
+  echo "   feat: add new feature"
+  echo "   fix(api): resolve authentication issue"
+  echo "   docs: update README with installation guide"
+  echo "   test(cli): add unit tests for command parsing"
+  echo "   chore: update dependencies"
+  echo ""
+  echo "🏷️  Valid types: feat, fix, docs, style, refactor, test, chore, build, ci, perf, revert"
+  echo "🎯 Scope is optional: feat(scope): message OR feat: message"
+  echo "📏 Keep header under 100 characters"
+  echo "🔤 Subject should be lowercase and not end with period"
+  echo ""
+  echo "🔗 Learn more: https://www.conventionalcommits.org/"
+  exit 1
+fi
+
+echo "✅ Commit message format is valid!"
